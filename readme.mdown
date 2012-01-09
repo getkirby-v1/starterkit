@@ -12,7 +12,7 @@ Kirby even has a Facebook page: <http://facebook.com/getkirby>
 
 ## Buy
 
-Though Kirby's source code is available on Github: <http://github.com/bastianallgeier/kirbycms>, you must purchase a license per domain. Please go to <http://getkirby.com/buy> for more information.
+Though Kirby's source code is available on Github: <http://github.com/bastianallgeier/kirbycms>, you must purchase a license per website. Please go to <http://getkirby.com/buy> for more information.
 
 
 ## Installation

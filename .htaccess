@@ -1,0 +1,30 @@
+# Kirby .htaccess
+
+# enable php for directory indexes. 
+# this should be enabled by default, but let's just make sure
+DirectoryIndex index.php index.html index.htm
+
+# rewrite rules
+<IfModule mod_rewrite.c>
+
+# enable awesome urls. i.e.: 
+# http://yourdomain.com/about-us/team
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# make sure to set the RewriteBase correctly
+# if you are running the site in a subfolder.
+# Otherwise links will break.
+# 
+# If your homepage is http://yourdomain.com/mysite
+# Set the RewriteBase to:
+# 
+# RewriteBase /mysite
+# 
+RewriteBase /
+
+# redirect everything to index.php
+RewriteRule ^(.*) index.php [L]
+ 
+</IfModule>
