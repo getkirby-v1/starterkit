@@ -1,0 +1,224 @@
+#Kirby Changelog
+
+## 1.0
+
+### Update from 1.0 RC2 to 1.0:
+
+To update from 1.0 RC2 to 1.0 replace the `kirby` system folder and replace site/config/config.php if you didn't change anything there.
+
+### Changes
+
+- added the homepage setup to the default config file. 
+- added the license key setup to the default config file. 
+
+## 1.0 RC2
+
+### Update from 1.0 RC to 1.0 RC2:
+
+To update from 1.0 RC to 1.0 RC2 replace the `kirby` system folder.
+
+### Changes
+
+- added the latest Kirby Toolkit version (0.92)
+- fixed the missing subfolder installation screen
+- improved caching again
+- added c::set('cache.autoupdate', true); which can be switched off to avoid filesystem access to check for the last change in the content folder. 
+- fixed a potential bug in $site->modified()
+
+## 1.0 RC
+
+### Update from 0.9.9.1 to 1.0 RC:
+
+To update from 0.9.9.1 to 1.0 RC replace the `kirby` system folder.
+
+### Changes
+
+- fixed a bug in `$pages->active()` which broke setting your own home uri
+- fixed a bug in `$pages->isOpen()` which didn't mark the homepage as open even if it was
+- changed `$pages->get()` and `$files->get()` to `$pages->slice` and `$files->slice`. This should have been already fixed :(
+- fixed a bug in almost every count method in the pages class. 
+- fixed a potential bug in the uri class, for subfolder installations
+- changed the caching in `kirby/lib/site.php` to be more effective
+- changed the `$page->url()` method to return the homepage url without any path attached. 
+- fixed a bug in the tinyurl redirection. 
+
+## 0.9.9.1
+
+### Damn, I need more versions :)
+
+### Update from 0.9.9.0 to 0.9.9.1:
+
+To update from 0.9.9 to 0.9.9.1 replace the `kirby` system folder and if you didn't change anything there yet, also the .htaccess file and the site/config/config.php. But that's only cosmetics.
+
+### Changes
+
+- changed the layout of the site/config/config.php to be more easy to understand
+- added a default timezone to kirby/config.php
+- changed kirby/config.php to kirby/defaults.php to make it clearer that this should not be edited
+- added more descriptions and help to the default .htaccess file
+- removed kirby/parsers/html.php, kirby/parsers/multiline.php and kirby/parsers/xml.php and merged them all in one kirby/parsers/defaults.php file. 
+- replaced the assets/images/apple-touch-icon.png and assets/images/favicon.png with newer versions. 
+- slightly cleaned up the assets/styles/styles.css
+- slightly changed the readme.mdown
+- slightly changed the license.mdown
+- fixed a bug in the pagination class
+- the pagination class has two more functions `numStart()` and `numEnd()`  
+- added c::set('cache.ignore', array()); to make it easy to ignore certain pages while caching. 
+- made it possible to switch to query pagination instead of params
+- added ranged pagination
+
+## 0.9.9
+
+### Update from 0.9.8 to 0.9.9:
+
+To update from 0.9.8 to 0.9.9 replace the `kirby` system folder and the index.php
+
+### Changes
+
+- removed `$site->find()` to avoid duplicates and strict errors
+- cleaned (hopefully) all `E_STRICT` warnings. 
+- added a troubleshooting screen which you can activate in your site config, when something is wrong: `c::set('troubleshoot', true)`
+- added an improved subfolder setup screen
+- added a check for the kirby system file to the index.php
+
+## 0.9.8
+
+### Update from 0.9.7 to 0.9.8:
+
+To update from 0.9.7 to 0.9.8 simply replace the `kirby` system folder.
+
+### Changes
+
+- bug fix in pagination class
+- new children function for a set of pages, which gathers all children for all pages in the set
+- `$pages->find('page-a', 'page-b')` can take multiple page uids now and returns a set of all matches
+- the same applies to `$pages->findByUID()`, `$pages->findByDirname()`, `$pages->findByTitle()` and `$pages->findByHash()`
+- renamed `$files->get()` and `$pages->get()` into `$files->slice()` and `$pages->slice()`
+- cleaned a few things in the uri class
+
+
+## 0.9.7
+
+### Update from 0.9.6 to 0.9.7:
+
+To update from 0.9.6 to 0.9.7 simply replace the `kirby` system folder.
+
+### Changes
+
+- fixed a bug in kirby/lib/files.php
+- new shuffle function for pages and files i.e. `$page->children()->shuffle()`
+- switched to kirby toolkit 0.9.1
+- another fix for the field detection in text files
+
+## 0.9.6
+
+### Update from 0.9.5 to 0.9.6:
+
+To update from 0.9.4 to 0.9.5 simply replace the `kirby` system folder and the .htaccess file.
+
+### Changes
+
+- changed the version number for the kirby toolkit from 0.6 to 0.9
+- used a new regular expression to split the fields in text files. 
+- fixed a bug in the pagination class
+- you can now add class names to kirbytext links
+- fixed some bugs in kirbytext
+- fixed a bug in the url function, which broke sites without url rewriting
+
+
+## 0.9.5
+
+### Update from 0.9.4 to 0.9.5:
+
+To update from 0.9.4 to 0.9.5 simply replace the `kirby` system folder and the .htaccess file.
+
+### Changes
+
+- added a `highlight()` hook for the `kirbytext()` parser to enable custom code highlighting
+- added ``` ``` code blocks to kirbytext
+- fixed a notice bug in kirbytext
+- added config var for markdown breaks
+- small change in the `.htaccess` file to make `/file:image.jpg` urls possible
+- added local file urls i.e. `(http://yourdomain.com/blog/file:01.png)`
+- fixed a small bug in `a::sort()` function 
+- fixed bug in files fetcher
+- removed the txt class and added variable fetching to the variables class
+- better video support in `kirby/lib/files.php`
+- fixed a bug in the `excerpt()` function
+- Revamped the URI class. 
+
+
+## 0.9.4
+
+### Update from 0.9.3 to 0.9.4:
+
+To update from 0.9.3 to 0.9.4 simply replace the `kirby` system folder. Also replace the .htaccess file if you got problems with the php_flag short_open_tag on directive. 
+
+### Changes
+
+- disabled `php_flag short_open_tag on` in the .htaccess file by default as it causes problems on some servers. 
+- gist embedding in kirbytext
+- `excerpt($text, 0)` returns the entire text but without html
+- automatic detection of misconfigured subfolder installation
+- fixed a bug in kirbytext
+- added new variable object for all custom variables of a page
+- all query objects fail silently now when converted to a string. They will actually return some nice informative html. So now you can do stuff like `<?= $pages ?>` or `<?= $pages->find('blog') ?>` without error messages.
+- new `$page->modified($format=false)` function
+- new `$site->url()` function
+- new `$site->find($uri)` function, which is a alternative for `$pages->find($uri)`
+
+## 0.9.3
+
+### Update from 0.9.2 to 0.9.3:
+
+To update from 0.9.1 to 0.9.2 simply replace the `kirby` system folder. 
+
+### Changes
+
+- added a more verbose readme.mdown with more docs about the installation process.
+- added a new xml parser, which generates xml safe output for strings. This can be used for feeds etc.
+- totally rebuilt the file reading engine, which is way faster now – especially with deep file structures
+- added a new pagination class, which makes it super easy to add pagination to sets of pages and sets of files: http://getkirby.com/docs/variables/pages
+- added a new `$pages->not($uid)` function which is a shortcut for `$pages->without($uid)` and is more jquerish
+- also added a new `$files->not($name)`
+- added `$pages->limit($limit)` and `$files->limit($limit)`
+- added `$pages->offset($offset)` and `$files->offset($offset)`
+- added a better a::sort function to the kirby toolkit
+- added a dir::inspect function to the kirby toolkit and removed the fdb class instead. 
+- replaced the dir::read function code with faster/easier scandir code. 
+- added a `$page->date($format)` function which makes it easy to specify a date variable for a page and afterwards get and format it in templates. 
+- fixed a bug in the excerpt function
+- added $pages->findOpen()
+- added $page->isOpen()
+- changed the default template.
+
+
+## 0.9.2
+
+### Update from 0.9.1 to 0.9.2:
+
+To update from 0.9.1 to 0.9.2 simply replace the `kirby` system folder and the `index.php`. 
+If you want to start from scratch, just replace the entire code.
+
+### Changes
+
+- new `$pages->flip()` function, which returns a set of pages in reverse order
+- new `str::excerpt($string, $chars=140, $removehtml=true, $rep='…')` function in kirby/lib/kirby.php
+- new `excerpt($string, $chars=140)` function in kirby/parsers/kirbytext.php
+- removed default error display in kirby/system.php
+- removed `ini_set` for php short open tags in kirby/system.php
+- added a `date_default_timezone_set` to kirby/system.php
+- added a custom config var + description for custom timezones to site/config.php
+- drastically reduced the templates and snippets code
+- moved images, javascript and styles to an asset folder. 
+- slightly adapted the style of the demo template to the kirby site. 
+- removed the plugins folder when not needed.
+- removed all php short open tags from the default template to increase compatibility
+- redesigned the index.php and kirby/system.php to keep path definitions more flexible. 
+
+## 0.9.1
+
+### Changes
+
+- cleaned up templates
+- trying to enable short open tags in .htaccess file. 

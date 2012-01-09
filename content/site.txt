@@ -1,0 +1,9 @@
+Title: Kirby Demo
+----
+Author: Bastian Allgeier
+----
+Description: Kirby is awesome
+----
+Keywords: kirby, cms, kirbycms, php, filesystem
+----
+Copyright: © 2009-(date: Year) (link: http://bastianallgeier.com text: Bastian Allgeier)
