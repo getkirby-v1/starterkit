@@ -7,7 +7,7 @@ function url($uri=false) {
   } else {
     if(!$uri) return c::get('url');
     if(is_file(c::get('root') . '/' . $uri)) {
-      return c::get('url') . '/' . $uri;    
+      return c::get('url') . '/' . $uri;
     } else {
       return c::get('url') . '/index.php/' . $uri;
     }
@@ -15,7 +15,7 @@ function url($uri=false) {
 }
 
 function u($uri=false) {
-  return url($uri);  
+  return url($uri);
 }
 
 // return the current url with all
@@ -43,13 +43,13 @@ function snippet($snippet, $data=array(), $return=false) {
 // embed a stylesheet tag
 function css($url, $media='all') {
   $url = (str::contains($url, 'http://') || str::contains($url, 'https://')) ? $url : url(ltrim($url, '/'));
-  return '<link rel="stylesheet" type="text/css" media="' . $media . '" href="' . $url . '" />' . "\n";
+  return '<link rel="stylesheet" media="' . $media . '" href="' . $url . '" />' . "\n";
 }
 
 // embed a js tag
 function js($url) {
   $url = (str::contains($url, 'http://') || str::contains($url, 'https://')) ? $url : url(ltrim($url, '/'));
-  return '<script type="text/javascript" src="' . $url . '"></script>' . "\n";
+  return '<script src="' . $url . '"></script>' . "\n";
 }
 
 ?>
