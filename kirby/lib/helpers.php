@@ -41,9 +41,13 @@ function snippet($snippet, $data=array(), $return=false) {
 }
 
 // embed a stylesheet tag
-function css($url, $media='all') {
+function css($url, $media = '') {
   $url = (str::contains($url, 'http://') || str::contains($url, 'https://')) ? $url : url(ltrim($url, '/'));
-  return '<link rel="stylesheet" media="' . $media . '" href="' . $url . '" />' . "\n";
+  if (!empty($media)) {
+    return '<link rel="stylesheet" media="' . $media . '" href="' . $url . '" />' . "\n";
+  } else {
+    return '<link rel="stylesheet" href="' . $url . '" />' . "\n";
+  }
 }
 
 // embed a js tag
