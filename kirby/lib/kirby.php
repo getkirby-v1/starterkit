@@ -1,6 +1,6 @@
 <?php
 
-c::set('version', 0.922);
+c::set('version', 0.923);
 c::set('language', 'en');
 c::set('charset', 'utf-8');
 c::set('root', dirname(__FILE__));
@@ -1325,7 +1325,7 @@ class r {
   static function sanitize($data) {
     foreach($data as $key => $value) {
       if(!is_array($value)) { 
-        $value = str::trim(str::stripslashes($value));
+        $value = trim(str::stripslashes($value));
       } else {
         $value = self::sanitize($value);
       }
