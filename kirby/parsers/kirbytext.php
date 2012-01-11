@@ -241,17 +241,30 @@ class kirbytext {
   static function youtube($params) {
 
     $url = @$params['youtube'];
+    $id  = false;
     
-    // get the uid from the url
-    @preg_match('!watch\?v=([a-z0-9_-]+)!i', $url, $array);
-    $id = a::get($array, 1);
-    
-    // no uid no result!    
+    // http://www.youtube.com/embed/d9NF2edxy-M
+    if(@preg_match('!youtube.com\/embed\/([a-z0-9_-]+)!i', $url, $array)) {
+      $id = @$array[1];      
+    // http://www.youtube.com/watch?feature=player_embedded&v=d9NF2edxy-M#!
+    } elseif(@preg_match('!v=([a-z0-9_-]+)!i', $url, $array)) {
+      $id = @$array[1];
+    // http://youtu.be/d9NF2edxy-M
+    } elseif(@preg_match('!youtu.be\/([a-z0-9_-]+)!i', $url, $array)) {
+      $id = @$array[1];
+    }
+        
+    // no id no result!    
     if(empty($id)) return false;
     
-    $url = 'http://www.youtube.com/v/' . $id;
+    // build the embed url for the iframe    
+    $url = 'http://www.youtube.com/embed/' . $id;
+    
+    // default width and height if no custom values are set
+    if(!$params['width'])  $params['width']  = c::get('kirbytext.video.width');
+    if(!$params['height']) $params['height'] = c::get('kirbytext.video.height');
 
-    return self::flash($url, @$params['width'], @$params['height']);
+    return '<iframe width="' . $params['width'] . '" height="' . $params['height'] . '" src="' . $url . '" frameborder="0" allowfullscreen></iframe>';
   
   }
 
@@ -263,12 +276,17 @@ class kirbytext {
     @preg_match('!vimeo.com\/([a-z0-9_-]+)!i', $url, $array);
     $id = a::get($array, 1);
     
-    // no uid no result!    
-    if(empty($id)) return false;
-    
-    $url = 'http://vimeo.com/moogaloop.swf?clip_id=' . $id;
+    // no id no result!    
+    if(empty($id)) return false;    
 
-    return self::flash($url, @$params['width'], @$params['height']);
+    // build the embed url for the iframe    
+    $url = 'http://player.vimeo.com/video/' . $id;
+
+    // default width and height if no custom values are set
+    if(!$params['width'])  $params['width']  = c::get('kirbytext.video.width');
+    if(!$params['height']) $params['height'] = c::get('kirbytext.video.height');
+
+    return '<iframe src="' . $url . '" width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
       
   }
 

@@ -1,7 +1,7 @@
 <?php
 
-c::set('version.string', '1.0');
-c::set('version.number', 1.0);
+c::set('version.string', '1.0.1');
+c::set('version.number', 1.01);
 
 // define all directories
 c::set('root.templates', c::get('root.site') . '/templates');

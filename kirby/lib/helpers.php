@@ -41,9 +41,9 @@ function snippet($snippet, $data=array(), $return=false) {
 }
 
 // embed a stylesheet tag
-function css($url, $media = '') {
+function css($url, $media=false) {
   $url = (str::contains($url, 'http://') || str::contains($url, 'https://')) ? $url : url(ltrim($url, '/'));
-  if (!empty($media)) {
+  if(!empty($media)) {
     return '<link rel="stylesheet" media="' . $media . '" href="' . $url . '" />' . "\n";
   } else {
     return '<link rel="stylesheet" href="' . $url . '" />' . "\n";
