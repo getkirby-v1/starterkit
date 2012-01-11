@@ -118,6 +118,11 @@ class page extends obj {
         
   }
 
+  function depth() {
+    $parent = $this->parent();
+    return ($parent) ? ($parent->depth() + 1) : 1;
+  }
+
   function hash() {
     if($this->hash) return $this->hash;
 

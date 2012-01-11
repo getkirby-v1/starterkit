@@ -11,6 +11,7 @@ To update from 1.0 to 1.0.1 replace the `kirby` system folder.
 - switched from flash embeds for Youtube and Vimeo videos in kirbytext to iframe embedded videos, to make them work on mobile devices. Thanks to @nirusu for the suggestion.
 - merged the pull request from nebelschwade: https://github.com/bastianallgeier/kirbycms/pull/1, which removes the default type attribute in script and link tags and adds improved css media handling. 
 - added the kirby toolkit 0.922
+- added $page->depth() to get a numeric representation of the subfolder level.
 
 ## 1.0
 
