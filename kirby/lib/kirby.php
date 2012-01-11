@@ -1,6 +1,6 @@
 <?php
 
-c::set('version', 0.921);
+c::set('version', 0.922);
 c::set('language', 'en');
 c::set('charset', 'utf-8');
 c::set('root', dirname(__FILE__));
@@ -1747,14 +1747,8 @@ class str {
     else return $many;
   }
 
-  static function substr($str,$start) {
-    preg_match_all('/./u', $str, $ar);
-    if(func_num_args() >= 3) {
-       $end = func_get_arg(2);
-       return join('',array_slice($ar[0],$start,$end));
-    } else {
-       return join('',array_slice($ar[0],$start));
-    }
+  function substr($str, $start, $end = null) {
+    return mb_substr($str, $start, ($end == null) ? mb_strlen($str, 'UTF-8') : $end, 'UTF-8');
   }
 
   static function lower($str) {
@@ -1810,8 +1804,7 @@ class str {
 
     if(is_array($string)) return $string;
 
-    $string = ltrim($string, $separator);
-    $string = rtrim($string, $separator);
+    $string = trim($string, $separator);
     $parts  = explode($separator, $string);
     $out    = array();
 
