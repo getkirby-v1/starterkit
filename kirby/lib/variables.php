@@ -31,7 +31,7 @@ class variables extends file {
     if(!file_exists($file)) return array();
     $content  = f::read($file); 
     $content  = str_replace("\xEF\xBB\xBF", '', $content);    
-    $sections = preg_split('!\R[-]{4,}!', $content);
+    $sections = preg_split('![\r\n]+[-]{4,}!i', $content);
     $data     = array();
     foreach($sections AS $s) {
       $parts = explode(':', $s);  
