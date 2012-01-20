@@ -1,7 +1,7 @@
 <?php
 
-c::set('version.string', '1.0.1');
-c::set('version.number', 1.01);
+c::set('version.string', '1.0.2');
+c::set('version.number', 1.02);
 
 // define all directories
 c::set('root.templates', c::get('root.site') . '/templates');
@@ -50,5 +50,9 @@ c::set('tinyurl.folder', 'x');
 
 // default timezone
 c::set('timezone', 'UTC');
+
+// pagination setup
+c::set('pagination.variable', 'page');
+c::set('pagination.method', 'params');
 
 ?>

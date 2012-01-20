@@ -1,6 +1,6 @@
 <?php
 
-c::set('version', 0.923);
+c::set('version', 0.925);
 c::set('language', 'en');
 c::set('charset', 'utf-8');
 c::set('root', dirname(__FILE__));
@@ -205,59 +205,17 @@ class a {
     return $missing;
   }
 
-  static function sort() {
+  static function sort($array, $field, $direction='desc', $method=SORT_REGULAR) {
 
-    $options = func_get_args();
-    $array   = array_shift($options);    
-    $cols    = array();
-    
-    foreach($options as $option) {
-      $args  = str::split($option, ' ');
-      $field = $args[0];
-      $dir   = (@$args[1] == 'desc') ? SORT_DESC : SORT_ASC;
-      $cols[ $field ] = array($dir, SORT_REGULAR);
+    $direction = (strtolower($direction) == 'desc') ? SORT_DESC : SORT_ASC;
+    $helper    = array();
+      
+    foreach($array as $key => $row) {
+      $helper[$key] = (is_object($row)) ? str::lower($row->$field) : str::lower($row[$field]);
     }
     
-    $helper = array();
-    
-    // build a helper array for each field    
-    foreach($cols as $col => $order) {
-      $helper[$col] = array();
-      foreach($array as $k => $row) { 
-        $helper[$col]['_'.$k] = (is_object($row)) ? str::lower($row->$col) : $row[$col]; 
-      }
-    }
-
-    $params = array();
-    foreach($cols as $col => $order) {
-      $params[] = &$helper[$col];
-      $params = array_merge($params, (array)$order);
-    }
-    
-    // sort the params array
-    @call_user_func_array('array_multisort', $params);
-
-    $result = array();
-    $keys   = array();
-    $first  = true;
-
-    foreach($helper as $col => $arr) {
-      foreach($arr as $k => $v) {
-        if($first) $keys[$k] = substr($k,1);
-        $k = $keys[$k];
-        if(!isset($result[$k])) $result[$k] = $array[$k];
-        
-        if(is_object($result[$k])) {
-          $result[$k]->$col = $array[$k]->$col;
-        } else {
-          $result[$k][$col] = $array[$k][$col];        
-        }
-        
-      }
-      $first = false;
-    }
-
-    return $result;
+    array_multisort($helper, $direction, $method, $array);
+    return $array;
   
   }
 
@@ -1679,12 +1637,16 @@ class str {
     return $encoded;
   }
 
-  static function email($email, $text=false) {
+  static function email($email, $text=false, $title=false, $class=false) {
     if(empty($email)) return false;
     $email  = (string)$email;
     $string = (empty($text)) ? $email : $text;
     $email  = self::encode($email, 3);
-    return '<a title="' . $email . '" class="email" href="mailto:' . $email . '">' . self::encode($string, 3) . '</a>';
+    
+    if(!empty($class)) $class = ' class="' . $class . '"';
+    if(!empty($title)) $title = ' title="' . html($title) . '"';
+    
+    return '<a' . $title . $class . ' href="mailto:' . $email . '">' . self::encode($string, 3) . '</a>';
   }
 
   static function link($link, $text=false) {

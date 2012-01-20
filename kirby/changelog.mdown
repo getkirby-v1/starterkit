@@ -1,5 +1,21 @@
 #Kirby Changelog
 
+## 1.0.2
+
+### Update from 1.0.1 to 1.0.2
+
+To update from 1.0.1 to 1.0.2 replace the `kirby` system folder and remove the old changelog.mdown file from your main site folder. The new changelog file is now inside the kirby system folder and will update automatically with each new download. 
+
+### Changes
+
+- bug fix in kirby/lib/helpers.php – snippet()
+- moved the changelog to the kirby folder so you get an updated version with each update. 
+- fixed $pages->sortBy() and $page->files->sortBy()
+- switched to kirby toolkit 0.925
+- added an array of custom variables to the $site object
+- added class and title attributes wherever possible in kirbytext tags 
+- added pagination.variable and pagination.method to kirby/defaults.php to keep them adjustable.
+
 ## 1.0.1
 
 ### Update from 1.0 to 1.0.1

@@ -518,8 +518,8 @@ class pages extends obj {
     return $this->slice($offset);
   }
   
-  function sortBy($field, $direction='asc') {
-    $pages = a::sort($this->_, $field . ' ' . $direction);
+  function sortBy($field, $direction='asc', $method=SORT_REGULAR) {
+    $pages = a::sort($this->_, $field, $direction, $method);
     return new pages($pages);
   }
 

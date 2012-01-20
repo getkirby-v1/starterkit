@@ -30,12 +30,13 @@ class pagination {
     
     global $site;
     
-    $this->mode  = a::get($options, 'mode', 'params') == 'query' ? 'query' : 'params';
-    $this->data  = $data;
-    $this->count = $data->count();
-    $this->limit = $limit;
-    $this->page  = ($this->mode == 'query') ? intval(get('page')) : intval($site->uri->param('page'));
-    $this->pages = ceil($this->count / $this->limit);
+    $this->pagevar = c::get('pagination.variable', 'page');
+    $this->mode    = a::get($options, 'mode', c::get('pagination.method', 'params')) == 'query' ? 'query' : 'params';
+    $this->data    = $data;
+    $this->count   = $data->count();
+    $this->limit   = $limit;
+    $this->page    = ($this->mode == 'query') ? intval(get($this->pagevar)) : intval($site->uri->param($this->pagevar));
+    $this->pages   = ceil($this->count / $this->limit);
 
     // sanitize the page
     if($this->page < 1) $this->page = 1;
@@ -65,7 +66,7 @@ class pagination {
 
   function pageURL($page) {
     global $site;
-    ($this->mode == 'query') ? $site->uri->replaceQueryKey('page', $page) : $site->uri->replaceParam('page', $page);
+    ($this->mode == 'query') ? $site->uri->replaceQueryKey($this->pagevar, $page) : $site->uri->replaceParam($this->pagevar, $page);
     return $site->uri->toUrl();      
   }
 

@@ -37,7 +37,7 @@ function notFound() {
 
 // embed a template snippet from the snippet folder
 function snippet($snippet, $data=array(), $return=false) {
-  tpl::loadFile(c::get('root.snippets') . '/' . $snippet . '.php', $data, $return);
+  return tpl::loadFile(c::get('root.snippets') . '/' . $snippet . '.php', $data, $return);
 }
 
 // embed a stylesheet tag

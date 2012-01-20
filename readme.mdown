@@ -22,6 +22,13 @@ Installing Kirby couldn't be simpler. Just connect to your FTP-Server and upload
 Visit <http://yourdomain.com> (you should probably replace the with your url :)) and take a look at your brand new, Kirby-flavoured site.
 
 
+### Adding your license code
+
+After you've purchased a license for Kirby, please add your license code to site/config/config.php:
+
+c::set('license', 'put your license code here');
+
+
 ### Running Kirby in a subfolder of your domain
 
 If you want to run Kirby in a subfolder like `http://yourdomain.com/subfolder` you need to make some simple adjustments first. Go to `site/config/config.php` and make sure you manually set the url config variable:

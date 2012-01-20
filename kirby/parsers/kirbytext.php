@@ -11,19 +11,21 @@ function excerpt($text, $length=140) {
   return str::excerpt(kirbytext($text), $length);
 }
 
-function youtube($url, $width=false, $height=false) {
+function youtube($url, $width=false, $height=false, $class=false) {
   return kirbytext::youtube(array(
     'youtube' => $url,
     'width'   => $width,
-    'height'  => $height
+    'height'  => $height,
+    'class'   => $class
   ));
 }
 
-function vimeo($url, $width=false, $height=false) {
+function vimeo($url, $width=false, $height=false, $class=false) {
   return kirbytext::vimeo(array(
     'vimeo'  => $url,
     'width'  => $width,
-    'height' => $height
+    'height' => $height,
+    'class'  => $class
   ));
 }
 
@@ -31,10 +33,12 @@ function flash($url, $width=false, $height=false) {
   return kirbytext::flash($url, $width, $height);
 }
 
-function twitter($username, $text=false) {
+function twitter($username, $text=false, $title=false, $class=false) {
   return kirbytext::twitter(array(
     'twitter' => $username,
-    'text'    => $text
+    'text'    => $text,
+    'title'   => $title,
+    'class'   => $class
   ));
 }
 
@@ -50,7 +54,7 @@ class kirbytext {
   
   static public $obj  = false;
   static public $tags = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
-  static public $attr = array('text', 'file', 'width', 'height', 'link', 'popup', 'class');
+  static public $attr = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt');
   
   static function get($text) {
     // pass the parent page if available
@@ -158,40 +162,50 @@ class kirbytext {
 
     $url    = @$params['link'];
     $class  = @$params['class'];
+    $title  = @$params['title'];
     $target = self::target($params);
-    
-    if(empty($url)) return false;
-    if(empty($params['text'])) return '<a' . $target . ' href="' . self::url($url) . '">' . h($url) . '</a>';
 
     // add a css class if available
     if(!empty($class)) $class = ' class="' . $class . '"';
+    if(!empty($title)) $title = ' title="' . html($title) . '"';
+        
+    if(empty($url)) return false;
+    if(empty($params['text'])) return '<a' . $target . $class . $title . ' href="' . self::url($url) . '">' . h($url) . '</a>';
 
-    return '<a' . $target . $class . ' href="' . self::url($url) . '">' . h($params['text']) . '</a>';
+    return '<a' . $target . $class . $title . ' href="' . self::url($url) . '">' . h($params['text']) . '</a>';
 
   }
 
   static function email($params) {
     
-    $url = @$params['email'];
+    $url   = @$params['email'];
+    $class = @$params['class'];
+    $title = @$params['title'];
     
     if(empty($url)) return false;
-    return str::email($url, @$params['text']);
+    return str::email($url, @$params['text'], $title, $class);
 
   }
 
   static function twitter($params) {
     
     $username = @$params['twitter'];
+    $class  = @$params['class'];
+    $title  = @$params['title'];
     $target = self::target($params);
     
     if(empty($username)) return false;
 
     $username = str_replace('@', '', $username);
     $url = 'http://twitter.com/' . $username;
-    
-    if(empty($params['text'])) return '<a' . $target . ' href="' . self::url($url) . '">@' . h($username) . '</a>';
 
-    return '<a' . $target . ' href="' . self::url($url) . '">' . h($params['text']) . '</a>';
+    // add a css class if available
+    if(!empty($class)) $class = ' class="' . $class . '"';
+    if(!empty($title)) $title = ' title="' . html($title) . '"';
+    
+    if(empty($params['text'])) return '<a' . $target . $class . $title . ' href="' . self::url($url) . '">@' . h($username) . '</a>';
+
+    return '<a' . $target . $class . $title . ' href="' . self::url($url) . '">' . h($params['text']) . '</a>';
 
   }
   
@@ -202,7 +216,12 @@ class kirbytext {
     $url    = @$params['image'];
     $text   = @$params['text'];
     $class  = @$params['class'];
+    $alt    = @$params['alt'];
+    $title  = @$params['title'];
     $target = self::target($params);
+
+    // alt is just an alternative for text
+    if(!empty($text)) $alt = $text;
 
     // width/height
     $w = a::get($params, 'width');
@@ -213,13 +232,13 @@ class kirbytext {
     
     // add a css class if available
     if(!empty($class)) $class = ' class="' . $class . '"';
-
-    if(empty($text)) $text = $site->title();
+    if(!empty($title)) $title = ' title="' . html($title) . '"';
+    if(empty($alt))    $alt   = $site->title();
             
-    $image = '<img src="' . self::url($url) . '"' . $w . $h . $class . ' alt="' . h($text) . '" />';
+    $image = '<img src="' . self::url($url) . '"' . $w . $h . $class . $title . ' alt="' . h($alt) . '" />';
 
     if(!empty($params['link'])) {
-      return '<a class="image"' . $target . ' href="' . self::url($params['link']) . '">' . $image . '</a>';
+      return '<a' . $class . $target . $title . ' href="' . self::url($params['link']) . '">' . $image . '</a>';
     }
     
     return $image;
@@ -230,18 +249,24 @@ class kirbytext {
 
     $url    = @$params['file'];
     $text   = @$params['text'];
+    $class  = @$params['class'];
+    $title  = @$params['title'];
     $target = self::target($params);
 
     if(empty($text)) $text = h($url);
 
-    return '<a class="file"' . $target . ' href="' . self::url($url) . '">' . h($text) . '</a>';
+    if(!empty($class)) $class = ' class="' . $class . '"';
+    if(!empty($title)) $title = ' title="' . html($title) . '"';
+
+    return '<a' . $target . $title . $class . ' href="' . self::url($url) . '">' . h($text) . '</a>';
 
   }
 
   static function youtube($params) {
 
-    $url = @$params['youtube'];
-    $id  = false;
+    $url   = @$params['youtube'];
+    $class = @$params['class'];
+    $id    = false;
     
     // http://www.youtube.com/embed/d9NF2edxy-M
     if(@preg_match('!youtube.com\/embed\/([a-z0-9_-]+)!i', $url, $array)) {
@@ -263,14 +288,18 @@ class kirbytext {
     // default width and height if no custom values are set
     if(!$params['width'])  $params['width']  = c::get('kirbytext.video.width');
     if(!$params['height']) $params['height'] = c::get('kirbytext.video.height');
+    
+    // add a classname to the iframe
+    if(!empty($class)) $class = ' class="' . $class . '"';
 
-    return '<iframe width="' . $params['width'] . '" height="' . $params['height'] . '" src="' . $url . '" frameborder="0" allowfullscreen></iframe>';
+    return '<iframe' . $class . ' width="' . $params['width'] . '" height="' . $params['height'] . '" src="' . $url . '" frameborder="0" allowfullscreen></iframe>';
   
   }
 
   static function vimeo($params) {
 
-    $url = @$params['vimeo'];
+    $url   = @$params['vimeo'];
+    $class = @$params['class'];
     
     // get the uid from the url
     @preg_match('!vimeo.com\/([a-z0-9_-]+)!i', $url, $array);
@@ -286,7 +315,10 @@ class kirbytext {
     if(!$params['width'])  $params['width']  = c::get('kirbytext.video.width');
     if(!$params['height']) $params['height'] = c::get('kirbytext.video.height');
 
-    return '<iframe src="' . $url . '" width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+    // add a classname to the iframe
+    if(!empty($class)) $class = ' class="' . $class . '"';
+
+    return '<iframe' . $class . ' src="' . $url . '" width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
       
   }
 

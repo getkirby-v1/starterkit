@@ -400,8 +400,8 @@ class files extends obj {
     return f::nice_size($this->totalSize());
   }
 
-  function sortBy($field, $direction='asc') {
-    $files = a::sort($this->_, $field . ' ' . $direction);
+  function sortBy($field, $direction='asc', $method=SORT_REGULAR) {
+    $files = a::sort($this->_, $field, $direction, $method);
     return new files($files);
   }
 

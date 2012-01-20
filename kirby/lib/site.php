@@ -236,9 +236,12 @@ class site extends obj {
   
     $file = c::get('root.content') . '/site.txt';
     $info = variables::fetch($file);
-    
-    $this->_ = array_merge($this->_, $info);
 
+    // merge the current site info with the additional
+    // info from the info file(s)    
+    $this->variables = $info;
+    $this->_ = array_merge($this->_, $info);  
+    
   }
   
   function modified() {
