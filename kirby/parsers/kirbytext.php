@@ -1,18 +1,17 @@
 <?php
 
 function kirbytext($text, $markdown=true) {
-  $text = kirbytext::get($text); 
-  if($markdown) $text = markdown($text);
-  return $text;  
+  return kirbytext::init($text, $markdown);
 }
 
 // create an excerpt without html and kirbytext
-function excerpt($text, $length=140) {
-  return str::excerpt(kirbytext($text), $length);
+function excerpt($text, $length=140, $markdown=true) {
+  return str::excerpt(kirbytext::init($text, $markdown), $length);
 }
 
 function youtube($url, $width=false, $height=false, $class=false) {
-  return kirbytext::youtube(array(
+  $class = kirbytext::classname();
+  return $class::youtube(array(
     'youtube' => $url,
     'width'   => $width,
     'height'  => $height,
@@ -21,7 +20,8 @@ function youtube($url, $width=false, $height=false, $class=false) {
 }
 
 function vimeo($url, $width=false, $height=false, $class=false) {
-  return kirbytext::vimeo(array(
+  $class = kirbytext::classname();
+  return $class::vimeo(array(
     'vimeo'  => $url,
     'width'  => $width,
     'height' => $height,
@@ -30,11 +30,13 @@ function vimeo($url, $width=false, $height=false, $class=false) {
 }
 
 function flash($url, $width=false, $height=false) {
-  return kirbytext::flash($url, $width, $height);
+  $class = kirbytext::classname();
+  return $class::flash($url, $width, $height);
 }
 
 function twitter($username, $text=false, $title=false, $class=false) {
-  return kirbytext::twitter(array(
+  $class = kirbytext::classname();
+  return $class::twitter(array(
     'twitter' => $username,
     'text'    => $text,
     'title'   => $title,
@@ -43,7 +45,8 @@ function twitter($username, $text=false, $title=false, $class=false) {
 }
 
 function gist($url, $file=false) {
-  return kirbytext::gist(array(
+  $class = kirbytext::classname();
+  return $class::gist(array(
     'gist' => $url,
     'file' => $file
   ));
@@ -52,19 +55,40 @@ function gist($url, $file=false) {
 
 class kirbytext {
   
-  static public $obj  = false;
-  static public $tags = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
-  static public $attr = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt');
-  
-  static function get($text) {
-    // pass the parent page if available
-    if(is_object($text)) self::$obj = $text->parent;
-    $text = preg_replace_callback('!(?=[^\]])\((' . implode('|', self::$tags) . '):(.*?)\)!i', 'kirbytext::parse', $text);
-    $text = preg_replace_callback('!```(.*?)```!is', 'kirbytext::code', $text);
-    return $text;       
+  var $obj   = null;
+  var $text  = null;
+  var $mdown = false;
+  var $tags  = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
+  var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt');
+
+  function init($text, $mdown=true) {
+    
+    $classname = self::classname();            
+    $kirbytext = new $classname($text, $mdown);    
+    return $kirbytext->get();    
+              
   }
 
-  static function code($code) {
+  function __construct($text, $mdown=true) {
+      
+    $this->text  = $text;  
+    $this->mdown = $mdown;
+          
+    // pass the parent page if available
+    if(is_object($this->text)) $this->obj = $this->text->parent;
+
+  }
+  
+  function get() {
+
+    $text = preg_replace_callback('!(?=[^\]])\((' . implode('|', $this->tags) . '):(.*?)\)!i', array($this, 'parse'), (string)$this->text);
+    $text = preg_replace_callback('!```(.*?)```!is', array($this, 'code'), $text);
+    
+    return ($this->mdown) ? markdown($text) : $text;
+
+  }
+
+  function code($code) {
     
     $code = @$code[1];
     $lines = explode("\n", $code);
@@ -90,17 +114,17 @@ class kirbytext {
     
   }
 
-  static function parse($args) {
+  function parse($args) {
 
     $method = strtolower(@$args[1]);
     $string = @$args[0];    
     
     if(empty($string)) return false;
-    if(!method_exists('kirbytext', $method)) return $string;
+    if(!method_exists($this, $method)) return $string;
     
     $replace = array('(', ')');            
     $string  = str_replace($replace, '', $string);
-    $attr    = array_merge(self::$tags, self::$attr);
+    $attr    = array_merge($this->tags, $this->attr);
     $search  = preg_split('!(' . implode('|', $attr) . '):!i', $string, false, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
     $result  = array();
     $num     = 0;
@@ -117,7 +141,7 @@ class kirbytext {
 
     }
 
-    return self::$method($result);
+    return $this->$method($result);
         
   }
   
@@ -340,6 +364,18 @@ class kirbytext {
     return '<script src="' . $url . '"></script>';
   }
 
+  static function classname() {
+    return class_exists('kirbytextExtended') ? 'kirbytextExtended' : 'kirbytext';
+  }
+
+  function addTags() {
+    $this->tags = array_merge($this->tags, func_get_args());
+  }
+
+  function addAttributes($attr) {
+    $this->attr = array_merge($this->attr, func_get_args());      
+  }
+  
 }
 
 ?>
