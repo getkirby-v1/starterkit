@@ -1,6 +1,6 @@
 <?php
 
-c::set('version', 0.925);
+c::set('version', 0.926);
 c::set('language', 'en');
 c::set('charset', 'utf-8');
 c::set('root', dirname(__FILE__));
@@ -209,11 +209,11 @@ class a {
 
     $direction = (strtolower($direction) == 'desc') ? SORT_DESC : SORT_ASC;
     $helper    = array();
-      
+
     foreach($array as $key => $row) {
-      $helper[$key] = (is_object($row)) ? str::lower($row->$field) : str::lower($row[$field]);
+      $helper[$key] = (is_object($row)) ? (method_exists($row, $field)) ? str::lower($row->$field()) : str::lower($row->$field) : str::lower($row[$field]);
     }
-    
+          
     array_multisort($helper, $direction, $method, $array);
     return $array;
   
