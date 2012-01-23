@@ -5,8 +5,8 @@
 ---------------------------------------
 Document root of your site
 ---------------------------------------
-normaller this should be identical with 
-the directory in which your index.php is located
+this should be identical with the directory 
+in which your index.php is located
 
 */
 

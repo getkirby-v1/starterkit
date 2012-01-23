@@ -1,5 +1,8 @@
 <?php
 
+// direct access protection
+if(!defined('KIRBY')) die('Direct access is not allowed');
+
 // easy url builder
 function url($uri=false) {
   if(c::get('rewrite')) {

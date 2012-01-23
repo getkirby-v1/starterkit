@@ -1,3 +1,9 @@
+<?php
+
+// direct access protection
+if(!defined('KIRBY')) die('Direct access is not allowed');
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

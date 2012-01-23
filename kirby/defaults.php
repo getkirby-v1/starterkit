@@ -1,5 +1,8 @@
 <?php
 
+// direct access protection
+if(!defined('KIRBY')) die('Direct access is not allowed');
+
 c::set('version.string', '1.0.3');
 c::set('version.number', 1.03);
 

@@ -1,5 +1,11 @@
 <?php
 
+// direct access protection
+if(!isset($root)) die('Direct access is not allowed');
+
+// used for direct access protection
+define('KIRBY', true);
+
 // check for a proper phpversion
 if(floatval(phpversion()) < 5.2) {
   die('Please upgrade to PHP 5.2 or higher');
@@ -16,7 +22,7 @@ c::set('root.content', $rootContent);
 
 require_once($rootKirby . '/lib/load.php');
 
-// autoload additional configs, parsers and plugins
+// load the rest of the system
 load::lib();
 load::config();
 load::parsers();

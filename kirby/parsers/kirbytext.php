@@ -1,5 +1,8 @@
 <?php
 
+// direct access protection
+if(!defined('KIRBY')) die('Direct access is not allowed');
+
 function kirbytext($text, $markdown=true) {
   return kirbytext::init($text, $markdown);
 }
