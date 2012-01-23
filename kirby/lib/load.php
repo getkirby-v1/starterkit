@@ -1,6 +1,24 @@
 <?php
 
 class load {
+
+  static function lib() {
+    
+    $root = c::get('root.kirby');
+      
+    require_once($root . '/defaults.php');
+    require_once($root . '/lib/cache.php');
+    require_once($root . '/lib/obj.php');
+    require_once($root . '/lib/pagination.php');
+    require_once($root . '/lib/files.php');
+    require_once($root . '/lib/variables.php');
+    require_once($root . '/lib/pages.php');
+    require_once($root . '/lib/site.php');
+    require_once($root . '/lib/uri.php');
+    require_once($root . '/lib/helpers.php');
+    require_once($root . '/lib/template.php');
+    
+  }
   
   static function config() {
     $root = c::get('root.config');

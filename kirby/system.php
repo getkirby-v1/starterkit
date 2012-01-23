@@ -14,20 +14,10 @@ c::set('root.kirby',   $rootKirby);
 c::set('root.site',    $rootSite);
 c::set('root.content', $rootContent);
 
-require_once($rootKirby . '/defaults.php');
-require_once($rootKirby . '/lib/cache.php');
-require_once($rootKirby . '/lib/obj.php');
-require_once($rootKirby . '/lib/pagination.php');
-require_once($rootKirby . '/lib/files.php');
-require_once($rootKirby . '/lib/variables.php');
-require_once($rootKirby . '/lib/pages.php');
-require_once($rootKirby . '/lib/site.php');
 require_once($rootKirby . '/lib/load.php');
-require_once($rootKirby . '/lib/uri.php');
-require_once($rootKirby . '/lib/helpers.php');
-require_once($rootKirby . '/lib/template.php');
 
 // autoload additional configs, parsers and plugins
+load::lib();
 load::config();
 load::parsers();
 load::plugins();
