@@ -337,6 +337,7 @@ class pages extends obj {
   
   var $index = array();
   var $pagination = null;
+  var $active = false;
   
   function __toString() {
     $output = array();
@@ -391,19 +392,22 @@ class pages extends obj {
   }
     
   function active() {
-    
-    if($this->active) return $this->active;
-    
+        
     global $site;
 
-    $uri = $site->uri->path()->toString();
+    if($this->active) return $this->active;
+
+    $uri = (string)$site->uri->path();
 
     if(empty($uri)) $uri = c::get('home');
-            
+
     $page = $this->find($uri);
-    $page = (!$page) ? $site->pages->find(c::get('404')) : $page;
-        
-    return $page;
+
+    if(!$page || $page->uri() != $uri) {
+      $page = $site->pages->find(c::get('404'));
+    }
+           
+    return $this->active = $page;
                     
   }
   
