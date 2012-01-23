@@ -144,29 +144,17 @@ class kirbytext {
     return $this->$method($result);
         
   }
-  
-  static function date($params) {
-    
-    $format = @$params['date'];
-    
-    if(str::lower($format) == 'year') {
-      return date('Y');            
-    } else {
-      return date($format);        
-    }
-    
-  }
 
-  static function url($url) {
+  function url($url) {
     if(str::contains($url, 'http://') || str::contains($url, 'https://')) return $url;
 
-    if(!self::$obj) {
+    if(!$this->obj) {
       global $site;
       
       // search for a matching 
       $files = $site->pages()->active()->files();
     } else {
-      $files = self::$obj->files();
+      $files = $this->obj->files();
     }
             
     if($files) {
@@ -177,12 +165,7 @@ class kirbytext {
     return $url;
   }
 
-  static function target($params) {
-    if(empty($params['popup'])) return false;
-    return ' target="_blank"';
-  }
-
-  static function link($params) {
+  function link($params) {
 
     $url    = @$params['link'];
     $class  = @$params['class'];
@@ -194,46 +177,13 @@ class kirbytext {
     if(!empty($title)) $title = ' title="' . html($title) . '"';
         
     if(empty($url)) return false;
-    if(empty($params['text'])) return '<a' . $target . $class . $title . ' href="' . self::url($url) . '">' . h($url) . '</a>';
+    if(empty($params['text'])) return '<a' . $target . $class . $title . ' href="' . $this->url($url) . '">' . html($url) . '</a>';
 
-    return '<a' . $target . $class . $title . ' href="' . self::url($url) . '">' . h($params['text']) . '</a>';
-
-  }
-
-  static function email($params) {
-    
-    $url   = @$params['email'];
-    $class = @$params['class'];
-    $title = @$params['title'];
-    
-    if(empty($url)) return false;
-    return str::email($url, @$params['text'], $title, $class);
+    return '<a' . $target . $class . $title . ' href="' . $this->url($url) . '">' . html($params['text']) . '</a>';
 
   }
 
-  static function twitter($params) {
-    
-    $username = @$params['twitter'];
-    $class  = @$params['class'];
-    $title  = @$params['title'];
-    $target = self::target($params);
-    
-    if(empty($username)) return false;
-
-    $username = str_replace('@', '', $username);
-    $url = 'http://twitter.com/' . $username;
-
-    // add a css class if available
-    if(!empty($class)) $class = ' class="' . $class . '"';
-    if(!empty($title)) $title = ' title="' . html($title) . '"';
-    
-    if(empty($params['text'])) return '<a' . $target . $class . $title . ' href="' . self::url($url) . '">@' . h($username) . '</a>';
-
-    return '<a' . $target . $class . $title . ' href="' . self::url($url) . '">' . h($params['text']) . '</a>';
-
-  }
-  
-  static function image($params) {
+  function image($params) {
     
     global $site;
     
@@ -259,17 +209,17 @@ class kirbytext {
     if(!empty($title)) $title = ' title="' . html($title) . '"';
     if(empty($alt))    $alt   = $site->title();
             
-    $image = '<img src="' . self::url($url) . '"' . $w . $h . $class . $title . ' alt="' . h($alt) . '" />';
+    $image = '<img src="' . $this->url($url) . '"' . $w . $h . $class . $title . ' alt="' . html($alt) . '" />';
 
     if(!empty($params['link'])) {
-      return '<a' . $class . $target . $title . ' href="' . self::url($params['link']) . '">' . $image . '</a>';
+      return '<a' . $class . $target . $title . ' href="' . $this->url($params['link']) . '">' . $image . '</a>';
     }
     
     return $image;
     
   }
 
-  static function file($params) {
+  function file($params) {
 
     $url    = @$params['file'];
     $text   = @$params['text'];
@@ -277,15 +227,57 @@ class kirbytext {
     $title  = @$params['title'];
     $target = self::target($params);
 
-    if(empty($text)) $text = h($url);
-
+    if(empty($text))   $text  = $url;
     if(!empty($class)) $class = ' class="' . $class . '"';
     if(!empty($title)) $title = ' title="' . html($title) . '"';
 
-    return '<a' . $target . $title . $class . ' href="' . self::url($url) . '">' . h($text) . '</a>';
+    return '<a' . $target . $title . $class . ' href="' . $this->url($url) . '">' . html($text) . '</a>';
+
+  }
+  
+  static function date($params) {
+    $format = @$params['date'];
+    return (str::lower($format) == 'year') ? date('Y') : date($format);
+  }
+
+  static function target($params) {
+    if(empty($params['popup'])) return false;
+    return ' target="_blank"';
+  }
+
+  static function email($params) {
+    
+    $url   = @$params['email'];
+    $class = @$params['class'];
+    $title = @$params['title'];
+    
+    if(empty($url)) return false;
+    return str::email($url, @$params['text'], $title, $class);
 
   }
 
+  static function twitter($params) {
+    
+    $username = @$params['twitter'];
+    $class    = @$params['class'];
+    $title    = @$params['title'];
+    $target   = self::target($params);
+    
+    if(empty($username)) return false;
+
+    $username = str_replace('@', '', $username);
+    $url = 'http://twitter.com/' . $username;
+
+    // add a css class if available
+    if(!empty($class)) $class = ' class="' . $class . '"';
+    if(!empty($title)) $title = ' title="' . html($title) . '"';
+    
+    if(empty($params['text'])) return '<a' . $target . $class . $title . ' href="' . $url . '">@' . html($username) . '</a>';
+
+    return '<a' . $target . $class . $title . ' href="' . $url . '">' . html($params['text']) . '</a>';
+
+  }
+  
   static function youtube($params) {
 
     $url   = @$params['youtube'];
