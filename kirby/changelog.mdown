@@ -5,6 +5,7 @@
 ### Changes
 
 - date fields can now be sorted correctly with sortBy
+- kirbytext can now be extended
 
 ## 1.0.2
 
