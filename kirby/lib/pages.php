@@ -132,7 +132,11 @@ class page extends obj {
   }
   
   function url() {
-    return ($this->isHomePage()) ? u() : u($this->uri);
+    if($this->isHomePage() && !c::get('home.keepurl')) {
+      return u();
+    } else {
+      return u($this->uri);
+    }
   }
 
   function tinyurl() {
