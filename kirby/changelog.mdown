@@ -6,6 +6,9 @@
 
 - date fields can now be sorted correctly with sortBy
 - kirbytext can now be extended
+- new param() helper function
+- new $pages->filterBy() method
+- new way to load library files
 
 ## 1.0.2
 

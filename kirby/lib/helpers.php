@@ -59,4 +59,10 @@ function js($url) {
   return '<script src="' . $url . '"></script>' . "\n";
 }
 
+// fetch a param from the URI
+function param($key, $default=false) {
+  global $site;
+  return $site->uri->params($key, $default);
+}
+
 ?>

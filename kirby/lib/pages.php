@@ -452,6 +452,19 @@ class pages extends obj {
     $args = func_get_args();
     return $this->findBy('hash', $args);  
   }
+  
+  function filterBy($field, $value, $split=false) {
+    $pages = array();
+    foreach($this->_ as $key => $page) {
+      if($split) {
+        $values = str::split((string)$page->$field(), $split);
+        if(in_array($value, $values)) $pages[$key] = $page;
+      } else if($page->$field() == $value) {
+        $pages[$key] = $page;
+      }
+    }
+    return new pages($pages);    
+  }
     
   function visible() {
     $pages = array();

@@ -13,8 +13,9 @@ function excerpt($text, $length=140, $markdown=true) {
 }
 
 function youtube($url, $width=false, $height=false, $class=false) {
-  $class = kirbytext::classname();
-  return $class::youtube(array(
+  $name  = kirbytext::classname();
+  $class = new $name;
+  return $class->youtube(array(
     'youtube' => $url,
     'width'   => $width,
     'height'  => $height,
@@ -23,8 +24,9 @@ function youtube($url, $width=false, $height=false, $class=false) {
 }
 
 function vimeo($url, $width=false, $height=false, $class=false) {
-  $class = kirbytext::classname();
-  return $class::vimeo(array(
+  $name  = kirbytext::classname();
+  $class = new $name;
+  return $class->vimeo(array(
     'vimeo'  => $url,
     'width'  => $width,
     'height' => $height,
@@ -33,13 +35,15 @@ function vimeo($url, $width=false, $height=false, $class=false) {
 }
 
 function flash($url, $width=false, $height=false) {
-  $class = kirbytext::classname();
-  return $class::flash($url, $width, $height);
+  $name  = kirbytext::classname();
+  $class = new $name;
+  return $class->flash($url, $width, $height);
 }
 
 function twitter($username, $text=false, $title=false, $class=false) {
-  $class = kirbytext::classname();
-  return $class::twitter(array(
+  $name  = kirbytext::classname();
+  $class = new $name;
+  return $class->twitter(array(
     'twitter' => $username,
     'text'    => $text,
     'title'   => $title,
@@ -48,8 +52,9 @@ function twitter($username, $text=false, $title=false, $class=false) {
 }
 
 function gist($url, $file=false) {
-  $class = kirbytext::classname();
-  return $class::gist(array(
+  $name  = kirbytext::classname();
+  $class = new $name;
+  return $class->gist(array(
     'gist' => $url,
     'file' => $file
   ));
