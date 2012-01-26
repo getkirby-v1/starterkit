@@ -467,11 +467,7 @@ class pages extends obj {
   }
     
   function visible() {
-    $pages = array();
-    foreach($this->_ as $key => $page) {
-      if($page->visible) $pages[$key] = $page;
-    }   
-    return new pages($pages);    
+    return $this->filterBy('visible', true);
   }
   
   function countVisible() {
@@ -479,41 +475,13 @@ class pages extends obj {
   }
 
   function invisible() {
-    $pages = array();
-    foreach($this->_ as $key => $page) {
-      if(!$page->visible) $pages[$key] = $page;
-    }   
-    return new pages($pages);      
+    return $this->filterBy('visible', false);
   }
     
   function countInvisible() {
     return $this->invisible()->count();  
   }
-  
-  function online() {
-    $pages = array();
-    foreach($this->_ as $key => $page) {
-      if($page->online) $pages[$key] = $page;
-    }   
-    return new pages($pages);        
-  }
-
-  function countOnline() {
-    return $this->online()->count();    
-  }
-  
-  function offline() {
-    $pages = array();
-    foreach($this->_ as $key => $page) {
-      if($page->offline) $pages[$key] = $page;
-    }   
-    return new pages($pages);          
-  }
-  
-  function countOffline() {
-    return $this->offline()->count();      
-  }
-
+    
   function without($uid) {
     $pages = $this->_;
     unset($pages[$uid]);
