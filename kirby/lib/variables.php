@@ -23,11 +23,14 @@ class variables extends file {
     parent::__construct($array);
     
     $vars = self::fetch($this->root);
-    
-    foreach($vars as $key => $var) {
-      $this->_['variables'][$key] = $var;
+    $this->_['variables'] = array();
+
+    if($vars) {
+      foreach($vars as $key => $var) {
+        $this->_['variables'][$key] = $var;
+      }
     }
-            
+                
   }
   
   static function fetch($file) {
