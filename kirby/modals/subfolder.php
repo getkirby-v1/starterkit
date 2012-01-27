@@ -83,10 +83,18 @@ strong {
 <p>
   <code>
     <pre>
-      c::set('subfolder', '<?php echo $subfolder ?>');<br />
       c::set('url', '<?php echo $url ?>');
     </pre>
   </code>
+</p>
+<p>… and …</p>
+<p>
+  <code>
+    <pre>
+      c::set('subfolder', '<?php echo $subfolder ?>');<br />
+    </pre>
+  </code>
+</p>
 </p>
 <p>
   You might also need to adjust your .htaccess file if you are using mod_rewrite<br />
