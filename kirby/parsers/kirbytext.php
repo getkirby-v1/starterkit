@@ -369,11 +369,13 @@ class kirbytext {
   }
 
   function addTags() {
-    $this->tags = array_merge($this->tags, func_get_args());
+    $args = func_get_args();
+    $this->tags = array_merge($this->tags, $args);
   }
 
   function addAttributes($attr) {
-    $this->attr = array_merge($this->attr, func_get_args());      
+    $args = func_get_args();
+    $this->attr = array_merge($this->attr, $args);      
   }
   
 }
