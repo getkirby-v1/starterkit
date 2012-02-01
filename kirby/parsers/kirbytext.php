@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
@@ -84,7 +84,16 @@ class kirbytext {
           
     // pass the parent page if available
     if(is_object($this->text)) $this->obj = $this->text->parent;
-
+	
+	$plugin_tags = Plugins::invoke('KirbyTextPlugin', 'tagname');
+	foreach ($plugin_tags as $pluginname => $tag) {
+		$this->addTags($tag);
+	}
+	
+	$plugin_attributes = Plugins::invoke('KirbyTextPlugin', 'attributes');
+	foreach ($plugin_attributes as $pluginname => $attributes) {
+		$this->attr = array_merge($this->attr, $attributes);
+	}	
   }
   
   function get() {
@@ -128,7 +137,6 @@ class kirbytext {
     $string = @$args[0];    
     
     if(empty($string)) return false;
-    if(!method_exists($this, $method)) return $string;
     
     $replace = array('(', ')');            
     $string  = str_replace($replace, '', $string);
@@ -147,6 +155,17 @@ class kirbytext {
       $result[ $key ] = $value;
       $num = $num+2;
 
+    }
+
+    if(!method_exists($this, $method)) {
+		$parse_results = Plugins::invoke('KirbyTextPlugin', 'parse_' . $method, $result);
+	
+		if (empty($parse_results)) {
+			return $string;
+		} else {
+			$vals = array_values($parse_results);
+			return $vals[0];
+		}
     }
 
     return $this->$method($result);
@@ -376,6 +395,14 @@ class kirbytext {
     $this->attr = array_merge($this->attr, func_get_args());      
   }
   
+}
+
+interface KirbyTextPlugin extends Plugin {
+
+	public function tagname();
+	
+	public function attributes();
+
 }
 
 ?>
