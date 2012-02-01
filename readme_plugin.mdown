@@ -1,0 +1,29 @@
+# Kirby
+
+Kirby is a file-based CMS Plugin System.   
+Easy to setup, easy to use, flexible as hell.
+
+<http://getkirby.com>
+
+Subscribe to the Kirby newsletter: <http://tinyletter.com/kirby>    
+or follow @getkirby on Twitter for updates: <http://twitter.com/getkirby>
+Kirby even has a Facebook page: <http://facebook.com/getkirby>
+
+
+## Buy
+
+Though Kirby's source code is available on Github: <http://github.com/bastianallgeier/kirbycms>, you must purchase a license per website. 
+Please go to <http://getkirby.com/buy> for more information.
+
+
+## Plugin System
+
+The plugin function is realized by the class Plugins. 
+
+
+## Copyright
+
+© 2009-2012 Bastian Allgeier (OpenWe GmbH)
+<http://getkirby.com>
+
+## Copyright of the plugin system
