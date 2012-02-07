@@ -1,6 +1,6 @@
 <?php
 
-c::set('version', 0.926);
+c::set('version', 0.927);
 c::set('language', 'en');
 c::set('charset', 'utf-8');
 c::set('root', dirname(__FILE__));
@@ -1771,8 +1771,8 @@ class str {
     $out    = array();
 
     foreach($parts AS $p) {
-      $p = self::trim($p);
-      if(!empty($p) && str::length($p) >= $length) $out[] = $p;
+      $p = trim($p);
+      if(str::length($p) > 0 && str::length($p) >= $length) $out[] = $p;
     }
 
     return $out;

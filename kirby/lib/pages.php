@@ -320,10 +320,18 @@ class page extends obj {
   } 
 
 	static function parseName($name) {
-		$match = str::match($name, '!^([0-9]+[\-]+)!', 0);	
-    $uid   = str_replace($match, '', $name);
-    $num   = trim(rtrim($match, '-'));
+
+    if(str::contains($name, '-')) {
+      $match = str::match($name, '!^([0-9]+[\-]+)!', 0);	
+      $uid   = str_replace($match, '', $name);
+      $num   = trim(rtrim($match, '-'));
+    } else {
+      $num   = false;
+      $uid   = $name;
+    }
+    
     return array('uid' => $uid, 'num' => $num);
+
 	}
 
   static function parseDirURI($root) {

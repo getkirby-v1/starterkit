@@ -1,5 +1,19 @@
 #Kirby Changelog
 
+## 1.0.4
+
+### Update from 1.0.3 to 1.0.4
+
+To update from 1.0.3 to 1.0.4 replace the `kirby` system folder.
+
+### Changes
+
+- fixed a bug in str::split and updated to kirby toolkit 0.9.2.7
+- fixed a bug in page::parseName()
+- fixed a bug in kirbytext which caused a fatal error in older php versions
+- more logical instructions on the subfolder modal
+- fixed a possible bug in kirby/lib/variables.php
+
 ## 1.0.3
 
 ### Update from 1.0.2 to 1.0.3
