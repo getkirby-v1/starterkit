@@ -8,6 +8,8 @@ To update from 1.0.3 to 1.0.4 replace the `kirby` system folder.
 
 ### Changes
 
+- new cache::expired() method and better cache::get() method
+- removed the c::set('root.content',…) rule from the config file. It breaks setting the content directory in the index.php
 - fixed a bug in str::split and updated to kirby toolkit 0.9.2.7
 - fixed a bug in page::parseName()
 - fixed a bug in kirbytext which caused a fatal error in older php versions

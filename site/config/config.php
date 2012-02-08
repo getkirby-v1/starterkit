@@ -64,24 +64,6 @@ c::set('rewrite', true);
 /* 
 
 ---------------------------------------
-Content Directory
----------------------------------------
-
-All the content files are located in the 
-content directory, which are based in the root
-of your site. If you want to move it to a different
-directory please define that here: 
-
-c::set('root.content', '/yoursite/somedir');
- 
-*/
-
-c::set('root.content', c::get('root') . '/content');
-
-
-/* 
-
----------------------------------------
 Subfolder Setup
 ---------------------------------------
 
