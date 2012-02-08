@@ -112,11 +112,13 @@ class site extends obj {
       // RedirectMatch 301 ^/home/(.*)$ /$1 in your htaccess file and those
       // next lines will take care of delivering the right pages. 
       $uri = c::get('home') . '/' . $this->uri->path();
-
-      if($redirected = $this->pages->find($uri)) {
-        $page = $redirected;
-        $this->pages->active = $page;
-        $this->uri = new uri($uri);
+        
+      if($redirected = $this->pages()->find($uri)) {
+        if($redirected->uri() == $uri) {
+          $page = $redirected;
+          $this->pages->active = $page;
+          $this->uri = new uri($uri);
+        }
       }
       
     }
