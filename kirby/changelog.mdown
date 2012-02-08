@@ -1,5 +1,15 @@
 #Kirby Changelog
 
+## 1.0.5
+
+### Update from 1.0.4 to 1.0.5
+
+To update from 1.0.4 to 1.0.5 replace the `kirby` system folder.
+
+### Changes
+
+- it's now possible to have subdirectory-less blog article urls. 
+
 ## 1.0.4
 
 ### Update from 1.0.3 to 1.0.4

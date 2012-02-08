@@ -5,14 +5,14 @@ if(!defined('KIRBY')) die('Direct access is not allowed');
 
 class uri {
 
-  function __construct() {
+  function __construct($uri=false) {
     
     // set the defaults
     $this->path      = new uriPath();
     $this->params    = new uriParams();
     $this->query     = new uriQuery(str::parse(server::get('query_string'), 'query'));
     $this->extension = false;
-    $this->raw       = $this->raw();
+    $this->raw       = $this->raw($uri);
     $this->url       = url(ltrim($this->raw, '/'));
         
     // crawl the uri and get all elements   
@@ -24,8 +24,8 @@ class uri {
     return $this->toString();
   }
 
-  function raw() {
-    $raw = ltrim(server::get('request_uri'), '/');
+  function raw($uri=false) {
+    $raw = ($uri) ? $uri : ltrim(server::get('request_uri'), '/');
     // strip subfolders from uri    
     if(c::get('subfolder')) $raw = ltrim(str_replace(c::get('subfolder') . '/', '/', $raw), '/');
     return $raw;
@@ -47,7 +47,7 @@ class uri {
         $this->path->_[] = $p;
       }
     }
-    
+        
     // get the extension from the last part of the path    
     $this->extension = f::extension($this->path->last());
       
