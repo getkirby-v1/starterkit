@@ -57,7 +57,7 @@ class file extends obj {
 
     $info = array(
       'size' => f::size($this->root),
-      'mime' => @mime_content_type($this->root)
+      'mime' => (function_exists('mime_content_type')) ? @mime_content_type($this->root) : false
     );
     
     // set the nice size

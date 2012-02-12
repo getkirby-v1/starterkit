@@ -13,9 +13,9 @@ function excerpt($text, $length=140, $markdown=true) {
 }
 
 function youtube($url, $width=false, $height=false, $class=false) {
-  $name  = kirbytext::classname();
-  $class = new $name;
-  return $class->youtube(array(
+  $name = kirbytext::classname();
+  $obj  = new $name;
+  return $obj->youtube(array(
     'youtube' => $url,
     'width'   => $width,
     'height'  => $height,
@@ -24,9 +24,9 @@ function youtube($url, $width=false, $height=false, $class=false) {
 }
 
 function vimeo($url, $width=false, $height=false, $class=false) {
-  $name  = kirbytext::classname();
-  $class = new $name;
-  return $class->vimeo(array(
+  $name = kirbytext::classname();
+  $obj  = new $name;
+  return $obj->vimeo(array(
     'vimeo'  => $url,
     'width'  => $width,
     'height' => $height,
@@ -35,15 +35,15 @@ function vimeo($url, $width=false, $height=false, $class=false) {
 }
 
 function flash($url, $width=false, $height=false) {
-  $name  = kirbytext::classname();
-  $class = new $name;
-  return $class->flash($url, $width, $height);
+  $name = kirbytext::classname();
+  $obj  = new $name;
+  return $obj->flash($url, $width, $height);
 }
 
 function twitter($username, $text=false, $title=false, $class=false) {
-  $name  = kirbytext::classname();
-  $class = new $name;
-  return $class->twitter(array(
+  $name = kirbytext::classname();
+  $obj  = new $name;
+  return $obj->twitter(array(
     'twitter' => $username,
     'text'    => $text,
     'title'   => $title,
@@ -52,9 +52,9 @@ function twitter($username, $text=false, $title=false, $class=false) {
 }
 
 function gist($url, $file=false) {
-  $name  = kirbytext::classname();
-  $class = new $name;
-  return $class->gist(array(
+  $name = kirbytext::classname();
+  $obj  = new $name;
+  return $obj->gist(array(
     'gist' => $url,
     'file' => $file
   ));
@@ -69,7 +69,7 @@ class kirbytext {
   var $tags  = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
   var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt');
 
-  function init($text, $mdown=true) {
+  function init($text=false, $mdown=true) {
     
     $classname = self::classname();            
     $kirbytext = new $classname($text, $mdown);    
@@ -77,7 +77,7 @@ class kirbytext {
               
   }
 
-  function __construct($text, $mdown=true) {
+  function __construct($text=false, $mdown=true) {
       
     $this->text  = $text;  
     $this->mdown = $mdown;
