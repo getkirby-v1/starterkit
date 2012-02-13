@@ -1,6 +1,6 @@
 <?php
 
-c::set('version', 0.927);
+c::set('version', 0.928);
 c::set('language', 'en');
 c::set('charset', 'utf-8');
 c::set('root', dirname(__FILE__));
@@ -1669,7 +1669,7 @@ class str {
   static function excerpt($string, $chars=140, $removehtml=true, $rep='…') {
     if($removehtml) $string = strip_tags($string);
     $string = str::trim($string);    
-    $string = str_replace("\n", '', $string);
+    $string = str_replace("\n", ' ', $string);
     if(str::length($string) <= $chars) return $string;
     return ($chars==0) ? $string : substr($string, 0, strrpos(substr($string, 0, $chars), ' ')) . $rep;
   }

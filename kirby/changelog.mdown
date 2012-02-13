@@ -9,6 +9,9 @@ To update from 1.0.4 to 1.0.5 replace the `kirby` system folder.
 ### Changes
 
 - it's now possible to have subdirectory-less blog article urls. 
+- fixed a bug in parsers/kirbytext.php
+- fixed a bug in lib/files.php
+- updated the toolkit to 0.928
 
 ## 1.0.4
 
