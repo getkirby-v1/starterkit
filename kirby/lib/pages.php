@@ -347,6 +347,14 @@ class pages extends obj {
   var $pagination = null;
   var $active = false;
   
+  function __construct($array) {
+    $_ = array();
+    foreach($array as $key => $value) {
+      $_['_' . $this->_key($key)] = $value;
+    }
+    $this->_ = $_;    
+  }
+  
   function __toString() {
     $output = array();
     foreach($this->_ as $key => $page) {
@@ -355,12 +363,16 @@ class pages extends obj {
     return implode("\n", $output);
   }
   
+  function _key($key) {
+    return ltrim($key, '_');
+  }
+  
   function index($obj=null, $path=false) {
     
     if(!$obj) $obj = $this;
 
     foreach($obj->_ as $key => $page) {
-      $newPath = ltrim($path . '/' . $key, '/');
+      $newPath = ltrim($path . '/' . $page->uid() , '/');
       $this->index[$newPath] = $page;
       $this->index($page->children(), $newPath);
     }
@@ -389,8 +401,8 @@ class pages extends obj {
     $obj   = $this;
     $page  = false;
 
-    foreach($array as $p) {
-      $next = $obj->{$p};
+    foreach($array as $p) {    
+      $next = $obj->{'_' . $p};
       if(!$next) return $page;
 
       $page = $next;

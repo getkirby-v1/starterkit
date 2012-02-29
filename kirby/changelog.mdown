@@ -1,5 +1,16 @@
 #Kirby Changelog
 
+## 1.0.6
+
+### Update from 1.0.5 to 1.0.6
+
+To update from 1.0.5 to 1.0.6 replace the `kirby` system folder.
+
+### Changes
+
+- fixed a bug with numeric folder names (2010, 1234, etc.)
+- added rel="" to the kirbytext link tag: (link: http://google.com rel: nofollow)
+
 ## 1.0.5
 
 ### Update from 1.0.4 to 1.0.5

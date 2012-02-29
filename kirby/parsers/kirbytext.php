@@ -67,7 +67,7 @@ class kirbytext {
   var $text  = null;
   var $mdown = false;
   var $tags  = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
-  var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt');
+  var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel');
 
   function init($text=false, $mdown=true) {
     
@@ -177,17 +177,19 @@ class kirbytext {
 
     $url    = @$params['link'];
     $class  = @$params['class'];
+    $rel    = @$params['rel'];
     $title  = @$params['title'];
     $target = self::target($params);
 
     // add a css class if available
     if(!empty($class)) $class = ' class="' . $class . '"';
+    if(!empty($rel))   $rel   = ' rel="' . $rel . '"';
     if(!empty($title)) $title = ' title="' . html($title) . '"';
         
     if(empty($url)) return false;
-    if(empty($params['text'])) return '<a' . $target . $class . $title . ' href="' . $this->url($url) . '">' . html($url) . '</a>';
+    if(empty($params['text'])) return '<a' . $target . $class . $rel . $title . ' href="' . $this->url($url) . '">' . html($url) . '</a>';
 
-    return '<a' . $target . $class . $title . ' href="' . $this->url($url) . '">' . html($params['text']) . '</a>';
+    return '<a' . $target . $class . $rel . $title . ' href="' . $this->url($url) . '">' . html($params['text']) . '</a>';
 
   }
 
