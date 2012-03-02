@@ -1,5 +1,13 @@
 #Kirby Changelog
 
+## 1.0.7
+
+### Changes
+
+- fixed a bug with invalid variable names in content files. They get converted to valid function names now. 
+- added strict comparison for objects to improve perf and avoid nested errors. 
+- added $pages->files()->flip() to be compliant with the pages class
+
 ## 1.0.6
 
 ### Update from 1.0.5 to 1.0.6

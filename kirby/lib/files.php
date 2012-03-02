@@ -403,6 +403,11 @@ class files extends obj {
     return f::nice_size($this->totalSize());
   }
 
+  function flip() {
+    $files = array_reverse($this->_, true);
+    return new files($files);
+  }
+
   function sortBy($field, $direction='asc', $method=SORT_REGULAR) {
     $files = a::sort($this->_, $field, $direction, $method);
     return new files($files);

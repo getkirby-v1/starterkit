@@ -44,7 +44,7 @@ class variables extends file {
       if(count($parts) == 1 && count($sections) == 1) {
         return $content;
       }
-      $key = str::urlify($parts[0]);
+      $key = str::lower(preg_replace('![^a-z0-9]+!i', '_', trim($parts[0])));
       if(empty($key)) continue;
       $value = trim(implode(':', array_slice($parts, 1)));
       $data[$key] = $value;

@@ -3,8 +3,8 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
-c::set('version.string', '1.0.6');
-c::set('version.number', 1.06);
+c::set('version.string', '1.0.7');
+c::set('version.number', 1.07);
 
 // define all directories
 c::set('root.templates', c::get('root.site') . '/templates');
