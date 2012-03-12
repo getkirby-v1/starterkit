@@ -2,6 +2,10 @@
 
 ## 1.0.7
 
+### Update from 1.0.6 to 1.0.7
+
+To update from 1.0.6 to 1.0.7 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
+
 ### Changes
 
 - made sure the .htaccess file is no longer a binary to avoid permission problems.  
