@@ -4,9 +4,11 @@
 
 ### Changes
 
+- made sure the .htaccess file is no longer a binary to avoid permission problems.  
 - fixed a bug with invalid variable names in content files. They get converted to valid function names now. 
-- added strict comparison for objects to improve perf and avoid nested errors. 
+- added strict comparison for objects to improve performance and avoid nested errors. 
 - added $pages->files()->flip() to be compliant with the pages class
+- added a recommended values section to the htaccess file. 
 
 ## 1.0.6
 
