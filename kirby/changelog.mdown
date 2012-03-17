@@ -1,5 +1,11 @@
 #Kirby Changelog
 
+## 1.0.8
+
+### Changes
+
+- fixed a bug in pages::findBy(). Strict comparison did break comparing strings. 
+
 ## 1.0.7
 
 ### Update from 1.0.6 to 1.0.7

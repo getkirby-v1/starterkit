@@ -448,7 +448,7 @@ class pages extends obj {
     }
     if(empty($this->index)) $this->index();
     foreach($this->index as $page) {
-      if($value === $page->$key()) return $page;
+      if($value == $page->$key()) return $page;
     }
     return false;        
   }
