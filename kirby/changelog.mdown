@@ -2,9 +2,14 @@
 
 ## 1.0.8
 
+### Update from 1.0.7 to 1.0.8
+
+To update from 1.0.7 to 1.0.8 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
+
 ### Changes
 
 - fixed a bug in pages::findBy(). Strict comparison did break comparing strings. 
+- added a yaml parser
 
 ## 1.0.7
 
