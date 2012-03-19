@@ -479,7 +479,7 @@ class pages extends obj {
       if($split) {
         $values = str::split((string)$page->$field(), $split);
         if(in_array($value, $values)) $pages[$key] = $page;
-      } else if($page->$field() === $value) {
+      } else if($page->$field() == $value) {
         $pages[$key] = $page;
       }
     }
