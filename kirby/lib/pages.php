@@ -504,7 +504,7 @@ class pages extends obj {
     
   function without($uid) {
     $pages = $this->_;
-    unset($pages[$uid]);
+    unset($pages['_' . $uid]);
     return new pages($pages);        
   }
 

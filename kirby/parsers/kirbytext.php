@@ -69,7 +69,7 @@ class kirbytext {
   var $tags  = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
   var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel');
 
-  function init($text=false, $mdown=true) {
+  static function init($text=false, $mdown=true) {
     
     $classname = self::classname();            
     $kirbytext = new $classname($text, $mdown);    

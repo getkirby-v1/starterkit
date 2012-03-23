@@ -1,5 +1,17 @@
 #Kirby Changelog
 
+## 1.0.9
+
+### Update from 1.0.8 to 1.0.9
+
+To update from 1.0.8 to 1.0.9 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
+
+### Changes
+
+- fixed a bug in pages::filterBy(). 
+- fixed a possible php error in kirbytext::init()
+- fixed a bug in pages::without()
+
 ## 1.0.8
 
 ### Update from 1.0.7 to 1.0.8
