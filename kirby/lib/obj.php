@@ -3,6 +3,17 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
+/**
+ * The Core Object
+ *
+ * Almost every other object in Kirby is based
+ * on this class and their methods.
+ * 
+ * It implements magic getters, setters, 
+ * helper methods and a custom iterator.
+ * 
+ * @package Kirby CMS
+ */
 class obj implements Iterator {
 
   public $_ = array();
