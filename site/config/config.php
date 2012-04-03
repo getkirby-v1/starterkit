@@ -317,4 +317,11 @@ custom config by specific rules for that host.
 
 */
 
+
+
+c::set('lang.support', true);
+c::set('lang.default', 'en');
+c::set('lang.available', array('en', 'de'));
+c::set('lang.detect', true);
+
 ?>

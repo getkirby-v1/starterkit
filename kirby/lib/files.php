@@ -275,21 +275,85 @@ class files extends obj {
   }
 
   function dispatchContent() {
+        
+    $default = false;
+    $current = false;
+    $result  = false;
     
     foreach($this->contents() as $key => $content) {
-
-      // find a matching file
+      
+      // find a file with the same name        
       $file = $this->find($content->name);
+      
+      // skip media description files
       if($file) {
+        // merge the file's variables with the variables from 
+        // the media description file.
         $file->_ = array_merge($file->_, $content->variables);
-        // remove this from the list of contents
+        // remove this media description file from the list of contents
+        unset($this->_[$key]);        
+        continue;
+      }
+      
+      // at this poin only content files will be left
+      
+      // search for content files with attached language codes        
+      if(preg_match('!\.([a-z]{2})\.txt!i', $key, $match)) {
+        $code = @$match[1];
+        
+        // get rid of unneeded language files
+        if($code != c::get('lang.default') && $code != c::get('lang.current')) {
+          unset($this->_[$key]);          
+          continue;
+        }
+        
+        // set the default and the current     
+        if($code == c::get('lang.default')) {
+          $default = $content;
+        } else {
+          // this must be the current
+          $current = $content;
+        }
+        
+        // remove it from the set of files
+        // to add it again in a cleared way later                              
         unset($this->_[$key]);
+        
+      } else {
+        // content files without attached language code
+        // are considered to be the default language file
+        $default = $content;
       }
     
     }
     
-  }
+    if(!$default && !$current) return;
+    
+    // build a result file
+    $result = $default;
+    
+    // now overwrite the result file variables with 
+    // the current file variables      
+    if($current && $current != $default) {      
+      $result->variables = array_merge($result->variables, $current->variables);
+    }
 
+    // build a cleaned name
+    $name = $result->name();
+    $name = f::name($name);    
+    
+    // replace the name with the language extension
+    // with the cleaned name without the extension
+    // otherwise the templates wouldn't be loadable by that name
+    $result->name = $name;
+    $result->filename = $name . '.' . c::get('lang.current') . '.txt';
+            
+    // add the cleared file to the list of files again
+    // this time also with a cleared name
+    $this->_[$name . '.txt'] = $result;
+    
+  }
+  
   function slice($offset=null, $limit=null) {
     if($offset === null && $limit === null) return $this;
     return new files(array_slice($this->_, $offset, $limit));

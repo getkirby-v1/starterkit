@@ -54,6 +54,15 @@ class load {
     }
     
   }
+
+  static function language() {
+    $root    = c::get('root.site') . '/languages';
+    $default = $root . '/' . c::get('lang.default') . '.php';    
+    $current = $root . '/' . c::get('lang.current') . '.php';    
+    
+    self::file($default);
+    self::file($current);
+  }
   
   static function file($file) {
     if(!file_exists($file)) return false;

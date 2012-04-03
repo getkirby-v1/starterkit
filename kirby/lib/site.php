@@ -15,6 +15,9 @@ class site extends obj {
     // auto-detect the url if it is not set
     if(!c::get('url')) c::set('url', c::get('scheme') . server::get('http_host'));
 
+    // setup the multi-language support        
+    $this->languageSetup();
+
     // check if the cache is enabled at all
     $this->cacheEnabled = (c::get('cache') && (c::get('cache.html') || c::get('cache.data'))) ? true : false;
 
@@ -31,7 +34,7 @@ class site extends obj {
 
     }
 
-    $cacheID = 'site.php';
+    $cacheID = $this->dataCacheID();
     $cacheModified = time();
     $cacheData = null;
         
@@ -67,7 +70,6 @@ class site extends obj {
     }
         
     // attach the uri after caching
-    // this will definitely be variable :)
     $this->uri = new uri();
                                             
   }
@@ -150,7 +152,7 @@ class site extends obj {
     tpl::set('pages', $pages);
     tpl::set('page',  $page);
 
-    $cacheID = $this->uri->toCacheID() . '.php';
+    $cacheID = $this->htmlCacheID();
     $cacheModified = time();
     $cacheData = null;
     
@@ -254,7 +256,13 @@ class site extends obj {
 
   function siteInfo() {
   
-    $file = c::get('root.content') . '/site.txt';
+    if(c::get('lang.support')) {
+      $file = c::get('root.content') . '/site.' . c::get('lang.current') . '.txt';
+      if(!file_exists($file)) $file = c::get('root.content') . '/site.txt';
+    } else {
+      $file = c::get('root.content') . '/site.txt';      
+    }
+  
     $info = variables::fetch($file);
 
     // merge the current site info with the additional
@@ -267,8 +275,55 @@ class site extends obj {
   function modified() {
     return ($this->modified) ? $this->modified : time();
   }
-          
-}
 
+  function dataCacheID() {
+    return (c::get('lang.support')) ? 'site.' . c::get('lang.current') . '.php' : 'site.php';  
+  }
+  
+  function htmlCacheID() {
+    return (c::get('lang.support')) ? $this->uri->toCacheID() . '.' . c::get('lang.current') . '.php' : $this->uri->toCacheID() . '.php';  
+  }
+
+  function languageSetup() {
+
+    // check for activated language support
+    if(!c::get('lang.support')) return false;
+
+    // get the current language code      
+    $code = a::first(explode('/', ltrim(str_replace('index.php', '', server::get('request_uri')), '/')));
+
+    // try to detect the language code if the code is empty
+    if(empty($code)) {
+      
+      if(c::get('lang.detect')) {      
+        // detect the current language
+        $detected = str::split(server::get('http_accept_language'), '-');
+        $detected = str::trim(a::first($detected));
+        $detected = (!in_array($detected, c::get('lang.available'))) ? c::get('lang.default') : $detected;
+
+        // set the detected code as current code          
+        $code = $detected;
+
+      } else {
+        $code = c::get('lang.default');
+      }
+          
+    }
+    
+    // validate the code and switch back to the homepage if it is invalid      
+    if(!in_array($code, c::get('lang.available'))) go(url());
+
+    // set the current language
+    c::set('lang.current', $code);
+
+    // define a new subfolder
+    c::set('subfolder', trim($code . '/' . c::get('subfolder'), '/'));
+    
+    // load the additional language files if available
+    load::language();  
+
+  }
+         
+}
 
 ?>
