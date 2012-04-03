@@ -27,7 +27,7 @@ class uri {
   function raw($uri=false) {
     $raw = ($uri) ? $uri : ltrim(server::get('request_uri'), '/');
     // strip subfolders from uri    
-    if(c::get('subfolder')) $raw = ltrim(str_replace(c::get('subfolder') . '/', '/', $raw), '/');
+    if(c::get('subfolder')) $raw = ltrim(preg_replace('!^' . preg_quote(c::get('subfolder')) . '\/!i', '/', $raw), '/');
     return $raw;
   }
 
