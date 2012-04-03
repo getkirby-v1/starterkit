@@ -25,7 +25,7 @@ function url($uri=false, $lang=false) {
     $lang = ($lang) ? $lang : c::get('lang.current');
     
     // prepend the language code to the uri
-    if($uri) $uri = $lang . '/' . $uri;
+    $uri = $lang . '/' . $uri;
   } 
 
   // if rewrite is deactivated
@@ -41,8 +41,8 @@ function url($uri=false, $lang=false) {
 
 }
 
-function u($uri=false) {
-  return url($uri);
+function u($uri=false, $lang=false) {
+  return url($uri, $lang);
 }
 
 // return the current url with all

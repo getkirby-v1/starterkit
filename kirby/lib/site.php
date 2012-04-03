@@ -257,14 +257,34 @@ class site extends obj {
   function siteInfo() {
   
     if(c::get('lang.support')) {
-      $file = c::get('root.content') . '/site.' . c::get('lang.current') . '.txt';
-      if(!file_exists($file)) $file = c::get('root.content') . '/site.txt';
+
+      $default = c::get('root.content') . '/site.' . c::get('lang.default') . '.txt';
+      $current = c::get('root.content') . '/site.' . c::get('lang.current') . '.txt';
+      
+      if(!file_exists($default)) $default = c::get('root.content') . '/site.txt';
+
+      // if the default language is also the current language
+      // we don't need to load two files
+      if($default == $current) {
+        $info = variables::fetch($default);
+      } else {
+        $defaultInfo = variables::fetch($default);
+        $currentInfo = (file_exists($current)) ? variables::fetch($current) : array();
+      
+        // overwrite the default info with the current info
+        // so we get a nice info array with all variables filled
+        // even if the translated version is not complete.        
+        $info = array_merge($defaultInfo, $currentInfo);
+
+      }
+
     } else {
-      $file = c::get('root.content') . '/site.txt';      
+      // simply load the site.txt file
+      // no fancy language stuff here
+      $file = c::get('root.content') . '/site.txt';
+      $info = variables::fetch($file);
     }
   
-    $info = variables::fetch($file);
-
     // merge the current site info with the additional
     // info from the info file(s)    
     $this->variables = $info;
@@ -311,7 +331,7 @@ class site extends obj {
     }
     
     // validate the code and switch back to the homepage if it is invalid      
-    if(!in_array($code, c::get('lang.available'))) go(url());
+    if(!in_array($code, c::get('lang.available')) && $code != c::get('404')) go(url());
 
     // set the current language
     c::set('lang.current', $code);
