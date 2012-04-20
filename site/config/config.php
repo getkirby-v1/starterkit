@@ -138,11 +138,15 @@ Markdown Setup
 ---------------------------------------
 
 to disable automatic line breaks in markdown
-set this to false
+set this to false. 
+
+You can also switch between regular markdown
+or markdown extra: http://michelf.com/projects/php-markdown/extra/
 
 */
 
 c::set('markdown.break', true);
+c::set('markdown.extra', true);
 
 
 /*

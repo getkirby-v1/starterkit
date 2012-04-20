@@ -13,6 +13,9 @@ To update from 1.0.8 to 1.0.9 replace the `kirby` system folder. Delete all file
 - fixed a bug in pages::without()
 - proper 404 header for error pages
 - improved uri::raw() method
+- added optional php markdown extra parser
+- updated to kirby toolkit 0.930
+- new files::filterBy() method
 
 ## 1.0.8
 

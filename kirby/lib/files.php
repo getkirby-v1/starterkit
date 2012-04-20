@@ -367,6 +367,19 @@ class files extends obj {
     return new files($files);        
   }
 
+  function filterBy($field, $value, $split=false) {
+    $files = array();
+    foreach($this->_ as $key => $file) {
+      if($split) {
+        $values = str::split((string)$file->$field(), $split);
+        if(in_array($value, $values)) $files[$key] = $file;
+      } else if($file->$field() == $value) {
+        $files[$key] = $file;
+      }
+    }
+    return new files($files);    
+  }
+
   function images() {
     return $this->findByType('image');
   }

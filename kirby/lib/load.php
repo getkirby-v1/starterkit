@@ -44,13 +44,15 @@ class load {
 
   static function parsers() {
     $root  = c::get('root.parsers');
-    $files = dir::read($root);    
-  
-    if(!is_array($files)) return false;
-            
-    foreach($files as $file) {
-      if(f::extension($file) != 'php') continue;
-      self::file($root . '/' . $file);
+
+    require_once($root . '/defaults.php');
+    require_once($root . '/yaml.php');
+    require_once($root . '/kirbytext.php');
+
+    if(c::get('markdown.extra')) {
+      require_once($root . '/markdown.extra.php');
+    } else {
+      require_once($root . '/markdown.php');    
     }
     
   }
