@@ -12,7 +12,7 @@
  */
 
 
-c::set('version', 0.929);
+c::set('version', 0.930);
 c::set('language', 'en');
 c::set('charset', 'utf-8');
 c::set('root', dirname(__FILE__));
@@ -134,13 +134,11 @@ function load() {
 
 
 /**
- * The Kirby Array Class
+ * 
+ * Array 
  *
  * This class is supposed to simplify array handling
  * and make it more consistent. 
- * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
  * 
  * @package Kirby
  */
@@ -417,15 +415,13 @@ class a {
 
 
 /**
- * The Kirby Browser Sniffer Class
  *
- * Browser sniffing is bad -- I know! 
- * But sometimes this class is very helpful to 
- * react on certain browser and build browser-specific
- * css selectors for example. It's up to you to use it.
+ * Browser 
  * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * Browser sniffing is bad - I know! 
+ * But sometimes this class is very helpful to 
+ * react on certain browsers and build browser-specific
+ * css selectors for example. It's up to you to use it.
  * 
  * @package Kirby
  */
@@ -701,13 +697,11 @@ class browser {
 
 
 /**
- * The Kirby Config Class
- *
- * This is the core class to handle configuration 
- * values/constants. 
  * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * Config 
+ * 
+ * This is the core class to handle 
+ * configuration values/constants. 
  * 
  * @package Kirby
  */
@@ -768,13 +762,11 @@ class c {
 
 
 /**
- * The Kirby Content Class
- *
+ * 
+ * Content
+ * 
  * This class handles output buffering,
  * content loading and setting content type headers. 
- * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
  * 
  * @package Kirby
  */
@@ -856,12 +848,10 @@ class content {
 
 
 /**
- * The Kirby Cookie Class
- *
- * This class makes cookie handling easy
  * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * Cookie
+ * 
+ * This class makes cookie handling easy
  * 
  * @package Kirby
  */
@@ -913,20 +903,20 @@ class cookie {
 
 
 /**
- * The Kirby Database Class
- *
- * Database handling sucks -- not with this class :)
  * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * Database
+ * 
+ * Database handling sucks - not with this class :)
  * 
  * Configure your database connection like this:
  * 
+ * <code>
  * c::set('db.host', 'localhost');
  * c::set('db.user', 'root');
  * c::set('db.password', '');
  * c::set('db.name', 'mydb');
  * c::set('db.prefix', '');
+ * </code>
  * 
  * @package Kirby
  */
@@ -1656,12 +1646,11 @@ class db {
 
 
 /**
- * The Kirby Directory Class
- *
- * Makes it easy to create/edit/delete directories on the filesystem
  * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * Directory
+ * 
+ * This class makes it easy to create/edit/delete 
+ * directories on the filesystem
  * 
  * @package Kirby
  */
@@ -1828,12 +1817,11 @@ class dir {
 
 
 /**
- * The Kirby File Class
- *
- * Makes it easy to create/edit/delete files
  * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * File
+ * 
+ * This class makes it easy to 
+ * create/edit/delete files
  * 
  * @package Kirby
  */
@@ -2002,12 +1990,11 @@ class f {
 
 
 /**
- * The Kirby Globals Class
- *
- * Easy setting/getting of globals
  * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * Globals
+ * 
+ * The Kirby Globals Class
+ * Easy setting/getting of globals
  * 
  * @package Kirby
  */
@@ -2048,12 +2035,10 @@ class g {
 
 
 /**
- * The Kirby Language Class
- *
- * Some handy methods to handle multi-language support
  * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * Language
+ * 
+ * Some handy methods to handle multi-language support
  * 
  * @todo rework all but set() and get()
  * @package Kirby
@@ -2173,12 +2158,10 @@ class l {
 
 
 /**
- * The Kirby Request Class
- *
- * Handles all incoming requests
  * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * Request
+ * 
+ * Handles all incoming requests
  * 
  * @package Kirby
  */
@@ -2340,12 +2323,10 @@ function get($key=false, $default=null) {
 
 
 /**
- * The Kirby Session Class
- *
- * Handles all session fiddling
  * 
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * Session
+ * 
+ * Handles all session fiddling
  * 
  * @package Kirby
  */
@@ -2434,10 +2415,11 @@ class s {
 
 
 /**
- * The Kirby Server Getter Class
- *
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * 
+ * Server
+ * 
+ * Makes it more convenient to get variables
+ * from the global server array
  * 
  * @package Kirby
  */
@@ -2465,13 +2447,11 @@ class server {
 
 
 /**
- * The Kirby Size Calculator Class
- *
+ * 
+ * Size
+ * 
  * Makes it easy to recalculate image dimensions
  *
- * All methods are static, so it's not 
- * necessary to initialize this class. 
- * 
  * @package Kirby
  */
 class size {
@@ -2574,13 +2554,11 @@ class size {
 
 
 /**
- * The Kirby String Class
- *
+ * 
+ * String
+ * 
  * A set of handy string methods
  *
- * All methods are static, so it's not 
- * necessary to initialize this class. 
- * 
  * @package Kirby
  */
 class str {
@@ -2676,6 +2654,8 @@ class str {
 
   /**
     * Removes all xml entities from a string
+    * and convert them to html entities first
+    * and remove all html entities afterwards.
     *
     * @param  string  $string
     * @return string
@@ -2685,8 +2665,9 @@ class str {
     // flip the conversion table
     $table = array_flip(self::entities());
 
-    // convert html entities to xml entities
-    return strtr($string, $table);
+    // convert xml entities to html entities
+    $string = strtr($string, $table);
+    return str::unhtml($string);
 
   }
 
@@ -2794,6 +2775,7 @@ class str {
     * @return string  The shortened string  
     */  
   static function short($string, $chars, $rep='…') {
+    if($chars == 0) return $string;
     if(str::length($string) <= $chars) return $string;
     $string = self::substr($string,0,($chars-str::length($rep)));
     $punctuation = '.!?:;,-';
@@ -2900,7 +2882,7 @@ class str {
     * @param  int     $end 
     * @return string  
     */
-  function substr($str, $start, $end = null) {
+  static function substr($str, $start, $end = null) {
     return mb_substr($str, $start, ($end == null) ? mb_strlen($str, 'UTF-8') : $end, 'UTF-8');
   }
 
@@ -2939,10 +2921,15 @@ class str {
     * 
     * @param  string  $str
     * @param  string  $needle
+    * @param  boolean $i ignore upper/lowercase
     * @return string  
     */
-  static function contains($str, $needle) {
-    return strstr($str, $needle);
+  static function contains($str, $needle, $i=true) {
+    if($i) {
+      $str    = str::lower($str);
+      $needle = str::lower($needle);
+    }
+    return (strstr($str, $needle)) ? true : false;
   }
 
   /** 
@@ -3171,10 +3158,10 @@ class str {
 
 
 /**
- * The Kirby URL Class
- *
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * 
+ * URL
+ * 
+ * A bunch of handy methods to work with URLs
  * 
  * @package Kirby
  */
@@ -3260,10 +3247,10 @@ class url {
 
 
 /**
- * The Kirby Validator Class
- *
- * All methods are static, so it's not 
- * necessary to initialize this class. 
+ * 
+ * Validator
+ * 
+ * Makes input validation easier
  * 
  * @package Kirby
  */
@@ -3382,10 +3369,10 @@ class v {
 
 
 /**
+ * 
+ * XML
+ * 
  * The Kirby XML Parser Class
- *
- * All methods are static, so it's not 
- * necessary to initialize this class. 
  * 
  * @package Kirby
  */
