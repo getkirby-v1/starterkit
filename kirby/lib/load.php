@@ -20,6 +20,7 @@ class load {
     require_once($root . '/lib/uri.php');
     require_once($root . '/lib/helpers.php');
     require_once($root . '/lib/template.php');
+    require_once($root . '/lib/plugin.php');
     
   }
   

@@ -1,4 +1,4 @@
-Title: Home
+﻿Title: Home
 
 ----
 
@@ -10,3 +10,7 @@ Now just give the links in the menu a try to see if URL redirection works as wel
 Check out the docs: <http://getkirby.com/docs> if you run into any problems or send me an email: <bastian@getkirby.com>
 
 Have fun with Kirby!
+
+(wikipedia: Test text: Test in de.wikipedia.org language: de)
+(wikipedia: Test text: Test in en.wikipedia.org language: en)
+
