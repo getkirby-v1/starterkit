@@ -322,8 +322,40 @@ custom config by specific rules for that host.
 */
 
 
+/* 
 
-c::set('lang.support', true);
+---------------------------------------
+Multi-Language support setup
+---------------------------------------
+
+If you want to run a site with multiple languages, 
+enable support for it here. As soon as you set
+
+c::set('lang.support', true); 
+
+Kirby will automatically create language-dependent 
+URLs like:
+
+http://yourdomain.com/en/blog
+
+or 
+
+http://yourdomain.com/de/blog
+
+Make sure to set the default language code and 
+also the available language codes. 
+
+If you keep…
+
+c::set('lang.detect', true);
+
+Kirby will try to detect the default language 
+from the user agent string instead of using the
+default language. 
+
+*/
+
+c::set('lang.support', false);
 c::set('lang.default', 'en');
 c::set('lang.available', array('en', 'de'));
 c::set('lang.detect', true);
