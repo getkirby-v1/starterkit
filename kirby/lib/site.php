@@ -16,7 +16,7 @@ class site extends obj {
     if(!c::get('url')) c::set('url', c::get('scheme') . server::get('http_host'));
 
     // setup the multi-language support        
-    $this->languageSetup();
+    $this->languageSetup();    
 
     // check if the cache is enabled at all
     $this->cacheEnabled = (c::get('cache') && (c::get('cache.html') || c::get('cache.data'))) ? true : false;
@@ -71,7 +71,7 @@ class site extends obj {
         
     // attach the uri after caching
     $this->uri = new uri();
-                                            
+                                                
   }
 
   function __toString() {
@@ -90,13 +90,13 @@ class site extends obj {
       // if there's no https in the url
       if(!server::get('https')) go(str_replace('http://', 'https://', $page->url()));
     }
-    
+        
     // check for a misconfigured subfolder install
     if($page->isErrorPage()) {
       
       // get the subfolder in which the site is running
       $subfolder = ltrim(dirname(server::get('script_name')), '/');
-      
+                  
       // if it is running in a subfolder and it does not match the config
       // send an error with some explanations how to fix that
       if(!empty($subfolder) && c::get('subfolder') != $subfolder) {
@@ -134,7 +134,7 @@ class site extends obj {
 
     // redirect /home to /
     if($this->uri->path() == c::get('home')) go(url());
-    
+        
     // redirect tinyurls
     if($this->uri->path(1) == c::get('tinyurl.folder') && c::get('tinyurl.enabled')) {
       $hash = $this->uri->path(2);
@@ -309,8 +309,11 @@ class site extends obj {
     // check for activated language support
     if(!c::get('lang.support')) return false;
 
+    // get the raw uri
+    $uri = uri::raw();
+       
     // get the current language code      
-    $code = a::first(explode('/', ltrim(str_replace('index.php', '', server::get('request_uri')), '/')));
+    $code = a::first(explode('/', $uri));
 
     // try to detect the language code if the code is empty
     if(empty($code)) {
@@ -329,15 +332,16 @@ class site extends obj {
       }
           
     }
-    
-    // validate the code and switch back to the homepage if it is invalid      
-    if(!in_array($code, c::get('lang.available')) && $code != c::get('404')) go(url());
+
+    // http://yourdomain.com/error
+    // will redirect to http://yourdomain.com/en/error
+    if($code == c::get('404')) go(url('error', c::get('lang.default')));
+            
+    // validate the code and switch back to the homepage if it is invalid
+    if(!in_array($code, c::get('lang.available'))) go(url());
 
     // set the current language
     c::set('lang.current', $code);
-
-    // define a new subfolder
-    c::set('subfolder', trim($code . '/' . c::get('subfolder'), '/'));
     
     // load the additional language files if available
     load::language();  
