@@ -145,7 +145,7 @@ or markdown extra: http://michelf.com/projects/php-markdown/extra/
 
 */
 
-c::set('markdown.break', true);
+c::set('markdown.breaks', true);
 c::set('markdown.extra', false);
 
 

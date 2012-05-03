@@ -1,5 +1,15 @@
 #Kirby Changelog
 
+## 1.1
+
+### Update from 1.0.9 to 1.1
+
+To update from 1.0.9 to 1.1 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
+
+### Changes
+
+- fixed a bug in the default config (markdown.breaks)
+
 ## 1.0.9
 
 ### Update from 1.0.8 to 1.0.9
