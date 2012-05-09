@@ -9,6 +9,7 @@ To update from 1.0.9 to 1.1 replace the `kirby` system folder. Delete all files 
 ### Changes
 
 - fixed a bug in the default config (markdown.breaks)
+- omitted all ?> to avoid header output bugs
 
 ## 1.0.9
 
