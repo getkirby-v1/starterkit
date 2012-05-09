@@ -270,5 +270,3 @@ class site extends obj {
           
 }
 
-
-?>

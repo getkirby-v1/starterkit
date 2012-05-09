@@ -58,4 +58,3 @@ c::set('timezone', 'UTC');
 c::set('pagination.variable', 'page');
 c::set('pagination.method', 'params');
 
-?>

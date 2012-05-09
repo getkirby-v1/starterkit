@@ -55,5 +55,3 @@ class variables extends file {
     
 }
 
-
-?>

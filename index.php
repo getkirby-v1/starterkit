@@ -70,4 +70,3 @@ if(!file_exists($rootKirby . '/system.php')) {
 
 require_once($rootKirby . '/system.php');
 
-?>

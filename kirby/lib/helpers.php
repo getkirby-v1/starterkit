@@ -65,4 +65,3 @@ function param($key, $default=false) {
   return $site->uri->params($key, $default);
 }
 
-?>

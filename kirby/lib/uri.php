@@ -198,4 +198,3 @@ class uriQuery extends obj {
   
 }
 
-?>
