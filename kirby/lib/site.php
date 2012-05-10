@@ -13,7 +13,7 @@ class site extends obj {
   function __construct() {
 
     // auto-detect the url if it is not set
-    if(!c::get('url')) c::set('url', c::get('scheme') . server::get('http_host'));
+    if(c::get('url') === false) c::set('url', c::get('scheme') . server::get('http_host'));
 
     // check if the cache is enabled at all
     $this->cacheEnabled = (c::get('cache') && (c::get('cache.html') || c::get('cache.data'))) ? true : false;
