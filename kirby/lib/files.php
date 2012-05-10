@@ -335,19 +335,21 @@ class files extends obj {
 
   function findByExtension() {
 
-    $args  = func_get_args();
-    $count = count($args); 
+    $args = a::first(func_get_args());
+    $count = count($args);
+	
     if($count == 0) return false;
-    
+    if(is_array($args) && $count == 1) $args = a::first($args);
+
     $files = array();
     foreach($this->_ as $key => $file) {
       if($count > 1) {
         if(in_array($file->extension, $args)) $files[$key] = $file;
       } else {
-        if($file->extension == $args[0]) $files[$key] = $file;      
+        if($file->extension == $args) $files[$key] = $file;      
       }
     }   
-    return new files($files);      
+    return new files($files);     
   }
 
   function findByType($type) {
