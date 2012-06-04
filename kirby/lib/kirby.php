@@ -3,7 +3,7 @@
 /**
  * Kirby -- A stripped down and easy to use toolkit for PHP
  *
- * @version 0.929
+ * @version 0.94
  * @author Bastian Allgeier <bastian@getkirby.com>
  * @link http://toolkit.getkirby.com
  * @copyright Copyright 2009-2012 Bastian Allgeier
@@ -12,7 +12,7 @@
  */
 
 
-c::set('version', 0.930);
+c::set('version', 0.94);
 c::set('language', 'en');
 c::set('charset', 'utf-8');
 c::set('root', dirname(__FILE__));
@@ -3268,7 +3268,7 @@ class v {
     $min_length = $max_length = 0;
     if(is_array($options)) extract($options);
 
-    if($format && !preg_match('/^[$format]*$/is', $string)) return false;
+    if($format && !preg_match('/^[' . $format . ']*$/is', $string)) return false;
     if($min_length && str::length($string) < $min_length)   return false;
     if($max_length && str::length($string) > $max_length)  return false;
     return true;
@@ -3396,3 +3396,4 @@ class x {
 
 }
 
+?>
