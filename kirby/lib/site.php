@@ -13,7 +13,7 @@ class site extends obj {
   function __construct() {
 
     // auto-detect the url if it is not set
-    if(!c::get('url')) c::set('url', c::get('scheme') . server::get('http_host'));
+    if(c::get('url') === false) c::set('url', c::get('scheme') . server::get('http_host'));
 
     // setup the multi-language support        
     $this->languageSetup();    
@@ -350,4 +350,3 @@ class site extends obj {
          
 }
 
-?>

@@ -506,4 +506,3 @@ class files extends obj {
     
 }
 
-?>

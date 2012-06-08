@@ -97,4 +97,3 @@ class obj implements Iterator {
     
 }
 
-?>

@@ -201,4 +201,3 @@ class uriQuery extends obj {
   
 }
 
-?>

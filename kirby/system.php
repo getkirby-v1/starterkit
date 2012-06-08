@@ -55,4 +55,3 @@ if(c::get('troubleshoot')) {
 $site = new site();
 $site->load();
 
-?>

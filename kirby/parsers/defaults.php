@@ -23,4 +23,3 @@ function multiline($text) {
   return nl2br(html($text));
 }
 
-?>

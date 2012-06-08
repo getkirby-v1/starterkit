@@ -576,4 +576,3 @@ class pages extends obj {
             
 }
 
-?>
