@@ -266,7 +266,7 @@ php errors there.
 
 */
 
-c::set('debug', false);
+c::set('debug', true);
 
 
 /* 
@@ -354,7 +354,7 @@ default language.
 
 */
 
-c::set('lang.support', false);
+c::set('lang.support', true);
 c::set('lang.default', 'en');
 c::set('lang.available', array('en', 'de'));
 c::set('lang.detect', true);

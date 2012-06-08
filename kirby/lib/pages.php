@@ -5,6 +5,8 @@ if(!defined('KIRBY')) die('Direct access is not allowed');
 
 class page extends obj {
 
+  var $content = false;
+
   function __construct() {
     $this->children   = array();
     $this->online     = true; 
@@ -13,6 +15,21 @@ class page extends obj {
   
   function __toString() {
     return '<a href="' . $this->url() . '">' . $this->url() . '</a>';  
+  }
+
+  function content($code=false) {
+    if(!$code) $code = c::get('lang.default');
+    
+    $content = $this->contents()->filterBy('languageCode', $code)->first();
+    $result  = array();
+
+    if($content) {
+      foreach($content->variables as $key => $var) {
+        $result[$key] = new variable($var, $this);
+      }
+    }
+    
+    return new obj($result);
   }
 
   function children($offset=null, $limit=null, $sort='dirname', $direction='asc') {
@@ -25,10 +42,7 @@ class page extends obj {
     foreach($this->children as $child) {
 
       $child = dir::inspect($this->root . '/' . $child);
-      $page  = page::fromDir($child, $this->uri);
-
-      // add the parent page object
-      $page->parent = $this;
+      $page  = page::fromDir($child, $this);
 
       $pages[$page->uid] = $page;
       
@@ -109,7 +123,7 @@ class page extends obj {
 
   function template() {
 
-    $name = (!$this->content || !$this->content->name) ? c::get('tpl.default') : $this->content->name;
+    $name = (!$this->intendedTemplate) ? c::get('tpl.default') : $this->intendedTemplate;
     
     // construct the template file 
     $file = c::get('root.templates') . '/' . $name . '.php';
@@ -134,11 +148,28 @@ class page extends obj {
     return $this->hash = base_convert($checksum, 10, 36);
   }
   
-  function url() {
+  function url($lang=false) {
     if($this->isHomePage() && !c::get('home.keepurl')) {
       return u();
+    } else if(c::get('lang.support') && $lang) {
+      
+      $uri = ($this->url_key != '') ? $this->url_key : $this->uid;
+      $obj = $this;
+      
+      while($parent = $obj->parent()) {
+
+        $uid = $parent->content($lang)->url_key();
+        if(!$uid) $uid = $parent->uid;
+
+        $uri = $uid . '/' . $uri;
+        $obj = $obj->parent();
+      }
+    
+      $uri = $uri;
+      return u($uri, $lang);      
+                    
     } else {
-      return u($this->uri);
+      return u(($this->translatedURI != '') ? $this->translatedURI : $this->uri);
     }
   }
 
@@ -177,7 +208,7 @@ class page extends obj {
 
     if($this->isActive()) return true;
     
-    $p = str::split($this->uri(), '/');
+    $p = (c::get('lang.translated')) ? str::split($this->translatedURI(), '/'): str::split($this->uri(), '/');
     $u = $site->uri->path->toArray();
   
     for($x=0; $x<count($p); $x++) {
@@ -280,17 +311,19 @@ class page extends obj {
     return ($this->contents()->count() > 0) ? true : false;
   }
     
-  static function fromDir($dir, $path) {
+  static function fromDir($dir, $parent) {
   
     // create a new page for this dir      
-    $page = new page();
+    $page   = new page();
+    $parent = ($parent) ? $parent : new obj(); 
     
     $name = self::parseName($dir['name']);
 
     // apply all variables
+    $page->parent   = $parent;
     $page->num      = $name['num'];
     $page->uid      = $name['uid'];
-    $page->uri      = ltrim($path . '/' . $page->uid, '/');
+    $page->uri      = ltrim($parent->uri . '/' . $page->uid, '/');
     $page->dirname  = $dir['name'];
     $page->modified = $dir['modified'];
     $page->root     = $dir['root'];
@@ -306,13 +339,41 @@ class page extends obj {
     $page->files();
 
     // fetch the content
-    $page->content = $page->files()->content();    
+    $content = $page->files()->contents();    
     
-    // merge all variables
-    if($page->content && is_array($page->content->variables)) {
-      foreach($page->content->variables as $key => $var) {
-        $page->_[$key] = new variable($var, $page);
+    if(c::get('lang.support')) {
+
+      $fallback  = $content->filterBy('languageCode', c::get('lang.default'))->first();
+      $variables = ($fallback) ? $fallback->variables : array();
+      
+      $page->intendedTemplate = $fallback->template;
+      
+      if(c::get('lang.translated')) {
+        $translation = $content->filterBy('languageCode', c::get('lang.current'))->first();
+        $variables   = ($translation) ? array_merge($variables, $translation->variables) : $variables;
       }
+
+    } else {
+      
+      $contentfile = $content->first();
+      $variables   = ($contentfile) ? $contentfile->variables : array();
+
+      $page->intendedTemplate = $contentfile->template;
+                
+    }
+        
+    // merge all variables
+    foreach($variables as $key => $var) {
+      $page->_[$key] = new variable($var, $page);
+    }
+     
+    // multi-language translatable urls
+    if(c::get('lang.translated') && $page->url_key != '') {
+      $page->translatedUID = $page->url_key();
+      $page->translatedURI = ltrim($parent->translatedURI . '/' . $page->url_key(), '/');    
+    } else {
+      $page->translatedUID = $page->uid;
+      $page->translatedURI = ltrim($parent->translatedURI . '/' . $page->uid, '/');    
     }
                 
     return $page;
@@ -401,13 +462,18 @@ class pages extends obj {
     $obj   = $this;
     $page  = false;
 
+    // check if we need to search for translated urls
+    $translated = c::get('lang.translated');
+
     foreach($array as $p) {    
-      $next = $obj->{'_' . $p};
+
+      $next = ($translated) ? $obj->findBy('translatedUID', $p) : $obj->{'_' . $p};
       if(!$next) return $page;
 
       $page = $next;
       $obj  = $next->children();
     }
+        
     return $page;    
   }
     
@@ -418,15 +484,21 @@ class pages extends obj {
     if($this->active) return $this->active;
 
     $uri = (string)$site->uri->path();
-
+    
     if(empty($uri)) $uri = c::get('home');
 
     $page = $this->find($uri);
 
-    if(!$page || $page->uri() != $uri) {
+    if($page) {
+      $pageURI = (c::get('lang.translated')) ? $page->translatedURI() : $page->uri();
+    } else {
+      $pageURI = c::get('404');
+    }
+    
+    if(!$page || $pageURI != $uri) {
       $page = $site->pages->find(c::get('404'));
     }
-           
+               
     return $this->active = $page;
                     
   }

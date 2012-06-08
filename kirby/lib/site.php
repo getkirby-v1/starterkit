@@ -93,7 +93,7 @@ class site extends obj {
         
     // check for a misconfigured subfolder install
     if($page->isErrorPage()) {
-      
+            
       // get the subfolder in which the site is running
       $subfolder = ltrim(dirname(server::get('script_name')), '/');
                   
@@ -342,6 +342,9 @@ class site extends obj {
 
     // set the current language
     c::set('lang.current', $code);
+    
+    // mark if this is a translated version or the default version
+    ($code != c::get('lang.default')) ? c::set('lang.translated', true) : c::set('lang.translated', false);
     
     // load the additional language files if available
     load::language();  

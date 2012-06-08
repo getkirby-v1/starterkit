@@ -5,8 +5,15 @@ if(!defined('KIRBY')) die('Direct access is not allowed');
 
 class file extends obj {
   
+  var $meta = array();
+  
   function __toString() {
     return '<a href="' . $this->url() . '">' . $this->url() . '</a>';  
+  }
+
+  function meta($code=false) {
+    if(!$code) $code = c::get('lang.default');
+    return new obj(a::get($this->meta, $code));
   }
 
   function next() {
@@ -174,7 +181,6 @@ class video extends file {
 class files extends obj {
 
   var $pagination = null;
-  var $content = null;
 
   function __toString() {
     $output = array();
@@ -276,13 +282,9 @@ class files extends obj {
   }
 
   function dispatchContent() {
-        
-    $default   = false;
-    $current   = false;
-    $result    = false;
-    $metafiles = array();
-    $template  = false;
-    
+
+    $meta = array();
+            
     foreach($this->contents() as $key => $content) {
             
       // split filenames (already without extension) by .
@@ -294,16 +296,12 @@ class files extends obj {
       // home.txt
       if($countParts == 1) {
 
-        // content files without attached language code
-        // are considered to be the default language file
-        // make sure not to overwrite the default content
-        // if this has already been set by a proper 
-        // named lang file. i.e.: home.en.txt
-        if(!$default) $default = $content;
+        // files without a language code
+        // are considered to be the default language file            
+        $content->languageCode = c::get('lang.default');
 
         // keep the entire name for the template (i.e. home)
-        $template = $content->name;
-
+        $content->template = $content->name;
 
       // home.en.txt 
       // myfile.jpg.txt 
@@ -315,19 +313,18 @@ class files extends obj {
         
         // myfile.jpg.txt
         if($file) {
-          
-          // meta file without language code
-          // are considered to be the default meta file
-          // make sure not to overwrite the default content
-          // if this has already been set by a proper 
-          // named lang file. i.e.: myfile.jpg.en.txt
-          if(!isset($metafiles[$file->filename()]['default'])) {
-            $metafiles[$file->filename()]['default'] = $content;
-          }
-                    
-          // a::show($content->name .  ': meta file' );
 
-        
+          // change the filetype
+          $content->type = 'meta';
+
+          // files without a language code
+          // are considered to be the default language file            
+          $content->languageCode = c::get('lang.default');
+          $file->meta[$content->languageCode] = $content->variables;
+          
+          // add this to the meta array
+          $meta[] = $file;
+                                                                    
         // home.en.txt
         // article.video.txt
         } else {
@@ -336,30 +333,22 @@ class files extends obj {
           // home.en.txt
           if(in_array($lastPart, c::get('lang.available'))) {         
             
-            // assign the content to the right variable
-            if($lastPart == c::get('lang.default')) {
-              $default = $content;
-            } else if($lastPart == c::get('lang.current')) {
-              $current = $content;            
-            }
-
             // use the first part for the template name (i.e. home)
-            $template = $firstPart;
+            $content->template = $firstPart;
 
+            // add the language code
+            $content->languageCode = $lastPart;
 
           // plain content file with crazy name
           // article.video.txt
           } else {
 
-            // content files without attached language code
-            // are considered to be the default language file
-            // make sure not to overwrite the default content
-            // if this has already been set by a proper 
-            // named lang file. i.e.: article.video.en.txt
-            if(!$default) $default = $content;
+            // files without a language code
+            // are considered to be the default language file            
+            $content->languageCode = c::get('lang.default');
 
             // use the entire name for the template (i.e. home)
-            $template = $content->name;
+            $content->template = $content->name;
 
           }
 
@@ -382,28 +371,24 @@ class files extends obj {
           // check for a matching file by the new name        
           $file = $this->find($name);
           
+          // add the language code
+          $content->languageCode = $lastPart;
+          
           // myfile.jpg.de.txt
           if($file) {
+            
+            // change the filetype
+            $content->type = 'meta';
+            $file->meta[$content->languageCode] = $content->variables;
 
-            // assign the content to the right variable
-            if($lastPart == c::get('lang.default')) {
-              $metafiles[$file->filename()]['default'] = $content;            
-            } else if($lastPart == c::get('lang.current')) {
-              $metafiles[$file->filename()]['current'] = $content;            
-            }
-                        
+            // add this to the meta array
+            $meta[] = $file;
+                                    
           // article.video.de.txt
           } else {
 
-            // assign the content to the right variable
-            if($lastPart == c::get('lang.default')) {
-              $default = $content;
-            } else if($lastPart == c::get('lang.current')) {
-              $current = $content;            
-            }
-
             // use the already prepared name for the template (i.e. article.video)
-            $template = $name;
+            $content->template = $name;
                     
           }
 
@@ -415,29 +400,23 @@ class files extends obj {
 
           // check for a matching file by the new name        
           $file = $this->find($content->name);
+
+          // files without a language code
+          // are considered to be the default language file
+          $content->languageCode = c::get('lang.default');            
           
           if($file) {
+            
+            $content->type = 'meta';
+            $file->meta[$content->languageCode] = $content->variables;
+            
+            // add this to the meta array
+            $meta[] = $file;
 
-            // meta file without language code
-            // are considered to be the default meta file
-            // make sure not to overwrite the default content
-            // if this has already been set by a proper 
-            // named lang file. i.e.: myfile.jpg.en.txt
-            if($metafiles[$file->filename()]['default']) {
-              $metafiles[$file->filename()]['default'] = $content;            
-            } 
-          
           } else {
-                    
-            // content files without attached language code
-            // are considered to be the default language file
-            // make sure not to overwrite the default content
-            // if this has already been set by a proper 
-            // named lang file. i.e.: home.en.txt
-            if(!$default) $default = $content;
-  
+                      
             // use the entire name for the template (i.e. article.video.whatever)
-            $template = $content->name;
+            $content->template = $content->name;
           
           }
           
@@ -446,50 +425,30 @@ class files extends obj {
       }
     
     }
+
+    $langSupport = c::get('lang.support');
+    $translated  = c::get('lang.translated');
     
-    // if theirs neither a default nor current file to be found
-    // there's something wrong        
-    if(!$default && !$current) return;
-
-    // now make sure to set all meta files correctly
-    foreach($metafiles as $key => $metafile) {
-
-      $variables = $metafile['default']->variables;
-
-      // if there's a current language file object, which we can use to overwrite the
-      // defaults, do that here. 
-      if(isset($metafile['current']) && $metafile['current'] !== $metafile['default']) {      
-        $variables = array_merge($variables, $metafile['current']->variables);
+    foreach($meta as $m) {
+      
+      if($langSupport) {      
+        
+        $variables = (array)@$m->meta[c::get('lang.default')];
+                    
+        if($translated) {
+          $translation = $m->meta[c::get('lang.current')];
+          $variables   = ($translation) ? array_merge($variables, (array)$translation) : $variables;
+        }
+      
+      } else {
+        $variables = (array)@a::first($m->meta);
       }
-    
-      // add the meta variables to the file object
-      $file = $this->find($key);
-      $file->_ = array_merge($file->_, $variables);
-            
+      
+      // merge the variables with the file object      
+      $m->_ = array_merge($m->_, $variables);
+          
     }
-                
-    // build a result object
-    $result = $default;
-    
-    // now overwrite the result with the 
-    // current language file object if available
-    if($current && $current !== $default) {      
-      $result = $current;
-      $result->variables = array_merge($default->variables, $current->variables);
-    }
-
-    // remove the language extension from the name
-    $name = f::name($result->name());    
-        
-    // replace the name with the language extension
-    // with the cleaned name without the extension
-    // otherwise the templates wouldn't be loadable by that name
-    $result->name = $template;
-                        
-    // add the cleared file to the list of files again
-    // this time also with a cleared name
-    $this->content = $result;
-        
+                                
   }
   
   function content() {
@@ -604,6 +563,10 @@ class files extends obj {
 
   function contents() {
     return $this->findByType('content');
+  }
+
+  function meta() {
+    return $this->findByType('meta');
   }
 
   function others() {
