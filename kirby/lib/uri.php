@@ -26,12 +26,12 @@ class uri {
 
   function raw($uri=false) {
     $raw = ($uri) ? $uri : ltrim(server::get('request_uri'), '/');
-    $raw = ltrim(str_replace('index.php', '', $raw));
+    $raw = ltrim(str_replace('index.php', '', $raw), '/');
 
     // strip subfolders from uri    
     if(c::get('subfolder'))    $raw = ltrim(preg_replace('!^' . preg_quote(c::get('subfolder')) . '(\/|)!i', '/', $raw), '/');
     if(c::get('lang.support')) $raw = ltrim(preg_replace('!^' . preg_quote(c::get('lang.current')) . '(\/|)!i', '/', $raw), '/');
-        
+            
     return $raw;
   }
 
