@@ -305,8 +305,8 @@ class page extends obj {
     // gather all files
     $page->files();
 
-    // fetch the first content
-    $page->content = $page->files()->contents()->first();    
+    // fetch the content
+    $page->content = $page->files()->content();    
     
     // merge all variables
     if($page->content && is_array($page->content->variables)) {
