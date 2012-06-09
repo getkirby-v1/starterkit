@@ -3,8 +3,22 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
-function kirbytext($text, $markdown=true) {
-  return kirbytext::init($text, $markdown);
+function kirbytext($text, $second=true, $third=false) {
+  if(is_array($second)) {
+    if(isset($second["replace"]) && isset($second["markdown"])) {
+      return kirbytext::init($text, $second["markdown"], $second["replace"]);
+    } else if(isset($second["replace"]) && !isset($second["markdown"])) {
+      return kirbytext::init($text, true, $second["replace"]);
+    } else if(!isset($second["replace"]) && isset($second["markdown"])) {
+      return kirbytext::init($text, $second["markdown"]);
+    } else {
+      return kirbytext::init($text, true);
+    }
+  } else if(is_bool($second) && is_array($third)) {
+    return kirbytext::init($text, $second, $third);
+  } else {
+    return kirbytext::init($text, $second);
+  }
 }
 
 // specific version of the kirbytext function providing placeholder support
@@ -75,6 +89,7 @@ class kirbytext {
   var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel');
 
   static function init($text=false, $mdown=true, $placeholders=array()) {
+  
     $classname = self::classname();            
     $kirbytext = new $classname($text, $mdown, $placeholders);    
     return $kirbytext->get();    
@@ -98,7 +113,7 @@ class kirbytext {
     $text = preg_replace_callback('!```(.*?)```!is', array($this, 'code'), $text);
     
     foreach($this->placeholders as $pthis => $pthat) {
-	    $text = str_replace($pthis, $pthat, $text);
+      $text = str_replace($pthis, $pthat, $text);
     }
     
     return ($this->mdown) ? markdown($text) : $text;
