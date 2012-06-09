@@ -7,6 +7,11 @@ function kirbytext($text, $markdown=true) {
   return kirbytext::init($text, $markdown);
 }
 
+// specific version of the kirbytext function providing placeholder support
+function kirbytext_placeholders($text, $placeholders=array(), $markdown=true) {
+  return kirbytext::init($text, $markdown, $placeholders);
+}
+
 // create an excerpt without html and kirbytext
 function excerpt($text, $length=140, $markdown=true) {
   return str::excerpt(kirbytext::init($text, $markdown), $length);
@@ -69,18 +74,18 @@ class kirbytext {
   var $tags  = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
   var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel');
 
-  static function init($text=false, $mdown=true) {
-    
+  static function init($text=false, $mdown=true, $placeholders=array()) {
     $classname = self::classname();            
-    $kirbytext = new $classname($text, $mdown);    
+    $kirbytext = new $classname($text, $mdown, $placeholders);    
     return $kirbytext->get();    
               
   }
 
-  function __construct($text=false, $mdown=true) {
+  function __construct($text=false, $mdown=true, $placeholders=array()) {
       
     $this->text  = $text;  
     $this->mdown = $mdown;
+    $this->placeholders = $placeholders;
           
     // pass the parent page if available
     if(is_object($this->text)) $this->obj = $this->text->parent;
@@ -91,6 +96,10 @@ class kirbytext {
 
     $text = preg_replace_callback('!(?=[^\]])\((' . implode('|', $this->tags) . '):(.*?)\)!i', array($this, 'parse'), (string)$this->text);
     $text = preg_replace_callback('!```(.*?)```!is', array($this, 'code'), $text);
+    
+    foreach($this->placeholders as $pthis => $pthat) {
+	    $text = str_replace($pthis, $pthat, $text);
+    }
     
     return ($this->mdown) ? markdown($text) : $text;
 
