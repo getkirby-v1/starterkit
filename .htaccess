@@ -10,6 +10,19 @@ DirectoryIndex index.php index.html index.htm
 # enable awesome urls. i.e.: 
 # http://yourdomain.com/about-us/team
 RewriteEngine on
+
+# First, force www on domain, code from:
+# http://stackoverflow.com/questions/4916222/htaccess-how-to-force-www-in-a-generic-way
+
+RewriteCond %{HTTP_HOST} !^$
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteCond %{HTTPS}s ^on(s)|
+RewriteRule ^ http%1://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+
+# Now that we're on the right domain, check for and 
+# rewrite non-existent files and directories to Kirby
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
