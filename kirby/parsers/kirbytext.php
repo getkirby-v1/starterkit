@@ -21,11 +21,6 @@ function kirbytext($text, $second=true, $third=false) {
   }
 }
 
-// specific version of the kirbytext function providing placeholder support
-function kirbytext_placeholders($text, $placeholders=array(), $markdown=true) {
-  return kirbytext::init($text, $markdown, $placeholders);
-}
-
 // create an excerpt without html and kirbytext
 function excerpt($text, $length=140, $markdown=true) {
   return str::excerpt(kirbytext::init($text, $markdown), $length);
