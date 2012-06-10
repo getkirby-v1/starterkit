@@ -104,13 +104,33 @@ class kirbytext {
   
   function get() {
 
+    global $placeholders;
     $text = preg_replace_callback('!(?=[^\]])\((' . implode('|', $this->tags) . '):(.*?)\)!i', array($this, 'parse'), (string)$this->text);
     $text = preg_replace_callback('!```(.*?)```!is', array($this, 'code'), $text);
     
     foreach($this->placeholders as $pthis => $pthat) {
-      $text = str_replace($pthis, $pthat, $text);
+      if(is_numeric($pthis)) {
+        if(isset($placeholders[$pthat]) && isset($placeholders[$pthat]["usage"]) && $placeholders[$pthat]["usage"] == "demand") {
+          $text = str_replace($pthat, $placeholders[$pthat]["with"], $text);
+        } else {
+          foreach($placeholders as $pname => $poptions) {
+            if(isset($poptions["usage"]) && $poptions["usage"] == "demand" && $poptions["alias"] == $pthat) {
+              $text = str_replace($pname, $poptions["with"], $text);
+              break;
+            }
+          }
+        }
+      } else {
+        $text = str_replace($pthis, $pthat, $text);
+      }
     }
     
+    foreach($placeholders as $pname => $poptions) {
+      if(isset($poptions["usage"]) && $poptions["usage"] == "kirbytext") {
+        $text = str_replace($pname, $poptions["with"], $text);
+      }
+    }
+
     return ($this->mdown) ? markdown($text) : $text;
 
   }

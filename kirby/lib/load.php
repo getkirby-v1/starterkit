@@ -24,9 +24,26 @@ class load {
   }
   
   static function config() {
+    global $placeholders;
     $root = c::get('root.config');
     self::file($root . '/config.php');
     self::file($root . '/config.' . server::get('server_name') . '.php');
+    
+    $rootr = c::get('root.replace');
+    ob_start();
+    require($rootr . '/replace.php');
+    $content = preg_replace('{(.)( )+usage: (.*?)}', '$1' . "\n" . '  usage: $3', ob_get_clean());
+    $placeholders_general = yaml($content);
+    if(file_exists($rootr . '/replace.' . server::get('server_name') . '.php')) {
+      ob_start();
+      require($rootr . '/replace.' . server::get('server_name') . '.php');
+      $content = preg_replace('{(.)( )+usage: (.*?)}', '$1' . "\n" . '  usage: $3', ob_get_clean());
+      $placeholders_site = yaml($content);
+    } else {
+      $placeholders_site = array();
+    }
+    $placeholders = array_merge($placeholders_general, $placeholders_site);
+    
   }
   
   static function plugins() {
@@ -48,6 +65,7 @@ class load {
     require_once($root . '/defaults.php');
     require_once($root . '/yaml.php');
     require_once($root . '/kirbytext.php');
+    require_once($root . '/greplace.php');
 
     if(c::get('markdown.extra')) {
       require_once($root . '/markdown.extra.php');

@@ -78,6 +78,9 @@ class site extends obj {
 
   function load() {
 
+    // first activate the buffer to use global placeholders
+    ob_start("apply_global_placeholders");
+
     // initiate the site and make pages and page
     // globally available
     $pages = $this->pages;
@@ -182,6 +185,9 @@ class site extends obj {
     }
 
     die($html);
+    
+    // now clean the buffer
+    ob_end_clean();
     
   }
   
