@@ -4,15 +4,15 @@
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
 function kirbytext($text, $second=true, $third=false) {
-  if(is_array($second)) {
+  if(is_array($second) && !isset($second["markdown"]) && !isset($second["replace"])) {
+    return kirbytext::init($text, true, $second);
+  } else if(is_array($second)) {
     if(isset($second["replace"]) && isset($second["markdown"])) {
       return kirbytext::init($text, $second["markdown"], $second["replace"]);
     } else if(isset($second["replace"]) && !isset($second["markdown"])) {
       return kirbytext::init($text, true, $second["replace"]);
     } else if(!isset($second["replace"]) && isset($second["markdown"])) {
       return kirbytext::init($text, $second["markdown"]);
-    } else {
-      return kirbytext::init($text, true);
     }
   } else if(is_bool($second) && is_array($third)) {
     return kirbytext::init($text, $second, $third);
