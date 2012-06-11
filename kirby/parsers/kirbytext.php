@@ -104,17 +104,17 @@ class kirbytext {
   
   function get() {
 
-    global $placeholders;
+    global $placeholders, $currenttemplate;
     $text = preg_replace_callback('!(?=[^\]])\((' . implode('|', $this->tags) . '):(.*?)\)!i', array($this, 'parse'), (string)$this->text);
     $text = preg_replace_callback('!```(.*?)```!is', array($this, 'code'), $text);
     
     foreach($this->placeholders as $pthis => $pthat) {
       if(is_numeric($pthis)) {
-        if(isset($placeholders[$pthat]) && isset($placeholders[$pthat]["usage"]) && $placeholders[$pthat]["usage"] == "demand") {
+        if(isset($placeholders[$pthat]) && isset($placeholders[$pthat]["usage"]) && $placeholders[$pthat]["usage"] == "demand" && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]]))) {
           $text = str_replace($pthat, $placeholders[$pthat]["with"], $text);
         } else {
           foreach($placeholders as $pname => $poptions) {
-            if(isset($poptions["usage"]) && $poptions["usage"] == "demand" && $poptions["alias"] == $pthat) {
+            if(isset($poptions["usage"]) && $poptions["usage"] == "demand" && isset($poptions["alias"]) && $poptions["alias"] == $pthat && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]]))) {
               $text = str_replace($pname, $poptions["with"], $text);
               break;
             }
@@ -126,7 +126,7 @@ class kirbytext {
     }
     
     foreach($placeholders as $pname => $poptions) {
-      if(isset($poptions["usage"]) && $poptions["usage"] == "kirbytext") {
+      if(isset($poptions["usage"]) && $poptions["usage"] == "kirbytext" && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]]))) {
         $text = str_replace($pname, $poptions["with"], $text);
       }
     }

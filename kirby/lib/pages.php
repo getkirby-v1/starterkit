@@ -114,8 +114,13 @@ class page extends obj {
     // construct the template file 
     $file = c::get('root.templates') . '/' . $name . '.php';
     
+    global $currenttemplate;
+    $currenttemplate["virtual"] = $name;
+    
     // check if the template file exists and go back to the fallback    
     if(!file_exists($file)) $name = c::get('tpl.default');
+    
+    $currenttemplate["existing"] = $name;
 
     return $name;
         
