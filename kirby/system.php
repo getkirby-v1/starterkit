@@ -24,8 +24,8 @@ require_once($rootKirby . '/lib/load.php');
 
 // load the rest of the system
 load::lib();
-load::config();
 load::parsers();
+load::config();
 load::plugins();
 
 // check for an exisiting content dir 

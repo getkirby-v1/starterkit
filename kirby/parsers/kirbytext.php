@@ -3,8 +3,22 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
-function kirbytext($text, $markdown=true) {
-  return kirbytext::init($text, $markdown);
+function kirbytext($text, $second=true, $third=false) {
+  if(is_array($second) && !isset($second["markdown"]) && !isset($second["replace"])) {
+    return kirbytext::init($text, true, $second);
+  } else if(is_array($second)) {
+    if(isset($second["replace"]) && isset($second["markdown"])) {
+      return kirbytext::init($text, $second["markdown"], $second["replace"]);
+    } else if(isset($second["replace"]) && !isset($second["markdown"])) {
+      return kirbytext::init($text, true, $second["replace"]);
+    } else if(!isset($second["replace"]) && isset($second["markdown"])) {
+      return kirbytext::init($text, $second["markdown"]);
+    }
+  } else if(is_bool($second) && is_array($third)) {
+    return kirbytext::init($text, $second, $third);
+  } else {
+    return kirbytext::init($text, $second);
+  }
 }
 
 // create an excerpt without html and kirbytext
@@ -69,18 +83,19 @@ class kirbytext {
   var $tags  = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
   var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel');
 
-  static function init($text=false, $mdown=true) {
-    
+  static function init($text=false, $mdown=true, $placeholders=array()) {
+  
     $classname = self::classname();            
-    $kirbytext = new $classname($text, $mdown);    
+    $kirbytext = new $classname($text, $mdown, $placeholders);    
     return $kirbytext->get();    
               
   }
 
-  function __construct($text=false, $mdown=true) {
+  function __construct($text=false, $mdown=true, $placeholders=array()) {
       
     $this->text  = $text;  
     $this->mdown = $mdown;
+    $this->placeholders = $placeholders;
           
     // pass the parent page if available
     if(is_object($this->text)) $this->obj = $this->text->parent;
@@ -89,9 +104,33 @@ class kirbytext {
   
   function get() {
 
+    global $placeholders, $currenttemplate;
     $text = preg_replace_callback('!(?=[^\]])\((' . implode('|', $this->tags) . '):(.*?)\)!i', array($this, 'parse'), (string)$this->text);
     $text = preg_replace_callback('!```(.*?)```!is', array($this, 'code'), $text);
     
+    foreach($this->placeholders as $pthis => $pthat) {
+      if(is_numeric($pthis)) {
+        if(isset($placeholders[$pthat]) && isset($placeholders[$pthat]["usage"]) && $placeholders[$pthat]["usage"] == "demand" && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]]))) {
+          $text = re::regex($pthat, $placeholders[$pthat]["with"], $text);
+        } else {
+          foreach($placeholders as $pname => $poptions) {
+            if(isset($poptions["usage"]) && $poptions["usage"] == "demand" && isset($poptions["alias"]) && $poptions["alias"] == $pthat && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]]))) {
+              $text = re::regex($pname, $poptions["with"], $text);
+              break;
+            }
+          }
+        }
+      } else {
+        $text = re::regex($pthis, $pthat, $text);
+      }
+    }
+    
+    foreach($placeholders as $pname => $poptions) {
+      if(isset($poptions["usage"]) && $poptions["usage"] == "kirbytext" && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]]))) {
+        $text = re::regex($pname, $poptions["with"], $text);
+      }
+    }
+
     return ($this->mdown) ? markdown($text) : $text;
 
   }

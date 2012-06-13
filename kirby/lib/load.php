@@ -24,9 +24,37 @@ class load {
   }
   
   static function config() {
+    global $placeholders;
     $root = c::get('root.config');
     self::file($root . '/config.php');
     self::file($root . '/config.' . server::get('server_name') . '.php');
+    
+    $rootr = c::get('root.replace');
+    ob_start();
+    require($rootr . '/replace.php');
+    $content = preg_replace('{(.)( )+usage: (.*?)}', '$1' . "\n" . '  usage: $3', ob_get_clean());
+    $placeholders_general = yaml($content);
+    if(file_exists($rootr . '/replace.' . server::get('server_name') . '.php')) {
+      ob_start();
+      require($rootr . '/replace.' . server::get('server_name') . '.php');
+      $content = preg_replace('{(.)( )+usage: (.*?)}', '$1' . "\n" . '  usage: $3', ob_get_clean());
+      $placeholders_site = yaml($content);
+    } else {
+      $placeholders_site = array();
+    }
+    $placeholders = array_merge($placeholders_general, $placeholders_site);
+    foreach($placeholders as $placeholder => $options) {
+	    if(isset($options["templates"]) && is_array($options["templates"])) {
+	      $placeholders[$placeholder]["templates"] = array_flip($placeholders[$placeholder]["templates"]);
+	    } else if(isset($options["templates"])) {
+		    $placeholders[$placeholder]["templates"] = array($options["templates"] => 0);
+	    }
+	    if(isset($options["set"]) && is_array($options["set"])) {
+	      $placeholders[$placeholder]["set"] = array_flip($placeholders[$placeholder]["set"]);
+	    } else if(isset($options["set"])) {
+		    $placeholders[$placeholder]["set"] = array($options["set"] => 0);
+	    }
+	  }
   }
   
   static function plugins() {
@@ -48,6 +76,7 @@ class load {
     require_once($root . '/defaults.php');
     require_once($root . '/yaml.php');
     require_once($root . '/kirbytext.php');
+    require_once($root . '/replace.php');
 
     if(c::get('markdown.extra')) {
       require_once($root . '/markdown.extra.php');

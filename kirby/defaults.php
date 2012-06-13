@@ -11,6 +11,7 @@ c::set('root.templates', c::get('root.site') . '/templates');
 c::set('root.snippets',  c::get('root.site') . '/snippets');
 c::set('root.plugins',   c::get('root.site') . '/plugins');
 c::set('root.config',    c::get('root.site') . '/config');
+c::set('root.replace',   c::get('root.site') . '/replace');
 c::set('root.cache',     c::get('root.site') . '/cache');
 c::set('root.parsers',   c::get('root.kirby') . '/parsers');
 
