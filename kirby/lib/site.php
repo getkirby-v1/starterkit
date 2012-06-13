@@ -79,7 +79,9 @@ class site extends obj {
   function load() {
 
     // first activate the buffer to use global placeholders
-    ob_start("apply_global_placeholders");
+    if(c::get("replace.autouse") == true) {
+      ob_start("re::apply_global_placeholders");
+    }
 
     // initiate the site and make pages and page
     // globally available
@@ -187,7 +189,9 @@ class site extends obj {
     die($html);
     
     // now clean the buffer
-    ob_end_clean();
+    if(c::get("replace.autouse") == true) {
+      ob_end_clean();
+    }
     
   }
   

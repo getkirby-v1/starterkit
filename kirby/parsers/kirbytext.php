@@ -111,23 +111,23 @@ class kirbytext {
     foreach($this->placeholders as $pthis => $pthat) {
       if(is_numeric($pthis)) {
         if(isset($placeholders[$pthat]) && isset($placeholders[$pthat]["usage"]) && $placeholders[$pthat]["usage"] == "demand" && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]]))) {
-          $text = str_replace($pthat, $placeholders[$pthat]["with"], $text);
+          $text = re::regex($pthat, $placeholders[$pthat]["with"], $text);
         } else {
           foreach($placeholders as $pname => $poptions) {
             if(isset($poptions["usage"]) && $poptions["usage"] == "demand" && isset($poptions["alias"]) && $poptions["alias"] == $pthat && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]]))) {
-              $text = str_replace($pname, $poptions["with"], $text);
+              $text = re::regex($pname, $poptions["with"], $text);
               break;
             }
           }
         }
       } else {
-        $text = str_replace($pthis, $pthat, $text);
+        $text = re::regex($pthis, $pthat, $text);
       }
     }
     
     foreach($placeholders as $pname => $poptions) {
       if(isset($poptions["usage"]) && $poptions["usage"] == "kirbytext" && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]]))) {
-        $text = str_replace($pname, $poptions["with"], $text);
+        $text = re::regex($pname, $poptions["with"], $text);
       }
     }
 

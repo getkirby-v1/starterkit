@@ -175,6 +175,24 @@ c::set('tinyurl.enabled', true);
 /*
 
 ---------------------------------------
+Placeholders
+---------------------------------------
+
+With c::set('replace.autouse') you can change the behavior of the global replace function.
+false means that global replacements are diabled and can be used with the functions re::activate() and re::apply() to apply the placeholders only on specific parts of the page.
+By default (true), all placeholders defined in site/replace/*.php marked as "usage: global" will be used for the whole output.
+
+With c::set('replace.regex') you can change if you always want to use Regexes with preg_replace ('regex'), String replacement with str_replace ('string') or if it should be auto-detected ('auto').
+
+*/ 
+
+c::set('replace.autouse', true);
+c::set('replace.regex', 'auto');
+
+
+/*
+
+---------------------------------------
 Cache 
 ---------------------------------------
 

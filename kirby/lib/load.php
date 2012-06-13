@@ -46,7 +46,7 @@ class load {
     foreach($placeholders as $placeholder => $options) {
 	    if(isset($options["templates"]) && is_array($options["templates"])) {
 	      $placeholders[$placeholder]["templates"] = array_flip($placeholders[$placeholder]["templates"]);
-	    } else if(is_string($options["templates"])) {
+	    } else if(isset($options["templates"]) && is_string($options["templates"])) {
 		    $placeholders[$placeholder] = array();
 	    }
 	  }
@@ -71,7 +71,7 @@ class load {
     require_once($root . '/defaults.php');
     require_once($root . '/yaml.php');
     require_once($root . '/kirbytext.php');
-    require_once($root . '/greplace.php');
+    require_once($root . '/replace.php');
 
     if(c::get('markdown.extra')) {
       require_once($root . '/markdown.extra.php');
