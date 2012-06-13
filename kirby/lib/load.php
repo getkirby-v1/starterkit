@@ -46,8 +46,13 @@ class load {
     foreach($placeholders as $placeholder => $options) {
 	    if(isset($options["templates"]) && is_array($options["templates"])) {
 	      $placeholders[$placeholder]["templates"] = array_flip($placeholders[$placeholder]["templates"]);
-	    } else if(isset($options["templates"]) && is_string($options["templates"])) {
-		    $placeholders[$placeholder] = array();
+	    } else if(isset($options["templates"])) {
+		    $placeholders[$placeholder]["templates"] = array($options["templates"] => 0);
+	    }
+	    if(isset($options["set"]) && is_array($options["set"])) {
+	      $placeholders[$placeholder]["set"] = array_flip($placeholders[$placeholder]["set"]);
+	    } else if(isset($options["set"])) {
+		    $placeholders[$placeholder]["set"] = array($options["set"] => 0);
 	    }
 	  }
   }

@@ -3,11 +3,12 @@
 class re {
   static $activated = false;
   static $realplaceholders;
+  static $set = false;
   
-  static function apply_global_placeholders($output) {
+  static function apply_global_placeholders($output, $set = false) {
     global $placeholders, $currenttemplate;
     foreach($placeholders as $pname => $poptions) {
-      if(isset($poptions["usage"]) && $poptions["usage"] == "global" && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]]))) {
+      if(isset($poptions["usage"]) && $poptions["usage"] == "global" && (!isset($poptions["templates"]) || isset($poptions["templates"][$currenttemplate["existing"]]) || isset($poptions["templates"][$currenttemplate["virtual"]])) && ($set == false || !isset($poptions["set"]) || isset($poptions["set"][$set]))) {
         $output = self::regex($pname, $poptions["with"], $output);
       }
     }
@@ -34,8 +35,13 @@ class re {
 	  return self::remove($name);
   }
   
-  static function activate() {
-    global $activated;
+  static function activate($seta = false) {
+    global $activated, $set;
+    if($seta != false) {
+	    $set = $seta;
+    } else {
+	    $set = false;
+    }
     if(c::get("replace.autouse") == false && $activated == false) {
 	    ob_start();
 	    $activated = true;
@@ -44,22 +50,32 @@ class re {
 	  return false;
   }
   
-  static function on() {
-	  return self::activate();
+  static function on($set = false) {
+	  return self::activate($set);
   }
   
-  static function apply() {
-    global $activated;
+  static function apply($seta = false) {
+    global $activated, $set;
+    if($seta == false && $set == false) {
+	    $set = false;
+	    $setu = false;
+    } else if($set != false) {
+	    $setu = $set;
+    } else if($seta != false) {
+      $setu = $seta;
+    } else {
+	    $setu = false;
+    }
     if(c::get("replace.autouse") == false && $activated == true) {
-	    echo self::apply_global_placeholders(ob_get_clean());
+	    echo self::apply_global_placeholders(ob_get_clean(), $setu);
 	    $activated = false;
 	    return true;
 	  }
 	  return false;
   }
   
-  static function off() {
-	  return self::apply();
+  static function off($set = false) {
+	  return self::apply($set);
   }
   
   static function clear() {
