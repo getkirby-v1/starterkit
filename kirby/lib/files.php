@@ -433,11 +433,11 @@ class files extends obj {
       
       if($langSupport) {      
         
-        $variables = (array)@$m->meta[c::get('lang.default')];
+        $variables = (array)a::get($m->meta, c::get('lang.default'));
                     
         if($translated) {
-          $translation = $m->meta[c::get('lang.current')];
-          $variables   = ($translation) ? array_merge($variables, (array)$translation) : $variables;
+          $translation = (array)a::get($m->meta, c::get('lang.current'));
+          $variables   = (!empty($translation)) ? array_merge($variables, $translation) : $variables;
         }
       
       } else {
