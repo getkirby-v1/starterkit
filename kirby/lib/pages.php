@@ -350,7 +350,7 @@ class page extends obj {
       // get the fallback variables
       $variables = ($fallback) ? $fallback->variables : array();
       
-      $page->intendedTemplate = $fallback->template;
+      $page->intendedTemplate = ($fallback) ? $fallback->template : false;
       
       if(c::get('lang.translated')) {
         $translation = $content->filterBy('languageCode', c::get('lang.current'))->first();
@@ -362,7 +362,7 @@ class page extends obj {
       $contentfile = $content->first();
       $variables   = ($contentfile) ? $contentfile->variables : array();
 
-      $page->intendedTemplate = $contentfile->template;
+      $page->intendedTemplate = ($contentfile) ? $contentfile->template : false;
                 
     }
         
