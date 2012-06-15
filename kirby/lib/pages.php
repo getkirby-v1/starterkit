@@ -152,10 +152,11 @@ class page extends obj {
     if($this->isHomePage() && !c::get('home.keepurl')) {
       return u();
     } else if(c::get('lang.support') && $lang) {
-      
-      $uri = ($this->url_key != '') ? $this->url_key : $this->uid;
+
       $obj = $this;
-      
+      $uri = $this->content($lang)->url_key();
+      if(!$uri) $uri = $this->uid;
+                  
       while($parent = $obj->parent()) {
 
         $uid = $parent->content($lang)->url_key();
@@ -164,7 +165,7 @@ class page extends obj {
         $uri = $uid . '/' . $uri;
         $obj = $obj->parent();
       }
-    
+                
       $uri = $uri;
       return u($uri, $lang);      
                     
@@ -343,7 +344,10 @@ class page extends obj {
     
     if(c::get('lang.support')) {
 
-      $fallback  = $content->filterBy('languageCode', c::get('lang.default'))->first();
+      $fallback = $content->filterBy('languageCode', c::get('lang.default'))->first();
+      if(!$fallback) $fallback = $content->first();
+      
+      // get the fallback variables
       $variables = ($fallback) ? $fallback->variables : array();
       
       $page->intendedTemplate = $fallback->template;
