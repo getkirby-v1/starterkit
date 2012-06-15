@@ -3,7 +3,7 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
-c::set('version.string', '1.1-preview');
+c::set('version.string', '1.1');
 c::set('version.number', 1.1);
 
 // define all directories
