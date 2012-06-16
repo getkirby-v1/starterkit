@@ -18,6 +18,7 @@ class load {
     require_once($root . '/lib/pages.php');
     require_once($root . '/lib/site.php');
     require_once($root . '/lib/uri.php');
+    require_once($root . '/lib/compress.php');
     require_once($root . '/lib/helpers.php');
     require_once($root . '/lib/template.php');
     

@@ -43,8 +43,15 @@ function snippet($snippet, $data=array(), $return=false) {
   return tpl::loadFile(c::get('root.snippets') . '/' . $snippet . '.php', $data, $return);
 }
 
-// embed a stylesheet tag
-function css($url, $media=false) {
+// embed a stylesheet tag & add to queue
+function css($url=false, $media=false, $queue=-1) {
+  global $cssqueue;
+  if($url == false) {
+    return co::css();
+  }
+  if((($queue == -1 || $queue == true) && c::get('compress.css')) || ($queue == true && !c::get('compress.css'))) {
+	  $cssqueue[$media][] = $url;
+  } 
   $url = (str::contains($url, 'http://') || str::contains($url, 'https://')) ? $url : url(ltrim($url, '/'));
   if(!empty($media)) {
     return '<link rel="stylesheet" media="' . $media . '" href="' . $url . '" />' . "\n";
@@ -53,8 +60,15 @@ function css($url, $media=false) {
   }
 }
 
-// embed a js tag
-function js($url) {
+// embed a js tag & add to queue
+function js($url=false, $queue=-1) {
+  global $jsqueue;
+  if($url == false) {
+    return co::js();
+  }
+  if((($queue == -1 || $queue == true) && c::get('compress.js')) || ($queue == true && !c::get('compress.js'))) {
+    $jsqueue[false][] = $url;
+  } 
   $url = (str::contains($url, 'http://') || str::contains($url, 'https://')) ? $url : url(ltrim($url, '/'));
   return '<script src="' . $url . '"></script>' . "\n";
 }

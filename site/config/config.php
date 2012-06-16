@@ -222,6 +222,28 @@ c::set('cache.ignore', array());
 /*
 
 ---------------------------------------
+CSS/JS Compressing
+---------------------------------------
+
+If you enable this, all operations like css('assets/file.css') or js('assets/file.js')
+will be queued and the content will be saved into the site/cache dir.
+The files in the cache dir will also be compressed saving a lot of bytes transfered to the client.
+
+Important: You also have to activate the 'cache' config option above setting c::set('cache', true)
+to activate this feature.
+
+The css() and js() function will still return the tag for downward compatibility,
+but please don't echo them and ignore the output.
+
+*/ 
+
+c::set('compress.css', true);
+c::set('compress.js', true);
+
+
+/*
+
+---------------------------------------
 Timezone Setup 
 ---------------------------------------
 

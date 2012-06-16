@@ -52,6 +52,11 @@ if(c::get('troubleshoot')) {
   exit();
 }
 
+// collect compressed assets
+if(isset($_GET["assets"])) {
+  die(co::collect($_GET["assets"]));
+}
+
 $site = new site();
 $site->load();
 
