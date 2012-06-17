@@ -5,7 +5,7 @@ if(!defined('KIRBY')) die('Direct access is not allowed');
 
 class co {
   // get collective links
-  static function css() {
+  static function getcss() {
     $args = func_get_args();
     if(isset($args[0])) {
       $indent = $args[0];
@@ -42,7 +42,7 @@ class co {
     }
     return $return;
   }
-  static function js($indent="") {
+  static function getjs($indent="") {
     $url = self::get(0);
     if(is_array($url)) {
       $return = "";
@@ -77,20 +77,20 @@ class co {
         $buffer = JSMin::minify($buffer);
       } else {
         require_once(c::get('root.parsers') . '/htmlmin.php');
-        $buffer = Minify_HTML::minify($buffer, array('cssMinifier' => 'co::compresscss', 'jsMinifier' => 'co::compressjs');
+        $buffer = Minify_HTML::minify($buffer, array('cssMinifier' => 'co::cssminify', 'jsMinifier' => 'co::jsminify');
       }
       return $buffer;
     } else {
       return $buffer;
     }
   }
-  static function compresscss($content) {
+  static function cssminify($content) {
     return self::compress($content, 'css', 0, true);
   }
-  static function compressjs($content) {
+  static function jsminify($content) {
     return self::compress($content, 'js', 0, true);
   }
-  static function compresshtml($content) {
+  static function htmlminify($content) {
     return self::compress($content, 'html', 0, true);
   }
   

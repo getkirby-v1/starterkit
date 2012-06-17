@@ -47,7 +47,7 @@ function snippet($snippet, $data=array(), $return=false) {
 function css($url=false, $media=false, $queue=-1, $less=0) {
   global $cssqueue;
   if($url == false) {
-    return co::css();
+    return co::getcss();
   }
   if((($queue == -1 || $queue == true) && c::get('compress.css')) || ($queue == true && !c::get('compress.css'))) {
 	  $cssqueue[$less][$media][] = $url;
@@ -75,7 +75,7 @@ function less($url=false, $media=false, $queue=-1) {
 function js($url=false, $queue=-1) {
   global $jsqueue;
   if($url == false) {
-    return co::js();
+    return co::getjs();
   }
   if((($queue == -1 || $queue == true) && c::get('compress.js')) || ($queue == true && !c::get('compress.js'))) {
     $jsqueue[0][false][] = $url;
