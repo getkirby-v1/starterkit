@@ -7,8 +7,13 @@ class co {
   // get collective links
   static function css() {
     $args = func_get_args();
-    $indent = $args[0];
-    unset($args[0]);
+    if(isset($args[0])) {
+      $indent = $args[0];
+      unset($args[0]);
+    } else {
+      $args = array('all', 'aural', 'braille', 'embossed', 'handheld', 'print', 'projection', 'screen', 'tty', 'tv', -1);
+      $indent = '';
+    }
     $return = "";
     foreach($args as $media) {
       if($media == -1) {
@@ -17,6 +22,9 @@ class co {
       $url = self::get(1, $media);
       if(is_array($url)) {
         foreach($url as $now) {
+          if(!isset($now)) {
+            continue;
+          }
           $now = (str::contains($now, 'http://') || str::contains($now, 'https://')) ? $now : url(ltrim($now, '/'));
           if(!empty($media)) {
             $return .= $indent . '<link rel="stylesheet" media="' . $media . '" href="' . $now . '" />' . "\n";
@@ -25,9 +33,9 @@ class co {
           }
         }
       } else {
-        if(!empty($media)) {
+        if(!empty($media) && $url != '') {
           $return .= $indent . '<link rel="stylesheet" media="' . $media . '" href="' . $url . '" />' . "\n";
-        } else {
+        } else if($url != '') {
           $return .= $indent . '<link rel="stylesheet" href="' . $url . '" />' . "\n";
         }
       }
@@ -48,36 +56,53 @@ class co {
   }
   
   // compress css/js
-  private function compress($url, $what) {
-    if(c::get("compress.$what")) {
+  private function compress($url, $what, $less, $parsed=false) {
+    global $lessc;
+    if($parsed == true) {
+      $buffer = $url;
+    } else {
       $buffer = file_get_contents($url);
+    }
+    if($less == 1) {
+      $buffer = $lessc->parse($buffer);
+    }
+    if(c::get("compress.$what")) {
       if($what == "css") {
         $buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer);
         $buffer = str_replace(array("\r\n", "\r", "\n", "\t"), '', $buffer);
         $buffer = preg_replace('/\s\s+/', ' ', $buffer);
+        $buffer = str_replace(array(' { ', ' }', '; ', ', ', ': '), array('{', '}', ';', ',', ':'), $buffer);
+      } else if($what == "js") {
+        require_once(c::get('root.parsers') . '/jsmin.php');
+        $buffer = JSMin::minify($buffer);
       } else {
-        $buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer);
-        $buffer = preg_replace('!//[^\n\r]*!', '', $buffer);
-        $buffer = str_replace("\t", "", $buffer);
-        $buffer = preg_replace('/(\n)\n+/', '$1', $buffer);
-        $buffer = preg_replace('/(\n)\ +/', '$1', $buffer);
-        $buffer = preg_replace('/(\r)\r+/', '$1', $buffer);
-        $buffer = preg_replace('/(\r\n)(\r\n)+/', '$1', $buffer);
-        $buffer = preg_replace('/(\ )\ +/', '$1', $buffer);
+        require_once(c::get('root.parsers') . '/htmlmin.php');
+        $buffer = Minify_HTML::minify($buffer, array('cssMinifier' => 'co::compresscss', 'jsMinifier' => 'co::compressjs');
       }
       return $buffer;
     } else {
-      return file_get_contents($url);
+      return $buffer;
     }
+  }
+  static function compresscss($content) {
+    return self::compress($content, 'css', 0, true);
+  }
+  static function compressjs($content) {
+    return self::compress($content, 'js', 0, true);
+  }
+  static function compresshtml($content) {
+    return self::compress($content, 'html', 0, true);
   }
   
   // build collective urls
   static function get($what, $media=false) {
-    global $cssqueue, $jsqueue;
+    global $cssqueue, $jsqueue, $lessc;
     if(file_exists(c::get('root.cache') . '/compress.ser')) {
       $data = unserialize(file_get_contents(c::get('root.cache') . '/compress.ser'));
+      $datab = $data;
     } else {
       $data = array();
+      $datab = array();
     }
     if($what == 0) {
       $what = "js";
@@ -86,24 +111,32 @@ class co {
       $what = "css";
       $queue = $cssqueue;
     }
-    if(isset($queue[$media]) && is_array($queue[$media])) {
-      $queue = $queue[$media];
+    if(isset($queue[0][$media]) && is_array($queue[0][$media]) && isset($queue[1][$media]) && is_array($queue[1][$media])) {
+      $queue[0] = $queue[0][$media];
+      $queue[1] = $queue[1][$media];
+    } else if(isset($queue[0][$media]) && is_array($queue[0][$media])) {
+      $queue[0] = $queue[0][$media];
+      $queue[1] = array();
+    } else if(isset($queue[1][$media]) && is_array($queue[1][$media])) {
+      $queue[1] = $queue[1][$media];
+      $queue[0] = array();
     } else {
-      $queue = array();
-    }
-    if(!c::get('cache')) {
-      return '/?assets=' . implode(",", $queue);
+      $queue[0] = array();
+      $queue[1] = array();
     }
     $return = "";
+    $currentfiles = array();
     if(isset($data["ids"])) {
-      foreach($queue as $id => $name) {
-        if(substr($name, 0, 1) != '/' && substr($name, 0, 4) != 'http') {
-          $name = c::get('root') . '/' . $name;
-          $queue[$id] = $name;
-        } else {
-          $name = $queue[$id];
+      foreach($queue as $less => $array) {
+        foreach($array as $id => $name) {
+          if(!file_exists($name)) {
+            unset($queue[$less][$id]);
+            unset($url);
+            continue;
+          }
+          $name = $queue[$less][$id];
+          $currentfiles[$id] = md5($name) . '.' . $what;
         }
-        $currentfiles[$id] = md5($name) . '.' . $what;
       }
       foreach($data["ids"] as $id => $files) {
         if($currentfiles == $files) {
@@ -112,27 +145,40 @@ class co {
         }
       }
     }
+    if(!c::get('cache') && isset($queue[0][0])) {
+      return '/?assets=' . implode(",", $queue[0]);
+    } else if(!c::get('cache')) {
+      return '';
+    }
     if(!isset($uniqid)) {
       $uniqid = uniqid();
     }
-    foreach($queue as $id => $url) {
-      $md5 = md5_file($url);
-      $cachename = md5($url);
-      if(!isset($data["files"][$url]) || $data["files"][$url] != $md5 || !file_exists(c::get('root.cache') . '/' . $cachename . '.' . $what)) {
-        $data["files"][$url] = $md5;
-        f::write(c::get('root.cache') . '/' . $cachename . '.' . $what, self::compress($url, $what));
-      }
-      if(isset($data["ids"][$uniqid])) {
-        $flip = array_flip($data["ids"][$uniqid]);
-      } else {
-        array();
-      }
-      if(!isset($flip[$cachename . '.' . $what])) {
-        $data["ids"][$uniqid][] = $cachename . '.' . $what;
+    foreach($queue as $less => $array) {
+      foreach($array as $id => $url) {
+        if(!file_exists($url)) {
+          continue;
+        }
+        $md5 = md5_file($url);
+        $cachename = md5($url);
+        if(!isset($data["files"][$url]) || $data["files"][$url] != $md5 || !file_exists(c::get('root.cache') . '/' . $cachename . '.' . $what)) {
+          $data["files"][$url] = $md5;
+          f::write(c::get('root.cache') . '/' . $cachename . '.' . $what, self::compress($url, $what, $less));
+        }
+        if(isset($data["ids"][$uniqid])) {
+          $flip = array_flip($data["ids"][$uniqid]);
+        } else {
+          $flip = array();
+        }
+        if(!isset($flip[$cachename . '.' . $what])) {
+          $data["ids"][$uniqid][] = $cachename . '.' . $what;
+        }
       }
     }
     f::write(c::get('root.cache') . '/compress.ser', serialize($data));
     $url = '/?assets=' . $uniqid;
+    if($data == $datab && !(isset($queue[0][0]) || isset($queue[1][0]))) {
+      return '';
+    }
     return $url;
   }
   
@@ -143,7 +189,7 @@ class co {
       $path = "";
     } else {
       if(file_exists(c::get('root.cache') . '/compress.ser')) {
-        $data = unserialize(file_get_contents(c::get('root.cache') . '/compress.ser')) or die();
+        $data = @unserialize(file_get_contents(c::get('root.cache') . '/compress.ser')) or die();
       } else {
         return false;
       }
@@ -165,10 +211,12 @@ class co {
       if($file == "") {
         continue;
       }
-      if(substr($file, 0, 1) != '/' && substr($file, 0, 4) != 'http' && $path != "") {
+      if(substr($file, 0, 1) != '/' && substr($file, 0, 4) != 'http' && $path == "") {
         $file = c::get('root') . '/' . $file;
+      } else if(substr($file, 0, 1) != '/' && substr($file, 0, 4) != 'http') {
+        $file = $path . $file;
       }
-      $return .= file_get_contents($file) or die();
+      $return .= @file_get_contents($file) or die();
     }
     return $return;
   }

@@ -44,13 +44,13 @@ function snippet($snippet, $data=array(), $return=false) {
 }
 
 // embed a stylesheet tag & add to queue
-function css($url=false, $media=false, $queue=-1) {
+function css($url=false, $media=false, $queue=-1, $less=0) {
   global $cssqueue;
   if($url == false) {
     return co::css();
   }
   if((($queue == -1 || $queue == true) && c::get('compress.css')) || ($queue == true && !c::get('compress.css'))) {
-	  $cssqueue[$media][] = $url;
+	  $cssqueue[$less][$media][] = $url;
   } 
   $url = (str::contains($url, 'http://') || str::contains($url, 'https://')) ? $url : url(ltrim($url, '/'));
   if(!empty($media)) {
@@ -60,6 +60,17 @@ function css($url=false, $media=false, $queue=-1) {
   }
 }
 
+// embed a stylesheet tag with LESS and cache the compiled CSS
+function less($url=false, $media=false, $queue=-1) {
+  if(!c::get('cache')) {
+    return false;
+  }
+  global $lessc;
+  require_once(c::get('root.parsers') . '/less.php');
+  $lessc = new lessc();
+  return css($url, $media, $queue, 1);
+}
+
 // embed a js tag & add to queue
 function js($url=false, $queue=-1) {
   global $jsqueue;
@@ -67,7 +78,7 @@ function js($url=false, $queue=-1) {
     return co::js();
   }
   if((($queue == -1 || $queue == true) && c::get('compress.js')) || ($queue == true && !c::get('compress.js'))) {
-    $jsqueue[false][] = $url;
+    $jsqueue[0][false][] = $url;
   } 
   $url = (str::contains($url, 'http://') || str::contains($url, 'https://')) ? $url : url(ltrim($url, '/'));
   return '<script src="' . $url . '"></script>' . "\n";

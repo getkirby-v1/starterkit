@@ -222,7 +222,7 @@ c::set('cache.ignore', array());
 /*
 
 ---------------------------------------
-CSS/JS Compressing
+CSS/JS/HTML Compressing
 ---------------------------------------
 
 If you enable this, all operations like css('assets/file.css') or js('assets/file.js')
@@ -235,10 +235,14 @@ to activate this feature.
 The css() and js() function will still return the tag for downward compatibility,
 but please don't echo them and ignore the output.
 
+Enabling the html option will compress the whole (normal) output, even if it's no HTML, so don't
+use it if you build a Kirby application parsing JSON for example.
+
 */ 
 
 c::set('compress.css', true);
 c::set('compress.js', true);
+c::set('compress.html', true);
 
 
 /*
