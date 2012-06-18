@@ -37,10 +37,41 @@ or you need to set it on your own, do it like this:
 c::set('url', 'http://yourdomain.com');
 
 Make sure to write the url without a trailing slash.
+
+To work with relative URLs, you can set the URL like this:
+
+c::set('url', '/');
  
 */
 
 c::set('url', false);
+
+
+/* 
+
+---------------------------------------
+Subfolder Setup
+---------------------------------------
+
+Kirby will automatically try to detect the subfolder
+
+i.e. http://yourdomain.com/subfolder
+
+This might fail depending on your server setup. 
+In such a case, please set the correct subfolder here. 
+
+You must also set the right url then:
+
+c::set('url', 'http://yoururl.com/subfolder');
+
+if you are using the .htaccess file, make sure to 
+set the right RewriteBase there as well:
+
+RewriteBase /subfolder
+ 
+*/
+
+c::set('subfolder', false);
 
 
 /* 
@@ -59,29 +90,6 @@ http://yourdomain.com/index.php/about
 */
 
 c::set('rewrite', true);
-
-
-/* 
-
----------------------------------------
-Subfolder Setup
----------------------------------------
-
-if you run the site in a subfolder of your domain
-define the name of that subfolder here. 
-
-You must also set the right url in that case:
-
-c::set('url', 'http://yoururl.com/subfolder');
-
-if you are using the .htaccess file, make sure to 
-set the right RewriteBase there as well:
-
-RewriteBase /subfolder
- 
-*/
-
-c::set('subfolder', false);
 
 
 /* 
@@ -321,6 +329,7 @@ custom config by specific rules for that host.
 
 */
 
+
 /* 
 
 ---------------------------------------
@@ -358,4 +367,3 @@ c::set('lang.support', false);
 c::set('lang.default', 'en');
 c::set('lang.available', array('en', 'de'));
 c::set('lang.detect', true);
-
