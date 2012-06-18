@@ -12,6 +12,7 @@ class uri {
     $this->params    = new uriParams();
     $this->query     = new uriQuery(str::parse(server::get('query_string'), 'query'));
     $this->extension = false;
+    $this->original  = $_SERVER['REQUEST_URI'];
     $this->raw       = $this->raw($uri);
     $this->url       = url(ltrim($this->raw, '/'));
         
@@ -25,7 +26,7 @@ class uri {
   }
 
   function raw($uri=false) {
-    $raw = ($uri) ? $uri : ltrim(server::get('request_uri'), '/');
+    $raw = ($uri) ? $uri : ltrim($_SERVER['REQUEST_URI'], '/');
     $raw = ltrim(str_replace('index.php', '', $raw), '/');
 
     // strip subfolders from uri    

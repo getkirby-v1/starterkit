@@ -150,7 +150,7 @@ class page extends obj {
   
   function url($lang=false) {
     if($this->isHomePage() && !c::get('home.keepurl')) {
-      return u();
+      return url(false, $lang);
     } else if(c::get('lang.support') && $lang) {
 
       $obj = $this;
@@ -209,7 +209,7 @@ class page extends obj {
 
     if($this->isActive()) return true;
     
-    $p = (c::get('lang.translated')) ? str::split($this->translatedURI(), '/'): str::split($this->uri(), '/');
+    $p = (c::get('lang.support')) ? str::split($this->translatedURI(), '/'): str::split($this->uri(), '/');
     $u = $site->uri->path->toArray();
   
     for($x=0; $x<count($p); $x++) {
@@ -349,10 +349,15 @@ class page extends obj {
       
       // get the fallback variables
       $variables = ($fallback) ? $fallback->variables : array();
-      
+            
       $page->intendedTemplate = ($fallback) ? $fallback->template : false;
       
       if(c::get('lang.translated')) {
+
+        // don't use url_key as fallback
+        // the fallback should always be the folder name
+        unset($variables['url_key']);
+
         $translation = $content->filterBy('languageCode', c::get('lang.current'))->first();
         $variables   = ($translation) ? array_merge($variables, $translation->variables) : $variables;
       }
@@ -372,7 +377,7 @@ class page extends obj {
     }
      
     // multi-language translatable urls
-    if(c::get('lang.translated') && $page->url_key != '') {
+    if(c::get('lang.support') && $page->url_key != '') {
       $page->translatedUID = $page->url_key();
       $page->translatedURI = ltrim($parent->translatedURI . '/' . $page->url_key(), '/');    
     } else {
@@ -467,7 +472,7 @@ class pages extends obj {
     $page  = false;
 
     // check if we need to search for translated urls
-    $translated = c::get('lang.translated');
+    $translated = c::get('lang.support');
 
     foreach($array as $p) {    
 
@@ -494,7 +499,7 @@ class pages extends obj {
     $page = $this->find($uri);
 
     if($page) {
-      $pageURI = (c::get('lang.translated')) ? $page->translatedURI() : $page->uri();
+      $pageURI = (c::get('lang.support')) ? $page->translatedURI() : $page->uri();
     } else {
       $pageURI = c::get('404');
     }

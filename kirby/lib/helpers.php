@@ -5,11 +5,7 @@ if(!defined('KIRBY')) die('Direct access is not allowed');
 
 // easy url builder
 function url($uri=false, $lang=false) {
-  
-  // check for activated language support
-  // to modify urls with prepended language codes
-  $langSupport = c::get('lang.support');
-  
+    
   // get the base url of the site
   $baseUrl = c::get('url');
 
@@ -21,11 +17,11 @@ function url($uri=false, $lang=false) {
   }
     
   // prepare the lang variable for later
-  if($langSupport) {
+  if(c::get('lang.support')) {
     $lang = ($lang) ? $lang : c::get('lang.current');
     
     // prepend the language code to the uri
-    $uri = $lang . '/' . $uri;
+    $uri = $lang . '/' . ltrim($uri, '/');
   } 
 
   // if rewrite is deactivated

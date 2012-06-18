@@ -67,7 +67,7 @@ class kirbytext {
   var $text  = null;
   var $mdown = false;
   var $tags  = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
-  var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel');
+  var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel', 'lang');
 
   static function init($text=false, $mdown=true) {
     
@@ -153,7 +153,7 @@ class kirbytext {
         
   }
 
-  function url($url) {
+  function url($url, $lang=false) {
     if(str::contains($url, 'http://') || str::contains($url, 'https://')) return $url;
 
     if(!$this->obj) {
@@ -167,9 +167,9 @@ class kirbytext {
             
     if($files) {
       $file = $files->find($url);
-      $url = ($file) ? $file->url() : url($url);
+      $url = ($file) ? $file->url() : url($url, $lang);
     }
-
+            
     return $url;
   }
 
@@ -179,17 +179,21 @@ class kirbytext {
     $class  = @$params['class'];
     $rel    = @$params['rel'];
     $title  = @$params['title'];
+    $lang   = @$params['lang'];
     $target = self::target($params);
+
+    // language attribute is only allowed when lang support is activated
+    if($lang && !c::get('lang.support')) $lang = false;
 
     // add a css class if available
     if(!empty($class)) $class = ' class="' . $class . '"';
     if(!empty($rel))   $rel   = ' rel="' . $rel . '"';
     if(!empty($title)) $title = ' title="' . html($title) . '"';
         
-    if(empty($url)) return false;
-    if(empty($params['text'])) return '<a' . $target . $class . $rel . $title . ' href="' . $this->url($url) . '">' . html($url) . '</a>';
+    if(empty($url)) $url = '/';
+    if(empty($params['text'])) return '<a' . $target . $class . $rel . $title . ' href="' . $this->url($url, $lang) . '">' . html($url) . '</a>';
 
-    return '<a' . $target . $class . $rel . $title . ' href="' . $this->url($url) . '">' . html($params['text']) . '</a>';
+    return '<a' . $target . $class . $rel . $title . ' href="' . $this->url($url, $lang) . '">' . html($params['text']) . '</a>';
 
   }
 

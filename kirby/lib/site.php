@@ -11,13 +11,10 @@ class site extends obj {
   var $htmlCacheEnabled = false;
     
   function __construct() {
-
-    // auto-detect the url if it is not set
-    if(c::get('url') === false) c::set('url', c::get('scheme') . server::get('http_host'));
-
-    // setup the multi-language support        
+              
+    $this->urlSetup();                  
     $this->languageSetup();    
-
+        
     // check if the cache is enabled at all
     $this->cacheEnabled = (c::get('cache') && (c::get('cache.html') || c::get('cache.data'))) ? true : false;
 
@@ -71,7 +68,7 @@ class site extends obj {
         
     // attach the uri after caching
     $this->uri = new uri();
-                                                
+                                                        
   }
 
   function __toString() {
@@ -90,25 +87,15 @@ class site extends obj {
       // if there's no https in the url
       if(!server::get('https')) go(str_replace('http://', 'https://', $page->url()));
     }
+
+    // check for index.php in rewritten urls and rewrite them
+    if(c::get('rewrite') && preg_match('!index.php\/!i', $this->uri->original)) {
+      go($page->url());    
+    }
         
     // check for a misconfigured subfolder install
     if($page->isErrorPage()) {
-            
-      // get the subfolder in which the site is running
-      $subfolder = ltrim(dirname(server::get('script_name')), '/');
                   
-      // if it is running in a subfolder and it does not match the config
-      // send an error with some explanations how to fix that
-      if(!empty($subfolder) && c::get('subfolder') != $subfolder) {
-        
-        // this main url        
-        $url = 'http://' . server::get('http_host') . '/' . $subfolder;
-        
-        require_once(c::get('root.kirby') . '/modals/subfolder.php');
-        exit();
-        
-      }    
-      
       // if you want to store subfolders in the homefolder for blog articles i.e. and you
       // want urls like http://yourdomain.com/article-title you can set 
       // RedirectMatch 301 ^/home/(.*)$ /$1 in your htaccess file and those
@@ -122,6 +109,42 @@ class site extends obj {
           $this->uri = new uri($uri);
         }
       }
+      
+      // try to rewrite broken translated urls
+      // this will only work for default uris
+      if(c::get('lang.support')) {
+        
+        $path  = $this->uri->path->toArray();
+        $obj   = $pages;
+        $found = false;
+    
+        foreach($path as $p) {    
+          
+          // first try to find the page by uid
+          $next = $obj->{'_' . $p};
+                                        
+          if(!$next) {
+            
+            // go through each translation for each child page 
+            // and try to find the url_key or uid there
+            foreach($obj as $child) {
+              foreach(c::get('lang.available') as $lang) {
+                $c = $child->content($lang);   
+                // redirect to the url if a translated url has been found
+                if($c->url_key() == $p && !$child->isErrorPage()) $next = $child;
+              }
+            }
+
+            if(!$next) break;
+          }
+    
+          $found = $next;
+          $obj   = $next->children();
+        }
+        
+        if($found && !$found->isErrorPage()) go($found->url());
+                
+      }      
       
     }
     
@@ -223,8 +246,9 @@ class site extends obj {
   
   }
 
-  function url() {
-    return url();
+  function url($lang=false) {
+    $url = c::get('url');
+    return ($lang && c::get('lang.support') && in_array($lang, c::get('lang.available'))) ? url(false, $lang) : $url;
   }
 
   function serialize() {
@@ -330,9 +354,12 @@ class site extends obj {
       } else {
         $code = c::get('lang.default');
       }
+      
+      // go to the default homepage      
+      go(url(false, $code));
           
     }
-
+    
     // http://yourdomain.com/error
     // will redirect to http://yourdomain.com/en/error
     if($code == c::get('404')) go(url('error', c::get('lang.default')));
@@ -348,6 +375,27 @@ class site extends obj {
     
     // load the additional language files if available
     load::language();  
+
+  }
+
+  function urlSetup() {
+
+    // auto-detect the url if it is not set
+    $url = (c::get('url') === false) ? c::get('scheme') . server::get('http_host') : rtrim(c::get('url'), '/');
+      
+    // try to detect the subfolder      
+    $subfolder = (c::get('subfolder')) ? trim(c::get('subfolder'), '/') : trim(dirname($_SERVER['SCRIPT_NAME']), '/');
+
+    if($subfolder) {
+      c::set('subfolder', $subfolder);
+      
+      // check if the url already contains the subfolder      
+      // so it's not included twice
+      if(!preg_match('!' . preg_quote($subfolder) . '$!i', $url)) $url .= '/' . $subfolder;
+    }
+            
+    // set the final url
+    c::set('url', $url);  
 
   }
          

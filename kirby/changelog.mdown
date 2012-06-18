@@ -9,6 +9,8 @@ To update from 1.0.9 to 1.1 replace the `kirby` system folder. Delete all files 
 ### Changes
 
 - added full multi-language support
+- multi-language box fixes
+- auto-subfolder detection
 
 ## 1.0.9
 
