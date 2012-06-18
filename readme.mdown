@@ -31,7 +31,9 @@ c::set('license', 'put your license code here');
 
 ### Running Kirby in a subfolder of your domain
 
-If you want to run Kirby in a subfolder like `http://yourdomain.com/subfolder` you need to make some simple adjustments first. Go to `site/config/config.php` and make sure you manually set the url config variable:
+Kirby will try to automatically detect if your site is installed in a subfolder. I.e.: `http://yourdomain.com/subfolder`
+
+Sometimes auto-detection might fail, depending on your server setup. In that case, go to `site/config/config.php` and make sure you manually set the url config variable:
 	
 	c::set('url', 'http://yourdomain.com/subfolder');
 
