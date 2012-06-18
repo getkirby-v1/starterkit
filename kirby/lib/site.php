@@ -248,7 +248,7 @@ class site extends obj {
 
   function url($lang=false) {
     $url = c::get('url');
-    return ($lang && c::get('lang.support') && in_array($lang, c::get('lang.available'))) ? url(false, $lang) : $url;
+    return ($lang && c::get('lang.support') && in_array($lang, c::get('lang.available', array()))) ? url(false, $lang) : $url;
   }
 
   function serialize() {
@@ -333,6 +333,18 @@ class site extends obj {
     // check for activated language support
     if(!c::get('lang.support')) return false;
 
+    // get the available languages
+    $available = c::get('lang.available');
+
+    // sanitize the available languages
+    if(!is_array($available)) {
+      
+      // switch off language support      
+      c::set('lang.support', false);
+      return false;      
+            
+    }
+
     // get the raw uri
     $uri = uri::raw();
        
@@ -346,7 +358,7 @@ class site extends obj {
         // detect the current language
         $detected = str::split(server::get('http_accept_language'), '-');
         $detected = str::trim(a::first($detected));
-        $detected = (!in_array($detected, c::get('lang.available'))) ? c::get('lang.default') : $detected;
+        $detected = (!in_array($detected, $available)) ? c::get('lang.default') : $detected;
 
         // set the detected code as current code          
         $code = $detected;

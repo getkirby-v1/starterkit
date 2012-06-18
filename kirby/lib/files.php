@@ -284,6 +284,9 @@ class files extends obj {
   function dispatchContent() {
 
     $meta = array();
+
+    $langSupport = c::get('lang.support');
+    $translated  = c::get('lang.translated');
             
     foreach($this->contents() as $key => $content) {
             
@@ -331,7 +334,7 @@ class files extends obj {
           
           // check for a valid language extension
           // home.en.txt
-          if(in_array($lastPart, c::get('lang.available'))) {         
+          if($langSupport && in_array($lastPart, c::get('lang.available', array()))) {         
             
             // use the first part for the template name (i.e. home)
             $content->template = $firstPart;
@@ -363,7 +366,7 @@ class files extends obj {
         // check for a valid language extension
         // myfile.jpg.de.txt
         // article.video.de.txt
-        if(in_array($lastPart, c::get('lang.available'))) {         
+        if($langSupport && in_array($lastPart, c::get('lang.available', array()))) {         
           
           // name without the last part / language code
           $name = implode('.', array_slice($parts, 0, -1));
@@ -425,9 +428,6 @@ class files extends obj {
       }
     
     }
-
-    $langSupport = c::get('lang.support');
-    $translated  = c::get('lang.translated');
     
     foreach($meta as $m) {
       
