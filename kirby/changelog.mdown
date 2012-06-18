@@ -11,6 +11,9 @@ To update from 1.0.9 to 1.1 replace the `kirby` system folder. Delete all files 
 - added full multi-language support
 - multi-language box fixes
 - auto-subfolder detection
+- removed the favicons from the default template to keep it more simple
+- fixed some inconsistencies in the templates
+- improved the config
 
 ## 1.0.9
 
