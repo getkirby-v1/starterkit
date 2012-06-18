@@ -193,7 +193,10 @@ class files extends obj {
   function init($page) {
         
 		foreach($page->rawfiles AS $key => $file) {
-
+      
+      // skip invisible files      
+      if(preg_match('!^\.!', $file)) continue;
+      
 			$info = array(
 			  'name'      => f::name($file),
 				'filename'  => $file,

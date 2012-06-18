@@ -14,6 +14,7 @@ To update from 1.0.9 to 1.1 replace the `kirby` system folder. Delete all files 
 - removed the favicons from the default template to keep it more simple
 - fixed some inconsistencies in the templates
 - improved the config
+- all invisible content files are now skipped
 
 ## 1.0.9
 
