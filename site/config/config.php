@@ -367,3 +367,18 @@ c::set('lang.support', false);
 c::set('lang.default', 'en');
 c::set('lang.available', array('en', 'de'));
 c::set('lang.detect', true);
+
+
+/* 
+
+---------------------------------------
+Content File Extension
+---------------------------------------
+
+Change the default file extension for your
+content files here if you'd rather use something
+else than txt. For example md or mdown. 
+
+*/
+
+c::set('content.file.extension', 'txt');
