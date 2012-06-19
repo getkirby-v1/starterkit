@@ -65,4 +65,13 @@ function param($key, $default=false) {
   return $site->uri->params($key, $default);
 }
 
+// check if plugin exists
+function plugin_active($plugin) {
+  if(file_exists(c::get("root.plugins") . '/' . $plugin . '.php') || file_exists(c::get('root.plugins') . '/' . $plugin . '/' . $plugin . '.php')) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 ?>
