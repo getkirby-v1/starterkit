@@ -24,7 +24,7 @@ class variables extends file {
     
     $vars = self::fetch($this->root);
     $this->_['variables'] = array();
-    $this->filecontent = $vars['raw'];
+    $this->filecontent = @$vars['raw'];
 
     if($vars) {
       foreach($vars['data'] as $key => $var) {
