@@ -5,8 +5,6 @@ if(!defined('KIRBY')) die('Direct access is not allowed');
 
 class page extends obj {
 
-  var $content = false;
-
   function __construct() {
     $this->children   = array();
     $this->online     = true; 
@@ -18,18 +16,29 @@ class page extends obj {
   }
 
   function content($code=false) {
-    if(!$code) $code = c::get('lang.default');
     
-    $content = $this->contents()->filterBy('languageCode', $code)->first();
+    // return the cached version if available
+    if(!$code && is_a($this->content, 'obj')) return $this->content;
+
+    // make sure there's the right code for lang support
+    if(!$code && c::get('lang.support')) $code = c::get('lang.current');
+    
+    $content = ($code) ? $this->contents()->filterBy('languageCode', $code)->first() : $this->contents()->first();
     $result  = array();
 
     if($content) {
+
       foreach($content->variables as $key => $var) {
         $result[$key] = new variable($var, $this);
       }
+
+      $result['variables'] = $content->variables;
+      return new obj($result);
+
     }
     
-    return new obj($result);
+    return false;        
+    
   }
 
   function children($offset=null, $limit=null, $sort='dirname', $direction='asc') {
@@ -384,7 +393,11 @@ class page extends obj {
       $page->translatedUID = $page->uid;
       $page->translatedURI = ltrim($parent->translatedURI . '/' . $page->uid, '/');    
     }
-                
+    
+    // attach a cached version of the default content
+    // for backwards compatibility
+    $page->content = $page->content();
+                    
     return $page;
       
   } 
