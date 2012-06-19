@@ -267,6 +267,10 @@ class site extends obj {
   function modified() {
     return ($this->modified) ? $this->modified : time();
   }
+
+  function hasPlugin($plugin) {
+    return (file_exists(c::get('root.plugins') . '/' . $plugin . '.php') || file_exists(c::get('root.plugins') . '/' . $plugin . '/' . $plugin . '.php')) ? true : false;  
+  }
           
 }
 
