@@ -480,6 +480,10 @@ class site extends obj {
     c::set('url', $url);  
 
   }
+
+  function hasPlugin($plugin) {
+    return (file_exists(c::get('root.plugins') . '/' . $plugin . '.php') || file_exists(c::get('root.plugins') . '/' . $plugin . '/' . $plugin . '.php')) ? true : false;  
+  }
          
 }
 
