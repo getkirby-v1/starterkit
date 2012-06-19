@@ -6,6 +6,8 @@
 
 To update from 1.0.9 to 1.1 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
 
+PLEASE REPLACE YOUR OLD HTACCESS FILE WITH THE NEW HTACCESS FILE!!!
+
 ### Changes
 
 - added full multi-language support
