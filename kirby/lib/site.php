@@ -24,7 +24,7 @@ class site extends obj {
       $this->htmlCacheEnabled = c::get('cache.html');    
 
       if(c::get('cache.autoupdate')) {
-        $this->modified = dir::modified(c::get('root.content'));
+        $this->modified = dir::modified(c::get('root.content'));                
       } else {
         $this->modified = 0;
       }
@@ -58,7 +58,7 @@ class site extends obj {
       // get the first set of pages
       $this->rootPages();
       // get the additional site info from content/site.txt
-      $this->siteInfo();
+      $this->info();
             
       if($this->dataCacheEnabled) cache::set($cacheID, $this->_);
       
@@ -278,42 +278,104 @@ class site extends obj {
   
   }
 
-  function siteInfo() {
+  function info($lang=false) {
+    
+    // first run: fetch all the things we need    
+    if(!$this->info) {              
+
+      $root = c::get('root.content');
+
+      if(c::get('lang.support')) {
+
+        $defaultLang = c::get('lang.default');
+        $currentLang = c::get('lang.current');
+      
+        foreach(c::get('lang.available') as $lang) {
+          $file = $root . '/site.' . $lang . '.' . c::get('content.file.extension', 'txt');
+          if(!file_exists($file)) continue;
   
+          // fetch the site info from the defaulf file. 
+          $fetched = variables::fetch($file);
+          $data    = $fetched['data'];
+          $data['filecontent'] = $fetched['raw'];
+                  
+          $this->_['info'][$lang] = $data;
+          
+        }
+  
+        // if there's no default language
+        if(!isset($this->_['info'][$defaultLang])) {
+          
+          $file = $root . '/site.' . c::get('content.file.extension', 'txt');
+  
+          if(file_exists($file)) {
+  
+            // fetch the site info from the defaulf file. 
+            $fetched = variables::fetch($file);
+            $data    = $fetched['data'];
+            $data['filecontent'] = $fetched['raw'];
+                  
+            $this->_['info'][$defaultLang] = $data;
+          
+          } else {
+            $this->_['info'][$defaultLang] = array();
+          }
+          
+        }
+        
+        foreach($this->_['info'] as $key => $value) {
+          if($key == $defaultLang) continue;
+
+          $merged = array_merge($this->_['info'][$defaultLang], $value);
+          $this->_['info'][$key] = new siteinfo($merged);
+        }
+        
+        // bake the default language stuff into an object finally
+        $this->_['info'][$defaultLang] = new siteinfo($this->_['info'][$defaultLang]);        
+        
+        // get the current variables
+        $current = (isset($this->_['info'][$currentLang])) ? $this->_['info'][$currentLang] : $this->_['info'][$defaultLang];
+                                    
+      } else {
+  
+        $file = $root . '/site.' . c::get('content.file.extension', 'txt');
+  
+        if(file_exists($file)) {
+  
+          // fetch the site info from the defaulf file. 
+          $fetched = variables::fetch($file);
+          $data    = $fetched['data'];
+          $data['filecontent'] = $fetched['raw'];
+                
+          $this->_['info'] = new siteinfo($data);
+        } else {
+          $this->_['info'] = new siteinfo(array());
+        }
+        
+        $current = $this->_['info'];
+        
+      }
+        
+      // merge the current site info with the additional
+      // info from the info file(s)    
+      $this->variables = $current;
+      $this->_ = array_merge($this->_, $current->_);  
+
+    }
+
+    // now get the stuff the user wants
     if(c::get('lang.support')) {
 
-      $default = c::get('root.content') . '/site.' . c::get('lang.default') . '.txt';
-      $current = c::get('root.content') . '/site.' . c::get('lang.current') . '.txt';
-      
-      if(!file_exists($default)) $default = c::get('root.content') . '/site.txt';
-
-      // if the default language is also the current language
-      // we don't need to load two files
-      if($default == $current) {
-        $info = variables::fetch($default);
-      } else {
-        $defaultInfo = variables::fetch($default);
-        $currentInfo = (file_exists($current)) ? variables::fetch($current) : array();
-      
-        // overwrite the default info with the current info
-        // so we get a nice info array with all variables filled
-        // even if the translated version is not complete.        
-        $info = array_merge($defaultInfo, $currentInfo);
-
+      if($lang && in_array($lang, c::get('lang.available'))) {
+        return a::get($this->info, $lang);
       }
+      
+      return a::get($this->info, c::get('lang.current'));
 
     } else {
-      // simply load the site.txt file
-      // no fancy language stuff here
-      $file = c::get('root.content') . '/site.txt';
-      $info = variables::fetch($file);
+      return $this->info;
     }
-  
-    // merge the current site info with the additional
-    // info from the info file(s)    
-    $this->variables = $info;
-    $this->_ = array_merge($this->_, $info);  
-    
+        
   }
   
   function modified() {
@@ -413,3 +475,10 @@ class site extends obj {
          
 }
 
+class siteinfo extends obj {
+  
+  function __toString() {
+    return $this->filecontent;
+  }
+  
+}

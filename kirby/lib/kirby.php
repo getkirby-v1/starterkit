@@ -1798,7 +1798,8 @@ class dir {
    * @param   int      $modified internal modified store 
    * @return  int  
    */  
-  static function modified($dir, $modified=0) {
+  static function modified($dir, $modified=false) {
+    if($modified === false) $modified = filemtime($dir);
     $files = self::read($dir);
     foreach($files AS $file) {
       if(!is_dir($dir . '/' . $file)) continue;

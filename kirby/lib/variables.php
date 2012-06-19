@@ -24,9 +24,10 @@ class variables extends file {
     
     $vars = self::fetch($this->root);
     $this->_['variables'] = array();
+    $this->filecontent = $vars['raw'];
 
     if($vars) {
-      foreach($vars as $key => $var) {
+      foreach($vars['data'] as $key => $var) {
         $this->_['variables'][$key] = $var;
       }
     }
@@ -34,7 +35,10 @@ class variables extends file {
   }
   
   static function fetch($file) {
-    if(!file_exists($file)) return array();
+    if(!file_exists($file)) return array(
+      'raw'  => false,
+      'data' => array()
+    );
     $content  = f::read($file); 
     $content  = str_replace("\xEF\xBB\xBF", '', $content);    
     $sections = preg_split('![\r\n]+[-]{4,}!i', $content);
@@ -50,7 +54,10 @@ class variables extends file {
       $data[$key] = $value;
     }
         
-    return $data;
+    return array(
+      'raw'  => $content,
+      'data' => $data,
+    );
   }
     
 }

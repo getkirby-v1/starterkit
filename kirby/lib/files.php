@@ -204,7 +204,7 @@ class files extends obj {
 				'root'      => $page->root . '/' . $file,
 				'uri'       => $page->diruri . '/' . $file,
 				'parent'    => $this,
-				'modified'  => filectime($page->root . '/' . $file)
+				'modified'  => @filectime($page->root . '/' . $file)
 			);
 				
       switch($info['extension']) {
@@ -237,7 +237,7 @@ class files extends obj {
           $info['type'] = 'sound';
           $class = 'file';
           break;
-        case 'txt':
+        case c::get('content.file.extension', 'txt'):
           $info['type'] = 'content';
           $class = 'variables';
           break;

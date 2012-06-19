@@ -31,9 +31,12 @@ class page extends obj {
       foreach($content->variables as $key => $var) {
         $result[$key] = new variable($var, $this);
       }
+      
+      // pass on the variables object and the raw filecontent
+      $result['variables']   = $content->variables;
+      $result['filecontent'] = $content->filecontent;
 
-      $result['variables'] = $content->variables;
-      return new obj($result);
+      return new pagecontent($result);
 
     }
     
@@ -670,3 +673,10 @@ class pages extends obj {
             
 }
 
+class pagecontent extends obj {
+  
+  function __toString() {
+    return $this->filecontent;
+  }
+  
+}
