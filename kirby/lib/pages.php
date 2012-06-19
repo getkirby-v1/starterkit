@@ -166,12 +166,14 @@ class page extends obj {
     } else if(c::get('lang.support') && $lang) {
 
       $obj = $this;
-      $uri = $this->content($lang)->url_key();
+      $cnt = $this->content($lang);
+      $uri = $cnt ? $cnt->url_key() : false;
       if(!$uri) $uri = $this->uid;
                   
       while($parent = $obj->parent()) {
-
-        $uid = $parent->content($lang)->url_key();
+        
+        $cnt = $parent->content($lang);
+        $uid = ($cnt) ? $cnt->url_key() : false;
         if(!$uid) $uid = $parent->uid;
 
         $uri = $uid . '/' . $uri;
