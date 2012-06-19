@@ -27,6 +27,8 @@ load::lib();
 load::config();
 load::parsers();
 load::plugins();
+// load the config again because of new plugins that may have added their own config files
+load::config();
 
 // check for an exisiting content dir 
 if(!is_dir(c::get('root.content'))) die('The Kirby content directory could not be found');
