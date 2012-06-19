@@ -373,12 +373,15 @@ class site extends obj {
 
     // now get the stuff the user wants
     if(c::get('lang.support')) {
-
+      
+      $currentLang = c::get('lang.current');
+      $defaultLang = c::get('lang.default');
+      
       if($lang && in_array($lang, c::get('lang.available'))) {
-        return a::get($this->info, $lang);
+        return (isset($this->info[$lang])) ? $this->info[$lang] : $this->info[$defaultLang];
       }
       
-      return a::get($this->info, c::get('lang.current'));
+      return (isset($this->info[$currentLang])) ? $this->info[$currentLang] : $this->info[$defaultLang];
 
     } else {
       return $this->info;
