@@ -355,10 +355,18 @@ class site extends obj {
         $current = $this->_['info'];
         
       }
-        
+      
+      // add all variables        
+      $vars = $current->_;
+      
+      // don't add the filecontent var, 
+      // because this is not a custom var
+      unset($vars['filecontent']);
+
+      $this->variables = $vars;
+
       // merge the current site info with the additional
       // info from the info file(s)    
-      $this->variables = $current;
       $this->_ = array_merge($this->_, $current->_);  
 
     }
