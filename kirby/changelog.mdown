@@ -15,6 +15,7 @@ To update from 1.0.9 to 1.1 replace the `kirby` system folder. Delete all files 
 - fixed some inconsistencies in the templates
 - improved the config
 - all invisible content files are now skipped
+- added a Kirby Panel Version check. 
 
 ## 1.0.9
 

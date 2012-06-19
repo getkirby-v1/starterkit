@@ -6,6 +6,10 @@ if(!defined('KIRBY')) die('Direct access is not allowed');
 c::set('version.string', '1.1');
 c::set('version.number', 1.1);
 
+// set a required panel version to make sure 
+// core and panel will work together nicely
+c::set('panel.min.version', 0.8);
+
 // define all directories
 c::set('root.templates', c::get('root.site') . '/templates');
 c::set('root.snippets',  c::get('root.site') . '/snippets');
