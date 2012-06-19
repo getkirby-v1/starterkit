@@ -20,6 +20,7 @@ PLEASE REPLACE YOUR OLD HTACCESS FILE WITH THE NEW HTACCESS FILE!!!
 - added a Kirby Panel Version check. 
 - fixed a caching bug
 - changeable content file extensions
+- new improved handling of plugins in the plugins folder (by Lukas)
 
 ## 1.0.9
 
