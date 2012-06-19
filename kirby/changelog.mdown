@@ -19,6 +19,7 @@ PLEASE REPLACE YOUR OLD HTACCESS FILE WITH THE NEW HTACCESS FILE!!!
 - all invisible content files are now skipped
 - added a Kirby Panel Version check. 
 - fixed a caching bug
+- changeable content file extensions
 
 ## 1.0.9
 
