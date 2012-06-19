@@ -29,17 +29,24 @@ class load {
     self::file($root . '/config.' . server::get('server_name') . '.php');
   }
   
-  static function plugins() {
+  static function plugins($folder='') {
     $root  = c::get('root.plugins');
-    $files = dir::read($root);    
+    if($folder != '') {
+      $files = dir::read($root . '/' . $folder);
+    } else {
+      $files = dir::read($root); 
+    } 
 
     if(!is_array($files)) return false;
     
     foreach($files as $file) {
-      if(f::extension($file) != 'php') continue;
-      self::file($root . '/' . $file);
+      if(is_dir($root . '/' . $file)) {
+        self::plugins($file . '/');
+      }
+      if(f::extension($file) != 'php' || $file == $folder . '.php') continue;
+      self::file($root . '/' . $folder . $file);
     }
-    
+    self::file($root . '/' . $folder . $folder . '.php');
   }
 
   static function parsers() {
