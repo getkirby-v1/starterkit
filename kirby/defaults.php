@@ -63,4 +63,4 @@ c::set('pagination.variable', 'page');
 c::set('pagination.method', 'params');
 
 // change the default kirby content file extension
-c::set('content.file.extension', 'md');
+c::set('content.file.extension', 'txt');
