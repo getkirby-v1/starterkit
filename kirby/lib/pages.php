@@ -107,9 +107,13 @@ class page extends obj {
     return ($this->prevVisible($sort, $direction)) ? true : false; 
   }
 
-  function template() {
+  function template($virtual=false) {
 
     $name = (!$this->content || !$this->content->name) ? c::get('tpl.default') : $this->content->name;
+    
+    if($virtual == true) {
+      return $name;
+    }
     
     // construct the template file 
     $file = c::get('root.templates') . '/' . $name . '.php';
@@ -119,6 +123,25 @@ class page extends obj {
 
     return $name;
         
+  }
+      
+  function hasTemplate($which) {
+    $name = (!$this->content || !$this->content->name) ? c::get('tpl.default') : $this->content->name;
+    
+    // construct the template file 
+    $file = c::get('root.templates') . '/' . $name . '.php';
+    
+    if($which == $name) {
+      return true;
+    }
+    
+    // check if the template file exists and go back to the fallback    
+    if(!file_exists($file)) $name = c::get('tpl.default');
+    
+    if($which == $name) {
+      return true;
+    }
+    return false;
   }
 
   function depth() {
