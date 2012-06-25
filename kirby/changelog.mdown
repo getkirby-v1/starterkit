@@ -1,10 +1,21 @@
 #Kirby Changelog
 
-## 1.1
+## 1.1.1
 
-### Update from 1.0.9 to 1.1
+### Update from 1.1.0 to 1.1.1
 
-To update from 1.0.9 to 1.1 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
+To update from 1.1.0 to 1.1.1 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
+
+### Changes
+
+- fixed a possible bug in variables.php
+- added a better content protection rule to the htaccess
+
+## 1.1.1
+
+### Update from 1.0.9 to 1.1.0
+
+To update from 1.0.9 to 1.1.0 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
 
 PLEASE REPLACE YOUR OLD HTACCESS FILE WITH THE NEW HTACCESS FILE!!!
 

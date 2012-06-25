@@ -26,7 +26,7 @@ class variables extends file {
     $this->_['variables'] = array();
     $this->filecontent = @$vars['raw'];
 
-    if($vars) {
+    if($vars && is_array($vars)) {
       foreach($vars['data'] as $key => $var) {
         $this->_['variables'][$key] = $var;
       }
