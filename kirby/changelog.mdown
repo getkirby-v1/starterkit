@@ -10,6 +10,9 @@ To update from 1.1.0 to 1.1.1 replace the `kirby` system folder. Delete all file
 
 - fixed a possible bug in variables.php
 - added a better content protection rule to the htaccess
+- removed ?> in kirby.php
+- fixed a potential bug in kirbytext
+- fixed a potential bug in the troubleshoot modal
 
 ## 1.1.1
 
