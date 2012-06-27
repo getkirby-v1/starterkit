@@ -5,7 +5,7 @@ if(!defined('KIRBY')) die('Direct access is not allowed');
 
 // Kirby Troubleshoot File
 
-$modules   = apache_get_modules(); 
+$modules   = (function_exists('apache_get_modules')) ? apache_get_modules() : array(); 
 $rewrite   = in_array('mod_rewrite', $modules);
 $subfolder = ltrim(dirname(server::get('script_name')), '/');
 $url       = c::get('url', 'http://' . server::get('http_host'));
