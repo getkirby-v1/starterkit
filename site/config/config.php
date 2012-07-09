@@ -187,8 +187,10 @@ Cache
 ---------------------------------------
 
 Enable or disable the cache. 
-It is enabled by default, but you 
-need to make sure that the site/cache
+It is disabled by default. 
+
+If you enable it, you need to make 
+sure that the site/cache
 directory is writable. 
 
 You can also decide to disable/enable
@@ -198,8 +200,6 @@ the final html, make sure to clean
 the cache, once you've modified your
 templates. It's better to keep this
 off until your site is ready for production. 
-
-Caching is switched off by default
 
 With c::set('cache.autoupdate') you can set if 
 Kirby will automatically check for updates in your 
