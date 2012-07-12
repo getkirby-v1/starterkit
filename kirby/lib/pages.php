@@ -147,6 +147,10 @@ class page extends obj {
         
   }
 
+  function hasTemplate() {
+    return ($this->template() == $this->intendedTemplate()) ? true : false;
+  }
+
   function depth() {
     $parent = $this->parent();
     return ($parent) ? ($parent->depth() + 1) : 1;

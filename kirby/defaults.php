@@ -3,8 +3,8 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
-c::set('version.string', '1.1');
-c::set('version.number', 1.1);
+c::set('version.string', '1.1.1');
+c::set('version.number', 1.11);
 
 // set a required panel version to make sure 
 // core and panel will work together nicely

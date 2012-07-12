@@ -13,8 +13,9 @@ To update from 1.1.0 to 1.1.1 replace the `kirby` system folder. Delete all file
 - removed ?> in kirby.php
 - fixed a potential bug in kirbytext
 - fixed a potential bug in the troubleshoot modal
+- implemented Lukas' $page->hasTemplate()
 
-## 1.1.1
+## 1.1.0
 
 ### Update from 1.0.9 to 1.1.0
 
