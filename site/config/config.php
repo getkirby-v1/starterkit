@@ -145,16 +145,56 @@ c::set('kirbytext.video.height', 358);
 Markdown Setup 
 ---------------------------------------
 
-to disable automatic line breaks in markdown
-set this to false. 
+You can globally switch Markdown parsing 
+on or off here. 
+
+To disable automatic line breaks in markdown
+set markdown.breaks to false. 
 
 You can also switch between regular markdown
 or markdown extra: http://michelf.com/projects/php-markdown/extra/
 
 */
 
+c::set('markdown', true);
 c::set('markdown.breaks', true);
 c::set('markdown.extra', false);
+
+
+/* 
+
+---------------------------------------
+Smartypants Setup 
+---------------------------------------
+
+Smartypants is a typography plugin, which
+helps to improve things like quotes and ellipsises
+and all those nifty little typography details. 
+
+You can read more about it here: 
+http://michelf.com/projects/php-smartypants/typographer/
+
+Smartypants is switched off by default. 
+As soon as it is switched on it will affect all 
+texts which are parsed by kirbytext()
+
+*/
+
+// smartypants
+c::set('smartypants', false);
+c::set('smartypants.attr', 1);
+c::set('smartypants.doublequote.open', '&#8220;');
+c::set('smartypants.doublequote.close', '&#8221;');
+c::set('smartypants.space.emdash', ' ');
+c::set('smartypants.space.endash', ' ');
+c::set('smartypants.space.colon', '&#160;');
+c::set('smartypants.space.semicolon', '&#160;');
+c::set('smartypants.space.marks', '&#160;');
+c::set('smartypants.space.frenchquote', '&#160;');
+c::set('smartypants.space.thousand', '&#160;');
+c::set('smartypants.space.unit', '&#160;');
+c::set('smartypants.skip', 'pre|code|kbd|script|math');
+
 
 
 /*

@@ -57,6 +57,7 @@ class load {
     require_once($root . '/defaults.php');
     require_once($root . '/yaml.php');
     require_once($root . '/kirbytext.php');
+    require_once($root . '/smartypants.php');
 
     if(c::get('markdown.extra')) {
       require_once($root . '/markdown.extra.php');

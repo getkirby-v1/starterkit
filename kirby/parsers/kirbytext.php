@@ -63,24 +63,26 @@ function gist($url, $file=false) {
 
 class kirbytext {
   
-  var $obj   = null;
-  var $text  = null;
-  var $mdown = false;
-  var $tags  = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
-  var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel', 'lang');
+  var $obj         = null;
+  var $text        = null;
+  var $mdown       = true;
+  var $smartypants = true;
+  var $tags        = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
+  var $attr        = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel', 'lang');
 
-  static function init($text=false, $mdown=true) {
+  static function init($text=false, $mdown=true, $smartypants=true) {
     
     $classname = self::classname();            
-    $kirbytext = new $classname($text, $mdown);    
+    $kirbytext = new $classname($text, $mdown, $smartypants);    
     return $kirbytext->get();    
               
   }
 
-  function __construct($text=false, $mdown=true) {
+  function __construct($text=false, $mdown=true, $smartypants=true) {
       
-    $this->text  = $text;  
-    $this->mdown = $mdown;
+    $this->text        = $text;  
+    $this->mdown       = $mdown;
+    $this->smartypants = $smartypants;
           
     // pass the parent page if available
     if(is_object($this->text)) $this->obj = $this->text->parent;
@@ -92,8 +94,11 @@ class kirbytext {
     $text = preg_replace_callback('!(?=[^\]])\((' . implode('|', $this->tags) . '):(.*?)\)!i', array($this, 'parse'), (string)$this->text);
     $text = preg_replace_callback('!```(.*?)```!is', array($this, 'code'), $text);
     
-    return ($this->mdown) ? markdown($text) : $text;
-
+    $text = ($this->mdown) ? markdown($text) : $text;
+    $text = ($this->smartypants) ? smartypants($text) : $text;
+    
+    return $text;
+    
   }
 
   function code($code) {
