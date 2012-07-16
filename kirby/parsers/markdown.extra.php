@@ -1628,10 +1628,10 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 	### HTML Block Parser ###
 	
 	# Tags that are always treated as block tags:
-	var $block_tags_re = 'p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|address|form|fieldset|iframe|hr|legend';
+	var $block_tags_re = 'p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|address|form|fieldset|iframe|hr|legend|figure';
 	
 	# Tags treated as block tags only if the opening tag is alone on it's line:
-	var $context_block_tags_re = 'script|noscript|math|ins|del';
+	var $context_block_tags_re = 'script|noscript|math|ins|del|img';
 	
 	# Tags where markdown="1" default to span mode:
 	var $contain_span_tags_re = 'p|h[1-6]|li|dd|dt|td|th|legend|address';
