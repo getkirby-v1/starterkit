@@ -25,7 +25,7 @@ class uri {
     return $this->toString();
   }
 
-  function raw($uri=false) {
+  static function raw($uri=false) {
     $raw = ($uri) ? $uri : ltrim($_SERVER['REQUEST_URI'], '/');
     $raw = ltrim(str_replace('index.php', '', $raw), '/');
 
