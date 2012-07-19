@@ -16,6 +16,7 @@ To update from 1.1.0 to 1.1.1 replace the `kirby` system folder. Delete all file
 - implemented Lukas' $page->hasTemplate()
 - improved markdown configuration
 - added smartypants
+- fixed a strict bug in the uri class when language support is switched on
 
 ## 1.1.0
 
