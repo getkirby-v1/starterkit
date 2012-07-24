@@ -3,6 +3,12 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
+// default param separator
+if(!c::get('uri.param.separator')) {
+  // check for linux or windows
+  c::set('uri.param.separator', (DIRECTORY_SEPARATOR == '/') ? ':' : ';');
+}
+
 class uri {
 
   function __construct($uri=false) {
@@ -44,8 +50,8 @@ class uri {
             
     // parse params
     foreach($path AS $p) {
-      if(str::contains($p, ':')) {
-        $parts = explode(':', $p);
+      if(str::contains($p, c::get('uri.param.separator'))) {
+        $parts = explode(c::get('uri.param.separator'), $p);
         if(count($parts) < 2) continue;
         $this->params->$parts[0] = $parts[1];
       } else {
@@ -184,7 +190,7 @@ class uriParams extends obj {
   function toString() {
     $output = array();
     foreach($this->_ as $key => $value) {
-      $output[] = $key . ':' . $value;
+      $output[] = $key . c::get('uri.param.separator') . $value;
     }        
     return implode('/', $output);
   }

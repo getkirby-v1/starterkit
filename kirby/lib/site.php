@@ -469,7 +469,7 @@ class site extends obj {
     $url = (c::get('url') === false) ? c::get('scheme') . server::get('http_host') : rtrim(c::get('url'), '/');
       
     // try to detect the subfolder      
-    $subfolder = (c::get('subfolder')) ? trim(c::get('subfolder'), '/') : trim(dirname($_SERVER['SCRIPT_NAME']), '/');
+    $subfolder = (c::get('subfolder')) ? trim(c::get('subfolder'), '/') : trim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 
     if($subfolder) {
       c::set('subfolder', $subfolder);
