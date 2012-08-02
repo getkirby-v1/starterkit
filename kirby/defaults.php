@@ -22,6 +22,9 @@ c::set('root.parsers',   c::get('root.kirby') . '/parsers');
 c::set('scheme', (server::get('https')) ? 'https://' : 'http://');
 c::set('url', c::get('scheme') . server::get('http_host'));
 
+// ignore files
+c::set('files.ignore', array('.svn'));
+
 // rewrite url setup
 c::set('rewrite', true);
 
