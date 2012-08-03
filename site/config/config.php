@@ -440,4 +440,4 @@ array('.', '..', '.DS_Store', '.svn', '.git', '.htaccess');
 …so you don't have to add them. 
 
 */
-c::set('content.file.ignore', array('test.txt'));
+c::set('content.file.ignore', array());
