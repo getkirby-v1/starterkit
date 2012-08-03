@@ -422,3 +422,22 @@ else than txt. For example md or mdown.
 */
 
 c::set('content.file.extension', 'txt');
+
+
+/*
+
+---------------------------------------
+Ignore Content Files
+---------------------------------------
+
+Sometimes it's necessary to ignore particular
+content files/folders in all content folders. 
+Just add them to the array here. By default
+the following files are being ignored:
+
+array('.', '..', '.DS_Store', '.svn', '.git', '.htaccess');
+
+…so you don't have to add them. 
+
+*/
+c::set('content.file.ignore', array('test.txt'));

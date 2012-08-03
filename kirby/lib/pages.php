@@ -49,11 +49,12 @@ class page extends obj {
     // if children have already been fetched return them from "cache"
     if(is_object($this->children)) return $this->children->sortBy($sort, $direction);
   
-    $pages = array();
-    
+    $pages  = array();
+    $ignore = array_merge(array('.svn', '.git', '.htaccess'), (array)c::get('content.file.ignore', array()));
+        
     foreach($this->children as $child) {
 
-      $child = dir::inspect($this->root . '/' . $child);
+      $child = dir::inspect($this->root . '/' . $child, $ignore);
       $page  = page::fromDir($child, $this);
 
       $pages[$page->uid] = $page;
