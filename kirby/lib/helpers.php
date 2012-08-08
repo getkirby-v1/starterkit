@@ -84,3 +84,12 @@ function param($key, $default=false) {
   global $site;
   return $site->uri->params($key, $default);
 }
+
+// let plugins get the file name of their own assets
+function getpluginasset($whichone) {
+  $backtrace = debug_backtrace();
+  preg_match('{^(.*)/.*}', $backtrace[0]["file"], $matches);
+  $assetfolder = "/" . c::get('subfolder') . str_replace(c::get('root') . "/", "", $matches[1]) . "/assets/";
+  $file = $assetfolder . $whichone;
+  return $file;
+}
