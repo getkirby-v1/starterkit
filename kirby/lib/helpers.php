@@ -84,3 +84,12 @@ function param($key, $default=false) {
   global $site;
   return $site->uri->params($key, $default);
 }
+
+// debug function
+function debug($msg) {
+  if(c::get('debug')) {
+    echo $msg;
+    return true;
+  }
+  return false;
+}
