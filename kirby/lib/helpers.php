@@ -86,12 +86,8 @@ function param($key, $default=false) {
 }
 
 // debug function
-function debug($msg, $die=false) {
-  if($die && c::get('debug')) {
-    die("<strong>" . $msg . "</strong>");
-  } else if($die) {
-    die();
-  } else if(c::get('debug')) {
+function debug($msg) {
+  if(c::get('debug')) {
     echo $msg;
     return true;
   }
