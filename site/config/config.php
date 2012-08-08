@@ -127,6 +127,29 @@ c::set('ssl', false);
 /*
 
 ---------------------------------------
+Plugins
+---------------------------------------
+
+If you have multiple sites powered by the same
+Kirby installation, as described here:
+,
+you can define additional folders in this array to be used as plugin folders.
+
+Every folder defined here (absolute or relative to the Kirby installation folder
+defined as $root) will be searched for .php files and plugin folders to include as
+a normal plugin.
+
+Notice: The normal site/plugins/ folder will be used by default and
+can't be deactivated, you don't have to define it here!
+
+*/
+
+c::set('pluginfolders', array());
+
+
+/*
+
+---------------------------------------
 Kirbytext Setup 
 ---------------------------------------
 
