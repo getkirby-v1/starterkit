@@ -258,13 +258,14 @@ class site extends obj {
   function rootPages() {
   
     // get the first level in the content root
-    $files = dir::inspect(c::get('root.content'));
-    $pages = array();
+    $ignore = array_merge(array('.svn', '.git', '.htaccess'), (array)c::get('content.file.ignore', array()));
+    $files  = dir::inspect(c::get('root.content'), $ignore);
+    $pages  = array();
     
     // build the first set of pages     
     foreach($files['children'] as $file) {
 
-      $child = dir::inspect($files['root'] . '/' . $file);
+      $child = dir::inspect($files['root'] . '/' . $file, $ignore);
       $page  = page::fromDir($child, false);
       
       // add false as parent page object because we are on the first level
@@ -469,7 +470,7 @@ class site extends obj {
     $url = (c::get('url') === false) ? c::get('scheme') . server::get('http_host') : rtrim(c::get('url'), '/');
       
     // try to detect the subfolder      
-    $subfolder = (c::get('subfolder')) ? trim(c::get('subfolder'), '/') : trim(dirname($_SERVER['SCRIPT_NAME']), '/');
+    $subfolder = (c::get('subfolder')) ? trim(c::get('subfolder'), '/') : trim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 
     if($subfolder) {
       c::set('subfolder', $subfolder);

@@ -1,10 +1,30 @@
 #Kirby Changelog
 
-## 1.1
+## 1.1.1
 
-### Update from 1.0.9 to 1.1
+### Update from 1.1.0 to 1.1.1
 
-To update from 1.0.9 to 1.1 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
+To update from 1.1.0 to 1.1.1 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
+
+### Changes
+
+- fixed a possible bug in variables.php
+- added a better content protection rule to the htaccess
+- removed ?> in kirby.php
+- fixed a potential bug in kirbytext
+- fixed a potential bug in the troubleshoot modal
+- implemented Lukas' $page->hasTemplate()
+- improved markdown configuration
+- added smartypants
+- fixed a strict bug in the uri class when language support is switched on
+- fixed a compatibility issue with Apache on Win where : as param separator in URLs is not allowed
+- added a new config var to set content files, which should be ignored. .svn .git and .htaccess files are now ignored by default. Suggested by https://github.com/bastianallgeier/kirbycms/pull/30
+
+## 1.1.0
+
+### Update from 1.0.9 to 1.1.0
+
+To update from 1.0.9 to 1.1.0 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
 
 PLEASE REPLACE YOUR OLD HTACCESS FILE WITH THE NEW HTACCESS FILE!!!
 

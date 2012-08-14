@@ -260,7 +260,7 @@ class files extends obj {
     foreach($this->images() as $key => $image) {
       
       // check for images with thumbnail naming      
-      if(preg_match('!.thumb!', $image->name)) {
+      if(preg_match('!\.thumb!', $image->name)) {
 
         // get the rawFilename of the original file to which 
         // this thumb belongs to

@@ -3,7 +3,7 @@
 /**
  * Kirby -- A stripped down and easy to use toolkit for PHP
  *
- * @version 0.94
+ * @version 0.95
  * @author Bastian Allgeier <bastian@getkirby.com>
  * @link http://toolkit.getkirby.com
  * @copyright Copyright 2009-2012 Bastian Allgeier
@@ -1674,11 +1674,12 @@ class dir {
    * It skips unwanted invisible stuff. 
    * 
    * @param   string  $dir The path of directory
+   * @param   array   $ignore Optional array with filenames, which should be ignored
    * @return  mixed   An array of filenames or false
    */
-  static function read($dir) {
+  static function read($dir, $ignore=array()) {
     if(!is_dir($dir)) return false;
-    $skip = array('.', '..', '.DS_Store');
+    $skip = array_merge(array('.', '..', '.DS_Store'), $ignore);
     return array_diff(scandir($dir),$skip);
   }
 
@@ -1686,13 +1687,14 @@ class dir {
    * Reads a directory and returns a full set of info about it
    * 
    * @param   string  $dir The path of directory
+   * @param   array   $ignore Optional array with filenames, which should be ignored
    * @return  mixed   An info array or false
    */  
-  static function inspect($dir) {
+  static function inspect($dir, $ignore=array()) {
     
     if(!is_dir($dir)) return array();
 
-    $files    = dir::read($dir);
+    $files    = dir::read($dir, $ignore);
     $modified = filemtime($dir);
     
     $data = array(
@@ -3396,5 +3398,3 @@ class x {
   }
 
 }
-
-?>
