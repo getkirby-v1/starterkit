@@ -231,6 +231,7 @@ class kirbytext {
     $image = '<img src="' . $this->url($url) . '"' . $w . $h . $class . $title . ' alt="' . html($alt) . '" />';
 
     if(!empty($params['link'])) {
+      if($params['link'] == 'self') $params['link'] = $url;
       return '<a' . $class . $target . $title . ' href="' . $this->url($params['link']) . '">' . $image . '</a>';
     }
     
