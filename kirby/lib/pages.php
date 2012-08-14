@@ -577,17 +577,31 @@ class pages extends obj {
     return $this->findBy('hash', $args);  
   }
   
-  function filterBy($field, $value, $split=false) {
+  function filterBy($field, $value, $split=false, $inverted=false) {
     $pages = array();
-    foreach($this->_ as $key => $page) {
-      if($split) {
-        $values = str::split((string)$page->$field(), $split);
-        if(in_array($value, $values)) $pages[$key] = $page;
-      } else if($page->$field() == $value) {
-        $pages[$key] = $page;
+    if(!$inverted)
+    {
+      foreach($this->_ as $key => $page) {
+        if($split) {
+          $values = str::split((string)$page->$field(), $split);
+          if(in_array($value, $values)) $pages[$key] = $page;
+        } else if($page->$field() == $value) {
+          $pages[$key] = $page;
+        }
       }
+      return new pages($pages);
+    else
+    {
+      foreach($this->_ as $key => $page) {
+        if($split) {
+          $values = str::split((string)$page->$field(), $split);
+          if(!in_array($value, $values)) $pages[$key] = $page;
+        } else if($page->$field() !== $value) {
+          $pages[$key] = $page;
+        }
+      }
+      return new pages($pages);
     }
-    return new pages($pages);    
   }
     
   function visible() {
