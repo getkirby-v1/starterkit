@@ -205,8 +205,9 @@ class site extends obj {
     } else {
       $html = $cacheData;
     }
-
-    die($html);
+    
+    eval("?> $html <?php ");
+    die();
     
   }
   
