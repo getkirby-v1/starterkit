@@ -348,8 +348,8 @@ class kirbytext {
     $url = 'http://player.vimeo.com/video/' . $id;
 
     // default width and height if no custom values are set
-    if(!$params['width'])  $params['width']  = c::get('kirbytext.video.width');
-    if(!$params['height']) $params['height'] = c::get('kirbytext.video.height');
+    if(empty($params['width']))  $params['width']  = c::get('kirbytext.video.width');
+    if(empty($params['height'])) $params['height'] = c::get('kirbytext.video.height');
 
     // add a classname to the iframe
     if(!empty($class)) $class = ' class="' . $class . '"';
