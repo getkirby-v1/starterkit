@@ -201,6 +201,12 @@ class site extends obj {
     if(empty($cacheData)) {
       // load the main template
       $html = tpl::load($page->template(), false, true);
+      
+      // let plugins do things with the output
+      // apply placeholder replacements (Replacer plugin)
+	    if($this->hasPlugin("replacer") && c::get('replacer.autouse')) {
+	      $html = replacer::apply_global_placeholders($html, -1);
+	    }
       if($this->htmlCacheEnabled) cache::set($cacheID, (string)$html, true);
     } else {
       $html = $cacheData;
