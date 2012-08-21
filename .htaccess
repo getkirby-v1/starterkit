@@ -21,7 +21,8 @@ RewriteBase /
 # block text files in the content folder from being accessed directly
 RewriteRule ^content/(.*)\.(txt|md|mdown)$ error [R=301,L]
 
-# block all files in the site folder from being accessed directly
+# block all files in the site folder from being accessed directly but let plugin assets be accessible
+RewriteCond %{REQUEST_URI} !^/site/plugins/.+?/assets/.*
 RewriteRule ^site/(.*) error [R=301,L]
 
 # block all files in the kirby folder from being accessed directly
