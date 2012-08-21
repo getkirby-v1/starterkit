@@ -19,7 +19,7 @@ RewriteEngine on
 RewriteBase /
 
 # block text files in the content folder from being accessed directly
-RewriteRule ^content/(.*)\.txt$ error [R=301,L]
+RewriteRule ^content/(.*)\.(txt|md|mdown)$ error [R=301,L]
 
 # block all files in the site folder from being accessed directly
 RewriteRule ^site/(.*) error [R=301,L]

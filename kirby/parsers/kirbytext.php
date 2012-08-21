@@ -3,8 +3,15 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
-function kirbytext($text, $markdown=true) {
-  return kirbytext::init($text, $markdown);
+$site = new site();
+if($site->hasPlugin('replacer')) {
+	function kirbytext($text, $second=true, $third=false) {
+    return replacer::kirbytextfnct($text, $second, $third);
+  }
+} else {
+  function kirbytext($text, $markdown=true) {
+    return kirbytext::init($text, $markdown);
+  }
 }
 
 // create an excerpt without html and kirbytext
@@ -63,24 +70,31 @@ function gist($url, $file=false) {
 
 class kirbytext {
   
-  var $obj   = null;
-  var $text  = null;
-  var $mdown = false;
-  var $tags  = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
-  var $attr  = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel', 'lang');
+  var $obj         = null;
+  var $text        = null;
+  var $mdown       = true;
+  var $smartypants = true;
+  var $tags        = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
+  var $attr        = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel', 'lang');
 
-  static function init($text=false, $mdown=true) {
+  static function init($text=false, $mdown=true, $smartypants=true, $placeholders=array()) {
     
     $classname = self::classname();            
-    $kirbytext = new $classname($text, $mdown);    
+    $kirbytext = new $classname($text, $mdown, $smartypants, $placeholders);    
     return $kirbytext->get();    
               
   }
 
-  function __construct($text=false, $mdown=true) {
+  function __construct($text=false, $mdown=true, $smartypants=true, $placeholders=array()) {
       
-    $this->text  = $text;  
-    $this->mdown = $mdown;
+    $this->text        = $text;  
+    $this->mdown       = $mdown;
+    $this->smartypants = $smartypants;
+    
+    global $site;
+    if($site->hasPlugin('replacer')) {
+      $this->placeholders = $placeholders;
+    }
           
     // pass the parent page if available
     if(is_object($this->text)) $this->obj = $this->text->parent;
@@ -92,8 +106,16 @@ class kirbytext {
     $text = preg_replace_callback('!(?=[^\]])\((' . implode('|', $this->tags) . '):(.*?)\)!i', array($this, 'parse'), (string)$this->text);
     $text = preg_replace_callback('!```(.*?)```!is', array($this, 'code'), $text);
     
-    return ($this->mdown) ? markdown($text) : $text;
-
+    $text = ($this->mdown) ? markdown($text) : $text;
+    $text = ($this->smartypants) ? smartypants($text) : $text;
+    
+    global $site;
+    if($site->hasPlugin('replacer')) {
+      $text = replacer::apply_kirbytext_placeholders($text, $this->placeholders);
+    }
+    
+    return $text;
+    
   }
 
   function code($code) {
@@ -226,6 +248,7 @@ class kirbytext {
     $image = '<img src="' . $this->url($url) . '"' . $w . $h . $class . $title . ' alt="' . html($alt) . '" />';
 
     if(!empty($params['link'])) {
+      if($params['link'] == 'self') $params['link'] = $url;
       return '<a' . $class . $target . $title . ' href="' . $this->url($params['link']) . '">' . $image . '</a>';
     }
     
@@ -316,8 +339,8 @@ class kirbytext {
     $url = 'http://www.youtube.com/embed/' . $id;
     
     // default width and height if no custom values are set
-    if(!$params['width'])  $params['width']  = c::get('kirbytext.video.width');
-    if(!$params['height']) $params['height'] = c::get('kirbytext.video.height');
+    if(empty($params['width']))  $params['width']  = c::get('kirbytext.video.width');
+    if(empty($params['height'])) $params['height'] = c::get('kirbytext.video.height');
     
     // add a classname to the iframe
     if(!empty($class)) $class = ' class="' . $class . '"';
@@ -342,8 +365,8 @@ class kirbytext {
     $url = 'http://player.vimeo.com/video/' . $id;
 
     // default width and height if no custom values are set
-    if(!$params['width'])  $params['width']  = c::get('kirbytext.video.width');
-    if(!$params['height']) $params['height'] = c::get('kirbytext.video.height');
+    if(empty($params['width']))  $params['width']  = c::get('kirbytext.video.width');
+    if(empty($params['height'])) $params['height'] = c::get('kirbytext.video.height');
 
     // add a classname to the iframe
     if(!empty($class)) $class = ' class="' . $class . '"';

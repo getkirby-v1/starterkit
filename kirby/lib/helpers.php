@@ -65,7 +65,7 @@ function snippet($snippet, $data=array(), $return=false) {
 
 // embed a stylesheet tag
 function css($url, $media=false) {
-  $url = (str::contains($url, 'http://') || str::contains($url, 'https://')) ? $url : url(ltrim($url, '/'));
+  $url = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
   if(!empty($media)) {
     return '<link rel="stylesheet" media="' . $media . '" href="' . $url . '" />' . "\n";
   } else {
@@ -75,7 +75,7 @@ function css($url, $media=false) {
 
 // embed a js tag
 function js($url) {
-  $url = (str::contains($url, 'http://') || str::contains($url, 'https://')) ? $url : url(ltrim($url, '/'));
+  $url = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
   return '<script src="' . $url . '"></script>' . "\n";
 }
 
