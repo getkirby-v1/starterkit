@@ -3,8 +3,15 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
-function kirbytext($text, $markdown=true) {
-  return kirbytext::init($text, $markdown);
+$site = new site();
+if($site->hasPlugin('replacer')) {
+	function kirbytext($text, $second=true, $third=false) {
+    return replacer::kirbytextfnct($text, $second, $third);
+  }
+} else {
+  function kirbytext($text, $markdown=true) {
+    return kirbytext::init($text, $markdown);
+  }
 }
 
 // create an excerpt without html and kirbytext
@@ -70,19 +77,24 @@ class kirbytext {
   var $tags        = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
   var $attr        = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel', 'lang');
 
-  static function init($text=false, $mdown=true, $smartypants=true) {
+  static function init($text=false, $mdown=true, $smartypants=true, $placeholders=array()) {
     
     $classname = self::classname();            
-    $kirbytext = new $classname($text, $mdown, $smartypants);    
+    $kirbytext = new $classname($text, $mdown, $smartypants, $placeholders);    
     return $kirbytext->get();    
               
   }
 
-  function __construct($text=false, $mdown=true, $smartypants=true) {
+  function __construct($text=false, $mdown=true, $smartypants=true, $placeholders=array()) {
       
     $this->text        = $text;  
     $this->mdown       = $mdown;
     $this->smartypants = $smartypants;
+    
+    global $site;
+    if($site->hasPlugin('replacer')) {
+      $this->placeholders = $placeholders;
+    }
           
     // pass the parent page if available
     if(is_object($this->text)) $this->obj = $this->text->parent;
@@ -96,6 +108,11 @@ class kirbytext {
     
     $text = ($this->mdown) ? markdown($text) : $text;
     $text = ($this->smartypants) ? smartypants($text) : $text;
+    
+    global $site;
+    if($site->hasPlugin('replacer')) {
+      $text = replacer::apply_kirbytext_placeholders($text, $this->placeholders);
+    }
     
     return $text;
     

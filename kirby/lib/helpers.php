@@ -3,6 +3,9 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
+// needed here for $site->hasPlugin()
+$site = new site();
+
 // easy url builder
 function url($uri=false, $lang=false) {
     
@@ -63,20 +66,22 @@ function snippet($snippet, $data=array(), $return=false) {
   return tpl::loadFile(c::get('root.snippets') . '/' . $snippet . '.php', $data, $return);
 }
 
-// embed a stylesheet tag
-function css($url, $media=false) {
-  $url = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
-  if(!empty($media)) {
-    return '<link rel="stylesheet" media="' . $media . '" href="' . $url . '" />' . "\n";
-  } else {
-    return '<link rel="stylesheet" href="' . $url . '" />' . "\n";
-  }
-}
-
-// embed a js tag
-function js($url) {
-  $url = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
-  return '<script src="' . $url . '"></script>' . "\n";
+if(!$site->hasPlugin("assety")) {
+	// embed a stylesheet tag
+	function css($url, $media=false) {
+	  $url = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
+	  if(!empty($media)) {
+	    return '<link rel="stylesheet" media="' . $media . '" href="' . $url . '" />' . "\n";
+	  } else {
+	    return '<link rel="stylesheet" href="' . $url . '" />' . "\n";
+	  }
+	}
+	
+	// embed a js tag
+	function js($url) {
+	  $url = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
+	  return '<script src="' . $url . '"></script>' . "\n";
+	}
 }
 
 // fetch a param from the URI
