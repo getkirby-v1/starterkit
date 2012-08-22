@@ -207,6 +207,15 @@ class site extends obj {
 	    if($this->hasPlugin("replacer") && c::get('replacer.autouse')) {
 	      $html = replacer::apply_global_placeholders($html, -1);
 	    }
+	    // Minify the HTML (Assety plugin)
+	    if($this->hasPlugin("assety") && c::get('assety.html')) {
+	      $html = assety::htmlminify($html);
+	    }
+	    // Add asset code if not done manually (Assety plugin)
+	    if($this->hasPlugin("assety") && assety::$not == true) {
+	      $html = str_replace('</head>', assety::get() . '</head>', $html);
+	    }
+      
       if($this->htmlCacheEnabled) cache::set($cacheID, (string)$html, true);
     } else {
       $html = $cacheData;
