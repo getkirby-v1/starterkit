@@ -2977,10 +2977,22 @@ class str {
   static function urlify($text) {
     $text = trim($text);
     $text = str::lower($text);
+    // German Characters
     $text = str_replace('ä', 'ae', $text);
     $text = str_replace('ö', 'oe', $text);
     $text = str_replace('ü', 'ue', $text);
     $text = str_replace('ß', 'ss', $text);
+    // Polish Characters
+    $text = str_replace('ę', 'e', $text);
+    $text = str_replace('ó', 'o', $text);
+    $text = str_replace('ą', 'a', $text);
+    $text = str_replace('ś', 's', $text);
+    $text = str_replace('ł', 'l', $text);
+    $text = str_replace('ż', 'z', $text);
+    $text = str_replace('ź', 'z', $text);
+    $text = str_replace('ć', 'c', $text);
+    $text = str_replace('ń', 'n', $text);
+    // Regexp
     $text = preg_replace("![^a-z0-9]!i","-", $text);
     $text = preg_replace("![-]{2,}!","-", $text);
     $text = preg_replace("!-$!","", $text);
