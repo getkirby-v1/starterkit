@@ -74,9 +74,10 @@ function css($url, $media=false) {
 }
 
 // embed a js tag
-function js($url) {
-  $url = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
-  return '<script src="' . $url . '"></script>' . "\n";
+function js($url, $async = true) {
+  $url   = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
+  $async = ($async) ? ' async' : '';
+  return '<script' . $async . ' src="' . $url . '"></script>' . "\n";
 }
 
 // fetch a param from the URI
