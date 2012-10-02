@@ -20,6 +20,7 @@ To update from 1.1.0 to 1.1.1 replace the `kirby` system folder. Delete all file
 - fixed a compatibility issue with Apache on Win where : as param separator in URLs is not allowed
 - added a new config var to set content files, which should be ignored. .svn .git and .htaccess files are now ignored by default. Suggested by https://github.com/bastianallgeier/kirbycms/pull/30
 - added async script loading to the js() helper function. (https://github.com/bastianallgeier/kirbycms/pull/40)
+- fixed a bug in site.php, which broke language switching
 
 ## 1.1.0 
 
