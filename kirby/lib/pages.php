@@ -194,7 +194,7 @@ class page extends obj {
   }
 
   function tinyurl() {
-    return u('x/' . $this->hash());
+    return u(c::get('tinyurl.folder') . '/' . $this->hash());
   }
 
   function date($format=false) {
