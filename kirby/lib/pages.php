@@ -197,6 +197,10 @@ class page extends obj {
     return u('x/' . $this->hash());
   }
 
+  function slug() {
+    return end(explode('/', $this->url()));
+  }
+
   function date($format=false) {
     if(!$this->date) return false;
     $date = strtotime($this->_['date']);
