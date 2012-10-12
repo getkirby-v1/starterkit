@@ -74,7 +74,7 @@ function css($url, $media=false) {
 }
 
 // embed a js tag
-function js($url, $async = true) {
+function js($url, $async = false) {
   $url   = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
   $async = ($async) ? ' async' : '';
   return '<script' . $async . ' src="' . $url . '"></script>' . "\n";
