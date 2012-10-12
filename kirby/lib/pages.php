@@ -577,16 +577,70 @@ class pages extends obj {
     return $this->findBy('hash', $args);  
   }
   
-  function filterBy($field, $value, $split=false) {
+  function filterBy() {
+
+    $args     = func_get_args();
+    $field    = a::get($args, 0);
+    $operator = '=='; 
+    $value    = a::get($args, 1);
+    $split    = a::get($args, 2);
+    
+    if($value === '!=' || $value === '==' || $value === '*=') {
+      $operator = $value;
+      $value    = a::get($args, 2);
+      $split    = a::get($args, 3);
+    }          
+    
     $pages = array();
-    foreach($this->_ as $key => $page) {
-      if($split) {
-        $values = str::split((string)$page->$field(), $split);
-        if(in_array($value, $values)) $pages[$key] = $page;
-      } else if($page->$field() == $value) {
-        $pages[$key] = $page;
-      }
+
+    switch($operator) {
+
+      // ignore matching elements
+      case '!=':
+
+        foreach($this->_ as $key => $page) {
+          if($split) {
+            $values = str::split((string)$page->$field(), $split);
+            if(!in_array($value, $values)) $pages[$key] = $page;
+          } else if($page->$field() != $value) {
+            $pages[$key] = $page;
+          }
+        }
+        break;    
+      
+      // search
+      case '*=':
+        
+        foreach($this->_ as $key => $page) {
+          if($split) {
+            $values = str::split((string)$page->$field(), $split);
+            foreach($values as $val) {
+              if(str::contains($val, $value)) {
+                $pages[$key] = $page;
+                break;
+              }
+            }
+          } else if(str::contains($page->$field(), $value)) {
+            $pages[$key] = $page;
+          }
+        }
+                            
+      // take all matching elements          
+      default:
+
+        foreach($this->_ as $key => $page) {
+          if($split) {
+            $values = str::split((string)$page->$field(), $split);
+            if(in_array($value, $values)) $pages[$key] = $page;
+          } else if($page->$field() == $value) {
+            $pages[$key] = $page;
+          }
+        }
+
+        break;
+
     }
+
     return new pages($pages);    
   }
     

@@ -23,6 +23,8 @@ To update from 1.1.0 to 1.1.1 replace the `kirby` system folder. Delete all file
 - fixed a bug in site.php, which broke language switching
 - added new ecco and dump helper functions 
 - added new compatibility check with mbstring functions
+- new $pages->nth($n) and $files->nth($n) method
+- new operators for filterBy methods (!= and *=)
 
 ## 1.1.0 
 

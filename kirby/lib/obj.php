@@ -54,6 +54,11 @@ class obj implements Iterator {
     return prev($this->_);
   }
 
+  function nth($n) {
+    $array = array_values($this->_);
+    return (isset($array[$n])) ? $array[$n] : false;
+  }
+
   function valid() {
     $key = key($this->_);
     $var = ($key !== NULL && $key !== FALSE);

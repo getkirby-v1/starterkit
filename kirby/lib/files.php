@@ -535,17 +535,72 @@ class files extends obj {
     return new files($files);        
   }
 
-  function filterBy($field, $value, $split=false) {
+  function filterBy() {
+
+    $args     = func_get_args();
+    $field    = a::get($args, 0);
+    $operator = '=='; 
+    $value    = a::get($args, 1);
+    $split    = a::get($args, 2);
+    
+    if($value === '!=' || $value === '==' || $value === '*=') {
+      $operator = $value;
+      $value    = a::get($args, 2);
+      $split    = a::get($args, 3);
+    }          
+    
     $files = array();
-    foreach($this->_ as $key => $file) {
-      if($split) {
-        $values = str::split((string)$file->$field(), $split);
-        if(in_array($value, $values)) $files[$key] = $file;
-      } else if($file->$field() == $value) {
-        $files[$key] = $file;
-      }
+
+    switch($operator) {
+
+      // ignore matching elements
+      case '!=':
+
+        foreach($this->_ as $key => $file) {
+          if($split) {
+            $values = str::split((string)$file->$field(), $split);
+            if(!in_array($value, $values)) $files[$key] = $file;
+          } else if($file->$field() != $value) {
+            $files[$key] = $file;
+          }
+        }
+        break;    
+      
+      // search
+      case '*=':
+        
+        foreach($this->_ as $key => $file) {
+          if($split) {
+            $values = str::split((string)$file->$field(), $split);
+            foreach($values as $val) {
+              if(str::contains($val, $value)) {
+                $files[$key] = $file;
+                break;
+              }
+            }
+          } else if(str::contains($file->$field(), $value)) {
+            $files[$key] = $file;
+          }
+        }
+                            
+      // take all matching elements          
+      default:
+
+        foreach($this->_ as $key => $file) {
+          if($split) {
+            $values = str::split((string)$file->$field(), $split);
+            if(in_array($value, $values)) $files[$key] = $file;
+          } else if($file->$field() == $value) {
+            $files[$key] = $file;
+          }
+        }
+
+        break;
+
     }
+
     return new files($files);    
+
   }
 
   function images() {
