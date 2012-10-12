@@ -25,6 +25,7 @@ To update from 1.1.0 to 1.1.1 replace the `kirby` system folder. Delete all file
 - added new compatibility check with mbstring functions
 - new $pages->nth($n) and $files->nth($n) method
 - new operators for filterBy methods (!= and *=)
+- Now actually using the config option 'tinyurl.folder' (PR: https://github.com/bastianallgeier/kirbycms/pull/44)
 
 ## 1.1.0 
 
