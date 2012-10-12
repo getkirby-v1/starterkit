@@ -11,6 +11,12 @@ if(floatval(phpversion()) < 5.2) {
   die('Please upgrade to PHP 5.2 or higher');
 }
 
+// check for existing mbstring functions
+if(!function_exists('mb_strtolower')) {
+  require(dirname(__FILE__) . '/modals/mbstring.php');
+  exit();
+}
+
 // include kirby
 require_once($rootKirby . '/lib/kirby.php');
 

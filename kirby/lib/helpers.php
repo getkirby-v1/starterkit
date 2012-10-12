@@ -85,3 +85,12 @@ function param($key, $default=false) {
   global $site;
   return $site->uri->params($key, $default);
 }
+
+// smart version of echo with an if condition as first argument
+function ecco($condition, $echo, $alternative = false) {
+  echo ($condition) ? $echo : $alternative;
+}
+
+function dump($var) {
+  return a::show($var);
+}
