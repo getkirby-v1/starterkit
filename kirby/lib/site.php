@@ -131,7 +131,7 @@ class site extends obj {
               foreach(c::get('lang.available') as $lang) {
                 $c = $child->content($lang);   
                 // redirect to the url if a translated url has been found
-                if($c->url_key() == $p && !$child->isErrorPage()) $next = $child;
+                if(is_object($c) && $c->url_key() == $p && !$child->isErrorPage()) $next = $child;
               }
             }
 
