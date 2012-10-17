@@ -1,5 +1,16 @@
 #Kirby Changelog
 
+## 1.1.2
+
+### Update from 1.1.1 to 1.1.2
+
+To update from 1.1.1 to 1.1.2 replace the `kirby` system folder. Delete all files in site/cache, if you got caching enabled. 
+
+### Changes
+
+- fixed a possible nesting level bug in obj::indexOf()
+
+
 ## 1.1.1
 
 ### Update from 1.1.0 to 1.1.1
