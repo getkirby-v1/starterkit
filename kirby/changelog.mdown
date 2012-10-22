@@ -9,7 +9,8 @@ To update from 1.1.1 to 1.1.2 replace the `kirby` system folder. Delete all file
 ### Changes
 
 - fixed a possible nesting level bug in obj::indexOf()
-
+- added the latest kirby toolkit version
+- added natural sorting for dirnames. trailing zeros are no longer needer to get the sorting right. 
 
 ## 1.1.1
 

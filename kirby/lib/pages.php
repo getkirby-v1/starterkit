@@ -689,8 +689,14 @@ class pages extends obj {
   }
   
   function sortBy($field, $direction='asc', $method=SORT_REGULAR) {
+
+    if($field == 'dirname') {
+      $method = 'natural';
+    } 
+        
     $pages = a::sort($this->_, $field, $direction, $method);
     return new pages($pages);
+
   }
 
   function paginate($limit, $options=array()) {
