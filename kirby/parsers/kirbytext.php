@@ -247,7 +247,7 @@ class kirbytext {
     $title  = @$params['title'];
     $target = self::target($params);
 
-    if(empty($text))   $text  = $url;
+    if(empty($text))   $text  = str_replace('_', '\_', $url); // ignore markdown italic underscores in filenames
     if(!empty($class)) $class = ' class="' . $class . '"';
     if(!empty($title)) $title = ' title="' . html($title) . '"';
 
