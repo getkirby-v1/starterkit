@@ -29,17 +29,27 @@ class load {
     self::file($root . '/config.' . server::get('server_name') . '.php');
   }
   
-  static function plugins($folder=false) {
+  static function plugins($folder=false, $ignoreroot=false) {
 
     $root   = c::get('root.plugins');
     $folder = ($folder) ? $folder : $root;
     $files  = dir::read($folder);
+    
+    if($folder == $root) {
+      foreach(c::get('pluginfolders') as $pluginfolder) {
+	      if(substr($pluginfolder, 0, 1) == "/") {
+		      self::plugins($pluginfolder, true);
+	      } else {
+		      self::plugins(c::get('root') . '/' . $pluginfolder, true);
+	      }
+      }
+    }
 
     if(!is_array($files)) return false;
     
     foreach($files as $file) {
       
-      if(is_dir($folder . '/' . $file) && $folder == $root) {
+      if(is_dir($folder . '/' . $file) && ($folder == $root || $ignoreroot)) {
         self::plugins($folder . '/' . $file);
         continue;
       }
