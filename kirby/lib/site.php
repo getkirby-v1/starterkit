@@ -205,6 +205,34 @@ class site extends obj {
     } else {
       $html = $cacheData;
     }
+    
+    // check for cacheless snippets and replace them all
+    if(preg_match_all('/{{run:(?: )?(.+?)}}/', $html, $matches, PREG_SET_ORDER)) {
+
+			foreach($matches as $match) {
+				$options = $match[1];
+				$optionarray = preg_split('{ ?\| ?}', $options);
+
+				$first = true;
+				$params = array();
+				foreach($optionarray as $option) {
+					if($first == true) {
+						$function = $option;
+						$first = false;
+						continue;
+					}
+					
+					$eval = '$params[] = ' . $option . ";";
+					eval($eval);
+				}
+				
+				ob_start();
+				call_user_func_array($function, $params);
+				$data = ob_get_clean();
+
+				$html = str_replace($match[0], $data, $html);
+			}          
+    }
 
     die($html);
     
