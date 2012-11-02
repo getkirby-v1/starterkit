@@ -428,7 +428,13 @@ class page extends obj {
 	}
 
   static function parseDirURI($root) {
-    $base = ltrim(str_replace(c::get('root'), '', $root), '/');
+
+    if(c::get('root') == '/') {
+      $base = ltrim($root, '/');
+    } else {
+      $base = ltrim(str_replace(c::get('root'), '', $root), '/');
+    }
+
     return $base;    
   }
     
