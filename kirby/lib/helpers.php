@@ -4,7 +4,7 @@
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
 // easy url builder
-function url($uri=false, $lang=false) {
+function url($uri=false, $lang=null) {
     
   // get the base url of the site
   $baseUrl = c::get('url');
@@ -17,8 +17,8 @@ function url($uri=false, $lang=false) {
   }
     
   // prepare the lang variable for later
-  if(c::get('lang.support')) {
-    $lang = ($lang) ? $lang : c::get('lang.current');
+  if(c::get('lang.support') && $lang != -1) {
+    $lang = ($lang != null) ? $lang : c::get('lang.current');
     
     // prepend the language code to the uri
     $uri = $lang . '/' . ltrim($uri, '/');
@@ -37,7 +37,7 @@ function url($uri=false, $lang=false) {
 
 }
 
-function u($uri=false, $lang=false) {
+function u($uri=false, $lang=null) {
   return url($uri, $lang);
 }
 
@@ -65,7 +65,7 @@ function snippet($snippet, $data=array(), $return=false) {
 
 // embed a stylesheet tag
 function css($url, $media=false) {
-  $url = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
+  $url = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'), -1);
   if(!empty($media)) {
     return '<link rel="stylesheet" media="' . $media . '" href="' . $url . '" />' . "\n";
   } else {
@@ -75,7 +75,7 @@ function css($url, $media=false) {
 
 // embed a js tag
 function js($url, $async = false) {
-  $url   = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'));
+  $url   = (str::match($url, '~(^\/\/|^https?:\/\/)~'))? $url : url(ltrim($url, '/'), -1);
   $async = ($async) ? ' async' : '';
   return '<script' . $async . ' src="' . $url . '"></script>' . "\n";
 }
