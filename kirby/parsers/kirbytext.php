@@ -209,6 +209,7 @@ class kirbytext {
     $url    = @$params['image'];
     $text   = @$params['text'];
     $class  = @$params['class'];
+    $rel    = @$params['rel'];
     $alt    = @$params['alt'];
     $title  = @$params['title'];
     $target = self::target($params);
@@ -225,6 +226,7 @@ class kirbytext {
     
     // add a css class if available
     if(!empty($class)) $class = ' class="' . $class . '"';
+    if(!empty($rel))   $rel   = ' rel="' . $rel . '"';
     if(!empty($title)) $title = ' title="' . html($title) . '"';
     if(empty($alt))    $alt   = $site->title();
             
@@ -232,7 +234,7 @@ class kirbytext {
 
     if(!empty($params['link'])) {
       if($params['link'] == 'self') $params['link'] = $url;
-      return '<a' . $class . $target . $title . ' href="' . $this->url($params['link']) . '">' . $image . '</a>';
+      return '<a' . $class . $rel . $target . $title . ' href="' . $this->url($params['link']) . '">' . $image . '</a>';
     }
     
     return $image;
