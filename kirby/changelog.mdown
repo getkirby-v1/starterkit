@@ -13,6 +13,8 @@ To update from 1.1.1 to 1.1.2 replace the `kirby` system folder. Delete all file
 - added natural sorting for dirnames. trailing zeros are no longer needer to get the sorting right. 
 - fixed a markdown underscore problem in kirbytag (file: …) https://github.com/bastianallgeier/kirbycms/issues/41
 - fixed a possible bug with root being just /
+- better target attributes for link and image kirbytags
+- rel attribute for linked images in kirbytext
 
 ## 1.1.1
 

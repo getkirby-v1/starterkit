@@ -68,7 +68,7 @@ class kirbytext {
   var $mdown       = true;
   var $smartypants = true;
   var $tags        = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
-  var $attr        = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel', 'lang');
+  var $attr        = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel', 'lang', 'target');
 
   static function init($text=false, $mdown=true, $smartypants=true) {
     
@@ -209,6 +209,7 @@ class kirbytext {
     $url    = @$params['image'];
     $text   = @$params['text'];
     $class  = @$params['class'];
+    $rel    = @$params['rel'];
     $alt    = @$params['alt'];
     $title  = @$params['title'];
     $target = self::target($params);
@@ -225,6 +226,7 @@ class kirbytext {
     
     // add a css class if available
     if(!empty($class)) $class = ' class="' . $class . '"';
+    if(!empty($rel))   $rel   = ' rel="' . $rel . '"';
     if(!empty($title)) $title = ' title="' . html($title) . '"';
     if(empty($alt))    $alt   = $site->title();
             
@@ -232,7 +234,7 @@ class kirbytext {
 
     if(!empty($params['link'])) {
       if($params['link'] == 'self') $params['link'] = $url;
-      return '<a' . $class . $target . $title . ' href="' . $this->url($params['link']) . '">' . $image . '</a>';
+      return '<a' . $target . $class . $rel . $title . ' href="' . $this->url($params['link']) . '">' . $image . '</a>';
     }
     
     return $image;
@@ -261,8 +263,12 @@ class kirbytext {
   }
 
   static function target($params) {
-    if(empty($params['popup'])) return false;
-    return ' target="_blank"';
+    if(empty($params['popup']) && empty($params['target'])) return false;
+    if(empty($params['popup'])) {
+      return ' target="' . $params['target'] . '"';
+    } else {
+      return ' target="_blank"';
+    }
   }
 
   static function email($params) {
