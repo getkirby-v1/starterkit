@@ -18,7 +18,11 @@ class uri {
     $this->params    = new uriParams();
     $this->query     = new uriQuery(str::parse(server::get('query_string'), 'query'));
     $this->extension = false;
-    $this->original  = $_SERVER['REQUEST_URI'];
+    if(isset($_SERVER["REQUEST_URI"])) {
+	    $this->original  = $_SERVER['REQUEST_URI'];
+    } else {
+	    $this->original  = "/";
+    }
     $this->raw       = $this->raw($uri);
     $this->url       = url(ltrim($this->raw, '/'));
         
@@ -32,7 +36,11 @@ class uri {
   }
 
   static function raw($uri=false) {
-    $raw = ($uri) ? $uri : ltrim($_SERVER['REQUEST_URI'], '/');
+  	if(isset($_SERVER["REQUEST_URI"])) {
+	  	$raw = ($uri) ? $uri : ltrim($_SERVER['REQUEST_URI'], '/');
+  	} else {
+	  	$raw = ($uri) ? $uri : "";
+  	}
     $raw = ltrim(str_replace('index.php', '', $raw), '/');
 
     // strip subfolders from uri    

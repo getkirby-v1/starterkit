@@ -6,8 +6,15 @@ if(!defined('KIRBY')) die('Direct access is not allowed');
 // easy url builder
 function url($uri=false, $lang=false) {
     
+	global $argv;
+	
   // get the base url of the site
-  $baseUrl = c::get('url');
+  // Only in CGI mode
+  if(!isset($argv)) {
+ 	  $baseUrl = c::get('url');
+ 	} else {
+	 	$baseUrl = "";
+ 	}
 
   // url() can also be used to link to css, img or js files
   // so we need to make sure that this is not a link to a real

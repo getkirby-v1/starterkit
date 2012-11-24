@@ -75,23 +75,31 @@ class site extends obj {
     return '<a href="' . $this->url() . '">' . $this->url() . '</a>';
   }
 
-  function load() {
+  function load($pageToLoad=false) {
 
+	  global $argv;
     // initiate the site and make pages and page
     // globally available
     $pages = $this->pages;
-    $page  = $this->pages->active();
+    if($pageToLoad == false) {
+    	$page = $this->pages->active();
+    } else {
+	    $page = $this->pages->find($pageToLoad);
+    }
     
-    // check for ssl
-    if(c::get('ssl')) {
-      // if there's no https in the url
-      if(!server::get('https')) go(str_replace('http://', 'https://', $page->url()));
-    }
-
-    // check for index.php in rewritten urls and rewrite them
-    if(c::get('rewrite') && preg_match('!index.php\/!i', $this->uri->original)) {
-      go($page->url());    
-    }
+    // Only in CGI mode
+    if(!isset($argv)) {
+	    // check for ssl
+	    if(c::get('ssl')) {
+	      // if there's no https in the url
+	      if(!server::get('https')) return go(str_replace('http://', 'https://', $page->url()));
+	    }
+	
+	    // check for index.php in rewritten urls and rewrite them
+	    if(c::get('rewrite') && preg_match('!index.php\/!i', $this->uri->original)) {
+	      return go($page->url());    
+	    }
+	  }
         
     // check for a misconfigured subfolder install
     if($page->isErrorPage()) {
@@ -142,7 +150,7 @@ class site extends obj {
           $obj   = $next->children();
         }
         
-        if($found && !$found->isErrorPage()) go($found->url());
+        if($found && !$found->isErrorPage()) return go($found->url());
                 
       }      
       
@@ -152,11 +160,11 @@ class site extends obj {
     if($this->uri->param('file')) {
       // get the local file
       $file = $page->files()->find($this->uri->param('file'));
-      if($file) go($file->url());
+      if($file) return go($file->url());
     }
 
     // redirect /home to /
-    if($this->uri->path() == c::get('home')) go(url());
+    if($this->uri->path() == c::get('home')) return go(url());
         
     // redirect tinyurls
     if($this->uri->path(1) == c::get('tinyurl.folder') && c::get('tinyurl.enabled')) {
@@ -165,7 +173,7 @@ class site extends obj {
       if(!empty($hash)) {
         $resolved = $this->pages->findByHash($hash)->first();
         // redirect to the original page
-        if($resolved) go(url($resolved->uri));
+        if($resolved) return go(url($resolved->uri));
       }  
       
     }
@@ -196,7 +204,7 @@ class site extends obj {
     }
     
     // send a 404 header if this is the error page
-    if($page->isErrorPage()) header("HTTP/1.0 404 Not Found");
+    if($page->isErrorPage() && !isset($argv)) header("HTTP/1.0 404 Not Found");
             
     if(empty($cacheData)) {
       // load the main template
@@ -205,8 +213,12 @@ class site extends obj {
     } else {
       $html = $cacheData;
     }
-
-    die($html);
+    
+    if(!isset($argv)) {
+    	die($html);
+    } else {
+	    return $html;
+    }
     
   }
   
