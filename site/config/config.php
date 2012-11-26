@@ -286,6 +286,22 @@ c::set('timezone', 'UTC');
 /*
 
 ---------------------------------------
+Language Setup
+---------------------------------------
+
+You can change the default language used for all
+php functions here. It is set to American English by default.
+
+Please read more about it at: http://www.php.net/manual/en/function.setlocale.php
+
+*/
+
+c::set('language', 'en_US');
+
+
+/*
+
+---------------------------------------
 Troubleshooting
 ---------------------------------------
 
