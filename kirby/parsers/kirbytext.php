@@ -158,87 +158,125 @@ class kirbytext {
         
   }
 
-  function url($url, $lang=false) {
-    if(str::contains($url, 'http://') || str::contains($url, 'https://')) return $url;
+  function url($url, $lang=false, $metadata=false) {
 
-    if(!$this->obj) {
-      global $site;
-      
-      // search for a matching 
-      $files = $site->pages()->active()->files();
-    } else {
-      $files = $this->obj->files();
+    $file = false;
+    
+    if(preg_match('!(http|https)\:\/\/!i', $url)) {
+      return (!$metadata) ? $url : array(
+        'url'  => $url, 
+        'file' => $file
+      );
     }
             
-    if($files) {
+    if($files = $this->relatedFiles()) {
       $file = $files->find($url);
-      $url = ($file) ? $file->url() : url($url, $lang);
+      $url  = ($file) ? $file->url() : url($url, $lang);
     }
             
-    return $url;
+    return (!$metadata) ? $url : array(
+      'url'  => $url,
+      'file' => $file
+    );
+
+  }
+
+  // get the current related page object
+  function relatedPage() {
+    global $site;
+    return ($this->obj) ? $this->obj : $site->pages()->active();
+  }
+
+  // get related files for the related page
+  function relatedFiles() {
+    $object = $this->relatedPage();
+    return ($object) ? $object->files() : null;
   }
 
   function link($params) {
 
-    $url    = @$params['link'];
-    $class  = @$params['class'];
-    $rel    = @$params['rel'];
-    $title  = @$params['title'];
-    $lang   = @$params['lang'];
-    $target = self::target($params);
+    $url = @$params['link'];
+
+    // sanitize the url
+    if(empty($url)) $url = '/';
 
     // language attribute is only allowed when lang support is activated
-    if($lang && !c::get('lang.support')) $lang = false;
+    $lang = (!empty($params['lang']) && c::get('lang.support')) ? $params['lang'] : false;
 
-    // add a css class if available
-    if(!empty($class)) $class = ' class="' . $class . '"';
-    if(!empty($rel))   $rel   = ' rel="' . $rel . '"';
-    if(!empty($title)) $title = ' title="' . html($title) . '"';
+    // get the full href
+    $href = $this->url($url, $lang);
+
+    $linkAttributes = $this->attr(array(
+      'href'   => $href,
+      'rel'    => @$params['rel'], 
+      'class'  => @$params['class'], 
+      'title'  => html(@$params['title']),       
+    ));
+
+    // get the text
+    $text = (empty($params['text'])) ? $href : $params['text'];
         
-    if(empty($url)) $url = '/';
-    if(empty($params['text'])) return '<a' . $target . $class . $rel . $title . ' href="' . $this->url($url, $lang) . '">' . html($url) . '</a>';
-
-    return '<a' . $target . $class . $rel . $title . ' href="' . $this->url($url, $lang) . '">' . html($params['text']) . '</a>';
+    return '<a ' . $linkAttributes . self::target($params) . '>' . html($text) . '</a>';
 
   }
 
   function image($params) {
-    
-    global $site;
-    
-    $url    = @$params['image'];
-    $text   = @$params['text'];
-    $class  = @$params['class'];
-    $rel    = @$params['rel'];
-    $alt    = @$params['alt'];
-    $title  = @$params['title'];
-    $target = self::target($params);
+        
+    $url   = @$params['image'];
+    $alt   = @$params['alt'];
+    $title = @$params['title'];
 
     // alt is just an alternative for text
-    if(!empty($text)) $alt = $text;
-
-    // width/height
-    $w = a::get($params, 'width');
-    $h = a::get($params, 'height');
-
-    if(!empty($w)) $w = ' width="' . $w . '"';
-    if(!empty($h)) $h = ' height="' . $h . '"';
+    if(!empty($params['text'])) $alt = $params['text'];
     
-    // add a css class if available
-    if(!empty($class)) $class = ' class="' . $class . '"';
-    if(!empty($rel))   $rel   = ' rel="' . $rel . '"';
-    if(!empty($title)) $title = ' title="' . html($title) . '"';
-    if(empty($alt))    $alt   = $site->title();
+    // get metadata (url + file) for the image url
+    $imageMeta = $this->url($url, $lang = false, $metadata = true);
+
+    // try to get the title from the image object and use it as alt text
+    if($imageMeta['file']) {
+      
+      if(empty($alt) && $imageMeta['file']->alt() != '') {
+        $alt = $imageMeta['file']->alt();
+      }
+
+      if(empty($title) && $imageMeta['file']->title() != '') {
+        $title = $imageMeta['file']->title();
+      }
+
+      // last resort for no alt text
+      if(empty($alt)) $alt = $title;
+
+    }
+
+    $imageAttributes = $this->attr(array(
+      'src'    => $imageMeta['url'],
+      'width'  => @$params['width'], 
+      'height' => @$params['height'], 
+      'class'  => @$params['class'], 
+      'title'  => html($title), 
+      'alt'    => html($alt)
+    ));
             
-    $image = '<img src="' . $this->url($url) . '"' . $w . $h . $class . $title . ' alt="' . html($alt) . '" />';
+    $image = '<img ' . $imageAttributes . ' />';
 
     if(!empty($params['link'])) {
-      if($params['link'] == 'self') $params['link'] = $url;
-      return '<a' . $target . $class . $rel . $title . ' href="' . $this->url($params['link']) . '">' . $image . '</a>';
+
+      // build the href for the link
+      $href = ($params['link'] == 'self') ? $url : $params['link'];
+
+      $linkAttributes = $this->attr(array(
+        'href'   => $this->url($href),
+        'rel'    => @$params['rel'], 
+        'class'  => @$params['class'], 
+        'title'  => html(@$params['title']), 
+      ));
+      
+      return '<a ' . $linkAttributes . self::target($params) . '>' . $image . '</a>';
+    
     }
-    
+
     return $image;
-    
+      
   }
 
   function file($params) {
@@ -256,6 +294,20 @@ class kirbytext {
     return '<a' . $target . $title . $class . ' href="' . $this->url($url) . '">' . html($text) . '</a>';
 
   }
+
+  static function attr($name, $value = null) {
+    if(is_array($name)) {
+      $attributes = array();
+      foreach($name as $key => $val) {
+        $a = self::attr($key, $val);
+        if($a) $attributes[] = $a;
+      }
+      return implode(' ', $attributes);
+    }  
+
+    if(empty($value)) return false;
+    return $name . '="' . $value . '"';    
+  }  
   
   static function date($params) {
     $format = @$params['date'];

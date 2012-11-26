@@ -15,6 +15,8 @@ To update from 1.1.1 to 1.1.2 replace the `kirby` system folder. Delete all file
 - fixed a possible bug with root being just /
 - better target attributes for link and image kirbytags
 - rel attribute for linked images in kirbytext
+- alt and title attributes for images can now be set with image meta text files
+- the default locale settings can now be changed from the config (c::set('lang.locale', 'en_US'))
 
 ## 1.1.1
 
