@@ -21,7 +21,24 @@ class tpl {
   }
 
   static function load($template='default', $vars=array(), $return=false) {    
-    $file = c::get('root.templates') . '/' . $template . '.php';
+		if(file_exists(c::get('root.templates') . '/' . $template . '.php')) {
+			$file = c::get('root.templates') . '/' . $template . '.php';
+		} else {
+			$filename = '';
+			$files = scandir(c::get('root.templates'));
+			foreach($files as $file) {
+				$filepath = c::get('root.templates') . '/' . $file;
+				if(is_dir($filepath)) {
+					$filesInFolder = scandir($filepath);
+					foreach($filesInFolder as $fileInFolder) {
+						if($fileInFolder == $template . '.php') {
+							$file = $filepath . '/' . $template . '.php';
+							break 2;
+						}
+					}
+				}
+			}
+		}
     return self::loadFile($file, $vars, $return);
   }
   
