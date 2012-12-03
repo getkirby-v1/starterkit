@@ -75,16 +75,20 @@ class site extends obj {
     return '<a href="' . $this->url() . '">' . $this->url() . '</a>';
   }
 
-  function load($pageToLoad=false) {
+  function load($pageToLoad=null) {
 
 	  global $argv;
     // initiate the site and make pages and page
     // globally available
     $pages = $this->pages;
-    if($pageToLoad == false) {
+    if($pageToLoad === null) {
     	$page = $this->pages->active();
     } else {
+    	if($pageToLoad == false) $pageToLoad = c::get('home');
+	    if($this->pages->find($pageToLoad) === false) return $this->load(c::get("error"));
 	    $page = $this->pages->find($pageToLoad);
+	    $_SERVER['REQUEST_URI'] = "/$pageToLoad";
+	    $this->__construct();
     }
     
     // Only in CGI mode
@@ -164,7 +168,10 @@ class site extends obj {
     }
 
     // redirect /home to /
-    if($this->uri->path() == c::get('home')) return go(url());
+    // Only in CGI mode
+    if(!isset($argv)) {
+    	if($this->uri->path() == c::get('home')) go(url());
+    }
         
     // redirect tinyurls
     if($this->uri->path(1) == c::get('tinyurl.folder') && c::get('tinyurl.enabled')) {

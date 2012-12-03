@@ -30,11 +30,8 @@ function go($url=false, $code=false) {
   if(empty($url)) $url = c::get('url', '/');
 
   // Not in CLI mode
-  if(isset($argv)) {
-  	global $site;
-  	$url = parse_url($url);
-	  return $site->load($url["path"]);
-  }
+  global $argv;
+  if(isset($argv)) return;
   
   // send an appropriate header
   if($code) {

@@ -25,7 +25,7 @@ class uri {
     }
     $this->raw       = $this->raw($uri);
     $this->url       = url(ltrim($this->raw, '/'));
-        
+    
     // crawl the uri and get all elements   
     $this->crawl();
         
@@ -46,7 +46,7 @@ class uri {
     // strip subfolders from uri    
     if(c::get('subfolder'))    $raw = ltrim(preg_replace('!^' . preg_quote(c::get('subfolder')) . '(\/|)!i', '/', $raw), '/');
     if(c::get('lang.support')) $raw = ltrim(preg_replace('!^' . preg_quote(c::get('lang.current')) . '(\/|)!i', '/', $raw), '/');
-            
+    
     return $raw;
   }
 
@@ -75,7 +75,7 @@ class uri {
       $last = array_pop($this->path->_);
       $this->path->_[] = f::name($last);
     }
-
+    
     return $this->path;
 
   }
