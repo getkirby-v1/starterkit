@@ -89,6 +89,7 @@ class site extends obj {
 	    $page = $this->pages->find($pageToLoad);
 	    $_SERVER['REQUEST_URI'] = "/$pageToLoad";
 	    $this->__construct();
+	    $this->breadcrumb = null;
     }
     
     // Only in CGI mode
