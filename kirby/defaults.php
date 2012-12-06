@@ -30,6 +30,7 @@ c::set('home', 'home');
 
 // define the 404 folder
 c::set('404', 'error');
+c::set('404.header', true);
 
 // default template name
 c::set('tpl.default', 'default');

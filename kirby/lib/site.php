@@ -196,7 +196,7 @@ class site extends obj {
     }
     
     // send a 404 header if this is the error page
-    if($page->isErrorPage()) header("HTTP/1.0 404 Not Found");
+    if($page->isErrorPage() && c::get('404.header')) header("HTTP/1.0 404 Not Found");
             
     if(empty($cacheData)) {
       // load the main template
