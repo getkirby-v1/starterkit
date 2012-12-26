@@ -80,7 +80,7 @@ class obj implements Iterator {
     $default = @$args[1];
 
     if(!$pattern) return $this->_;
-    return a::search($this->_, $pattern, $default);
+    return new obj(a::search($this->_, $pattern, $default));
   }
       
   function count() {
