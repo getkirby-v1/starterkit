@@ -56,7 +56,7 @@ class obj implements Iterator {
 
   function nth($n) {
     $array = array_values($this->_);
-    return (isset($array[$n])) ? $array[$n] : false;
+    return (isset($array[$n])) ? $array[$n] : FALSE;
   }
 
   function valid() {
@@ -66,13 +66,21 @@ class obj implements Iterator {
   }
 
   function find() {
-    
     $args    = func_get_args();
     $key     = @$args[0];
     $default = @$args[1];
 
     if(!$key) return $this->_;
     return a::get($this->_, $key, $default);
+  }
+
+  function search() {
+    $args    = func_get_args();
+    $pattern = @$args[0];
+    $default = @$args[1];
+
+    if(!$pattern) return $this->_;
+    return a::search($this->_, $pattern, $default);
   }
       
   function count() {
