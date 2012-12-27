@@ -4,7 +4,7 @@
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
 // easy url builder
-function url($uri=false, $lang=false) {
+function url($uri=false, $lang=false, array $params=array()) {
     
   // get the base url of the site
   $baseUrl = c::get('url');
@@ -23,6 +23,11 @@ function url($uri=false, $lang=false) {
     // prepend the language code to the uri
     $uri = $lang . '/' . ltrim($uri, '/');
   } 
+
+  // append params
+  foreach($params as $key => $value) {
+    $uri .= '/' . ltrim($key, '/') . ':' . ltrim($value, '/');
+  }
 
   // if rewrite is deactivated
   // index.php needs to be prepended
