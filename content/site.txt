@@ -1,4 +1,4 @@
-Title: Kirby Demo
+Title: Kirby
 ----
 Author: Bastian Allgeier
 ----

@@ -3,12 +3,12 @@
 // direct access protection
 if(!defined('KIRBY')) die('Direct access is not allowed');
 
-c::set('version.string', '1.1.1');
-c::set('version.number', 1.11);
+c::set('version.string', '1.1.2');
+c::set('version.number', 1.12);
 
 // set a required panel version to make sure 
 // core and panel will work together nicely
-c::set('panel.min.version', 0.8);
+c::set('panel.min.version', 0.9);
 
 // define all directories
 c::set('root.templates', c::get('root.site') . '/templates');
@@ -30,6 +30,7 @@ c::set('home', 'home');
 
 // define the 404 folder
 c::set('404', 'error');
+c::set('404.header', true);
 
 // default template name
 c::set('tpl.default', 'default');

@@ -88,7 +88,10 @@ class obj implements Iterator {
   }
 
   function indexOf($needle) {
-    return array_search($needle, array_values($this->_));
+    foreach(array_values($this->_) as $key => $value) {
+      if($value === $needle) return $key;
+    }
+    return false;
   }
 
   function shuffle() {
