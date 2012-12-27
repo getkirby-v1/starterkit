@@ -389,7 +389,7 @@ class a {
     * @param  array   $array The source array
     * @param  string  $field The name of the column
     * @param  string  $direction desc (descending) or asc (ascending)
-    * @param  const   $method A PHP sort method flag. 
+    * @param  const   $method A PHP sort method flag or 'natural' for natural sorting, which is not supported in PHP by sort flags 
     * @return array   The sorted array
     */
   static function sort($array, $field, $direction='desc', $method=SORT_REGULAR) {
@@ -400,9 +400,25 @@ class a {
     foreach($array as $key => $row) {
       $helper[$key] = (is_object($row)) ? (method_exists($row, $field)) ? str::lower($row->$field()) : str::lower($row->$field) : str::lower($row[$field]);
     }
-          
-    array_multisort($helper, $direction, $method, $array);
-    return $array;
+    
+    // natural sorting    
+    if($method === 'natural') {
+
+      natsort($helper);
+      if($direction === SORT_DESC) $helper = array_reverse($helper);
+
+      $result = array();
+    
+      foreach($helper as $key => $val) {
+        $result[$key] = $array[$key];
+      }                
+      
+      return $result;
+  
+    } else {
+      array_multisort($helper, $direction, $method, $array);
+      return $array;
+    }
   
   }
 
@@ -1899,7 +1915,10 @@ class f {
    */  
   static function extension($filename) {
     $ext = str_replace('.', '', strtolower(strrchr(trim($filename), '.')));
-    return url::strip_query($ext);
+    $ext = url::strip_query($ext);
+    $ext = preg_replace('!\:.*!i', '', $ext);
+    $ext = preg_replace('!\#.*!i', '', $ext);
+    return $ext;
   }
 
   /**
@@ -2977,16 +2996,64 @@ class str {
     * @return string  The safe string
     */
   static function urlify($text) {
+
     $text = trim($text);
     $text = str::lower($text);
-    $text = str_replace('ä', 'ae', $text);
-    $text = str_replace('ö', 'oe', $text);
-    $text = str_replace('ü', 'ue', $text);
-    $text = str_replace('ß', 'ss', $text);
-    $text = preg_replace("![^a-z0-9]!i","-", $text);
-    $text = preg_replace("![-]{2,}!","-", $text);
-    $text = preg_replace("!-$!","", $text);
+
+    $replace = array(
+      // French + Spanish 
+      'á' => 'a',
+      'à' => 'a',
+      'â' => 'a',
+      'é' => 'e',
+      'è' => 'e',
+      'ê' => 'e',
+      'í' => 'i',
+      'ì' => 'i',
+      'î' => 'i',
+      'ó' => 'o',
+      'ò' => 'o',
+      'ô' => 'o',
+      'ú' => 'u',
+      'ù' => 'u',
+      'û' => 'u',
+      'ç' => 'c',
+      'ñ' => 'n',
+      // German Characters
+      'ä' => 'ae',
+      'ö' => 'oe',
+      'ü' => 'ue', 
+      'ß' => 'ss', 
+      // Skandinavian Characters
+      'å' => 'a',
+      'ø' => 'o',
+      // Polish Characters
+      'ę' => 'e', 
+      'ó' => 'o', 
+      'ą' => 'a', 
+      'ś' => 's', 
+      'ł' => 'l', 
+      'ż' => 'z', 
+      'ź' => 'z', 
+      'ć' => 'c', 
+      'ń' => 'n', 
+      // Special Characters
+      '€' => ' euro ',
+      '@' => ' at ',
+      '$' => ' dollar ' 
+    );
+      
+    // replace all special characters
+    $text = str_replace(array_keys($replace), array_values($replace), $text);
+    // replace spaces with simple dashes
+    $text = preg_replace('![^a-z0-9]!i','-', $text);
+    // remove double dashes
+    $text = preg_replace('![-]{2,}!','-', $text);
+    // trim trailing and leading dashes
+    $text = trim($text, '-');
+
     return $text;
+
   }
 
   /** 

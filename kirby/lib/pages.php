@@ -428,7 +428,13 @@ class page extends obj {
 	}
 
   static function parseDirURI($root) {
-    $base = ltrim(str_replace(c::get('root'), '', $root), '/');
+
+    if(c::get('root') == '/') {
+      $base = ltrim($root, '/');
+    } else {
+      $base = ltrim(str_replace(c::get('root'), '', $root), '/');
+    }
+
     return $base;    
   }
     
@@ -689,8 +695,14 @@ class pages extends obj {
   }
   
   function sortBy($field, $direction='asc', $method=SORT_REGULAR) {
+
+    if($field == 'dirname') {
+      $method = 'natural';
+    } 
+        
     $pages = a::sort($this->_, $field, $direction, $method);
     return new pages($pages);
+
   }
 
   function paginate($limit, $options=array()) {

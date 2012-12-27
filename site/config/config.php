@@ -401,12 +401,16 @@ Kirby will try to detect the default language
 from the user agent string instead of using the
 default language. 
 
+Use c::set('lang.locale', 'en_US'); for example
+to set the default locale settings for all PHP functions
+
 */
 
 c::set('lang.support', false);
 c::set('lang.default', 'en');
 c::set('lang.available', array('en', 'de'));
 c::set('lang.detect', true);
+c::set('lang.locale', false);
 
 
 /* 

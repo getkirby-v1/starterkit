@@ -44,6 +44,9 @@ if(!is_dir(c::get('root.site'))) die('The Kirby site directory could not be foun
 // avoid errors in php 5.3
 @date_default_timezone_set(c::get('timezone'));
 
+// set default locale settings for php functions
+if(c::get('lang.locale')) setlocale(LC_ALL, c::get('lang.locale'));
+
 // switch on errors
 if(c::get('debug')) {
   error_reporting(E_ALL);
