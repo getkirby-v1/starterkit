@@ -67,7 +67,22 @@ function notFound() {
 
 // embed a template snippet from the snippet folder
 function snippet($snippet, $data=array(), $return=false) {
-  return tpl::loadFile(c::get('root.snippets') . '/' . $snippet . '.php', $data, $return);
+	$file = c::get('root.snippets') . '/' . $snippet . '.php';
+	
+	if(!file_exists($file)) {
+    // Let's check subfolders
+    foreach(scandir(c::get('root.snippets')) as $folder) {
+	    if(!is_dir(c::get('root.snippets') . '/' . $folder)) continue;
+	    
+	    $tplFile = c::get('root.snippets') . '/' . $folder . '/' . $snippet . '.php';
+	    if(file_exists($tplFile)) {
+		    $file = $tplFile;
+		    break;
+	    }
+    }
+  }
+	
+  return tpl::loadFile($file, $data, $return);
 }
 
 // embed a stylesheet tag
