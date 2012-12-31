@@ -22,6 +22,20 @@ class tpl {
 
   static function load($template='default', $vars=array(), $return=false) {    
     $file = c::get('root.templates') . '/' . $template . '.php';
+    
+    if(!file_exists($file)) {
+	    // Let's check subfolders
+	    foreach(scandir(c::get('root.templates')) as $folder) {
+		    if(!is_dir(c::get('root.templates') . '/' . $folder)) continue;
+		    
+		    $tplFile = c::get('root.templates') . '/' . $folder . '/' . $template . '.php';
+		    if(file_exists($tplFile)) {
+			    $file = $tplFile;
+			    break;
+		    }
+	    }
+    }
+    
     return self::loadFile($file, $vars, $return);
   }
   
