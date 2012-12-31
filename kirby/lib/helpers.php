@@ -60,7 +60,25 @@ function notFound() {
 
 // embed a template snippet from the snippet folder
 function snippet($snippet, $data=array(), $return=false) {
-  return tpl::loadFile(c::get('root.snippets') . '/' . $snippet . '.php', $data, $return);
+	if(file_exists(c::get('root.snippets') . '/' . $snippet . '.php')) {
+		$filename = c::get('root.snippets') . '/' . $snippet . '.php';
+	} else {
+		$filename = '';
+		$files = scandir(c::get('root.snippets'));
+		foreach($files as $file) {
+			$filepath = c::get('root.snippets') . '/' . $file;
+			if(is_dir($filepath)) {
+				$filesInFolder = scandir($filepath);
+				foreach($filesInFolder as $fileInFolder) {
+					if($fileInFolder == $snippet . '.php') {
+						$filename = $filepath . '/' . $snippet . '.php';
+						break 2;
+					}
+				}
+			}
+		}
+	}
+  return tpl::loadFile($filename, $data, $return);
 }
 
 // embed a stylesheet tag
