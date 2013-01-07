@@ -2728,14 +2728,19 @@ class str {
     * @return string
     */  
   static function encode($string) {
+    $decoded = utf8_decode($string);
     $encoded = '';
     $length = str::length($string);
     for($i=0; $i<$length; $i++) {
-      $encoded .= (rand(1,2)==1) ? '&#' . ord($string[$i]) . ';' : '&#x' . dechex(ord($string[$i])) . ';';
+      if($decoded[$i] === $string[$i]) {
+        $encoded .= (rand(1,2)==1) ? '&#'.ord($string[$i]).';' : '&#x'.dechex(ord($string[$i])).';';
+      } else {
+        $encoded .= (rand(1,2)==1) ? '&#'.ord($decoded[$i]).';' : '&#x'.dechex(ord($decoded[$i])).';';
+      }
     }
     return $encoded;
   }
-
+  
   /**
     * Creates an encoded email address, including proper html-tags
     *
