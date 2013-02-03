@@ -50,7 +50,7 @@ class page extends obj {
     if(is_object($this->children)) return $this->children->sortBy($sort, $direction);
   
     $pages  = array();
-    $ignore = array_merge(array('.svn', '.git', '.htaccess'), (array)c::get('content.file.ignore', array()));
+    $ignore = array_merge(array('.svn', '.git', '.hg', '.htaccess'), (array)c::get('content.file.ignore', array()));
         
     foreach($this->children as $child) {
 
