@@ -258,7 +258,7 @@ class site extends obj {
   function rootPages() {
   
     // get the first level in the content root
-    $ignore = array_merge(array('.svn', '.git', '.htaccess'), (array)c::get('content.file.ignore', array()));
+    $ignore = array_merge(array('.svn', '.git', '.hg', '.htaccess'), (array)c::get('content.file.ignore', array()));
     $files  = dir::inspect(c::get('root.content'), $ignore);
     $pages  = array();
     
