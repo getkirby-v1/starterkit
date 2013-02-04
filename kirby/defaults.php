@@ -49,8 +49,6 @@ c::Set('cache.ignore', array());
 c::set('markdown', true);
 c::set('markdown.breaks', true);
 c::set('markdown.extra', false);
-c::set('markdown.blocktags.a', 'ins|del|img');
-c::set('markdown.blocktags.b', 'p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|address|script|noscript|form|fieldset|iframe|math|figure');
 
 // smartypants
 c::set('smartypants', false);

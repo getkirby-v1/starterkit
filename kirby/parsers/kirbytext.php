@@ -60,7 +60,6 @@ function gist($url, $file=false) {
   ));
 }
 
-
 class kirbytext {
   
   var $obj         = null;

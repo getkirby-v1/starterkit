@@ -1,10 +1,14 @@
 <?php
+
+// direct access protection
+if(!defined('KIRBY')) die('Direct access is not allowed');
+
 #
 # SmartyPants Typographer  -  Smart typography for web sites
 #
-# PHP SmartyPants & Typographer  
-# Copyright (c) 2004-2006 Michel Fortin
-# <http://www.michelf.com/>
+# PHP SmartyPants & Typographer
+# Copyright (c) 2004-2013 Michel Fortin
+# <http://michelf.ca/>
 #
 # Original SmartyPants
 # Copyright (c) 2003-2004 John Gruber
@@ -12,8 +16,8 @@
 #
 
 
-define( 'SMARTYPANTS_VERSION',            "1.5.1oo2" ); # Unreleased
-define( 'SMARTYPANTSTYPOGRAPHER_VERSION', "1.0"      ); # Wed 28 Jun 2006
+define( 'SMARTYPANTS_VERSION',  "1.5.1f" ); # Sun 23 Jan 2013
+define( 'SMARTYPANTSTYPOGRAPHER_VERSION',  "1.0.1" ); # Sun 23 Jan 2013
 
 
 #
@@ -24,7 +28,7 @@ define( 'SMARTYPANTSTYPOGRAPHER_VERSION', "1.0"      ); # Wed 28 Jun 2006
 #  3  ->  "--" for em-dashes; "---" for en-dashes  
 #  See docs for more configuration options.
 #
-define( 'SMARTYPANTS_ATTR',    c::get('smartypants.attr', 1) );
+define( 'SMARTYPANTS_ATTR',    1 );
 
 # Openning and closing smart double-quotes.
 define( 'SMARTYPANTS_SMART_DOUBLEQUOTE_OPEN',  c::get('smartypants.doublequote.open', '&#8220;') );
@@ -56,6 +60,7 @@ define( 'SMARTYPANTS_SPACE_UNIT', c::get('smartypants.space.unit', '&#160;') );
 
 # SmartyPants will not alter the content of these tags:
 define( 'SMARTYPANTS_TAGS_TO_SKIP', c::get('smartypants.skip', 'pre|code|kbd|script|math') );
+
 
 
 ### Standard Function Interface ###
@@ -108,6 +113,47 @@ function SmartEllipsis($text, $attr = 1) {
 	return SmartyPants($text, $attr);
 }
 
+
+### WordPress Plugin Interface ###
+
+/*
+Plugin Name: SmartyPants Typographer
+Plugin URI: http://michelf.ca/projects/php-smartypants/
+Description: SmartyPants is a web publishing utility that translates plain ASCII punctuation characters into &#8220;smart&#8221; typographic punctuation HTML entities. The Typographer extension will also replace normal spaces with unbrekable ones where appropriate to silently remove unwanted line breaks around punctuation and at some other places. This plugin <strong>replace the default WordPress Texturize algorithm</strong> for the content and the title of your posts, the comments body and author name, and everywhere else Texturize normally apply.
+Version: 1.0.1
+Author: Michel Fortin
+Author URI: http://michelf.ca/
+*/
+
+if (isset($wp_version)) {
+	# Remove default Texturize filter that would conflict with SmartyPants.
+	remove_filter('category_description', 'wptexturize');
+	remove_filter('list_cats', 'wptexturize');
+	remove_filter('comment_author', 'wptexturize');
+	remove_filter('comment_text', 'wptexturize');
+	remove_filter('single_post_title', 'wptexturize');
+	remove_filter('the_title', 'wptexturize');
+	remove_filter('the_content', 'wptexturize');
+	remove_filter('the_excerpt', 'wptexturize');
+	remove_filter('the_tags', 'wptexturize');
+	# Add SmartyPants filter.
+	add_filter('category_description', 'SmartyPants', 11);
+	add_filter('list_cats', 'SmartyPants', 11);
+	add_filter('comment_author', 'SmartyPants', 11);
+	add_filter('comment_text', 'SmartyPants', 11);
+	add_filter('single_post_title', 'SmartyPants', 11);
+	add_filter('the_title', 'SmartyPants', 11);
+	add_filter('the_content', 'SmartyPants', 11);
+	add_filter('the_excerpt', 'SmartyPants', 11);
+	add_filter('the_tags', 'SmartyPants', 11);
+}
+
+
+### Smarty Modifier Interface ###
+
+function smarty_modifier_smartypants($text, $attr = NULL) {
+	return SmartyPants($text, $attr);
+}
 
 
 
@@ -539,7 +585,7 @@ class SmartyPants_Parser {
 		$index = 0;
 		$tokens = array();
 
-		$match = '(?s:<!(?:--.*?--\s*)+>)|'.	# comment
+		$match = '(?s:<!--.*?-->)|'.	# comment
 				 '(?s:<\?.*?\?>)|'.				# processing instruction
 												# regular tags
 				 '(?:<[/!$]?[-a-zA-Z0-9:]+\b(?>[^"\'>]+|"[^"]*"|\'[^\']*\')*>)'; 
@@ -1145,3 +1191,4 @@ arising in any way out of the use of this software, even if advised of the
 possibility of such damage.
 
 */
+?>

@@ -3046,7 +3046,7 @@ class str {
     // replace all special characters
     $text = str_replace(array_keys($replace), array_values($replace), $text);
     // replace spaces with simple dashes
-    $text = preg_replace('![^a-z0-9]!i','-', $text);
+    $text = preg_replace('![^a-z0-9._-]!i','-', $text);
     // remove double dashes
     $text = preg_replace('![-]{2,}!','-', $text);
     // trim trailing and leading dashes
