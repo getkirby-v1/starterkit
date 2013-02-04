@@ -385,7 +385,7 @@ class kirbytext {
     // add a classname to the iframe
     if(!empty($class)) $class = ' class="' . $class . '"';
 
-    return '<iframe' . $class . ' width="' . $params['width'] . '" height="' . $params['height'] . '" src="' . $url . '" frameborder="0" allowfullscreen></iframe>';
+    return '<div class="video-container"><iframe' . $class . ' width="' . $params['width'] . '" height="' . $params['height'] . '" src="' . $url . '" frameborder="0" allowfullscreen></iframe></div>';
   
   }
 
@@ -411,7 +411,7 @@ class kirbytext {
     // add a classname to the iframe
     if(!empty($class)) $class = ' class="' . $class . '"';
 
-    return '<iframe' . $class . ' src="' . $url . '" width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+    return '<div class="video-container"><iframe' . $class . ' src="' . $url . '" width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>';
       
   }
 
