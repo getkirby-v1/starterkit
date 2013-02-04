@@ -19,6 +19,7 @@ To update from 1.1.1 to 1.1.2 replace the `kirby` system folder. Delete all file
 - the default locale settings can now be changed from the config (c::set('lang.locale', 'en_US'))
 - added the latest markdown version
 - added the latest markdown extra version
+- added the latest smartypants version
 - markdown tags are no longer adjustable. Otherwise I will not be able to keep the markdown classes up to date. 
 
 ## 1.1.1
