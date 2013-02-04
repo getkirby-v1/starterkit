@@ -39,7 +39,7 @@ Sometimes auto-detection might fail, depending on your server setup. In that cas
 
 Afterwards make sure to also set the subfolder name:
 
-	c::set('subfolder', 'subfolder');
+	c::set('subfolder', 'mySubfolderName');
 
 You probably also need to adjust the RewriteBase in the .htaccess file if you want to use mod_rewrite. You will find more information about all this in the default config file and the htaccess file.
 
