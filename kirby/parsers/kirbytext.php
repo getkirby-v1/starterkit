@@ -385,7 +385,7 @@ class kirbytext {
     // add a classname to the iframe
     if(!empty($class)) $class = ' class="' . $class . '"';
 
-    return '<iframe' . $class . ' width="' . $params['width'] . '" height="' . $params['height'] . '" src="' . $url . '" frameborder="0" allowfullscreen></iframe>';
+    return '<div class="video-container"><iframe' . $class . ' width="' . $params['width'] . '" height="' . $params['height'] . '" src="' . $url . '" frameborder="0" allowfullscreen></iframe></div>';
   
   }
 
