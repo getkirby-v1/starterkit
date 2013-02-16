@@ -51,6 +51,29 @@ class load {
 
   }
 
+  static function helpers($folder = false) {
+    $root   = c::get('root.helpers');
+    $folder = $folder ? $folder : $root;
+    $files  = dir::read($folder);
+
+    if ( ! is_array($files)) {
+      return false;
+    }
+
+    foreach ($files as $file) {
+      if (is_dir($folder .'/' .$file) && $folder == $root) {
+        self::helpers($folder .'/' .$file);
+        continue;
+      }
+
+      if (f::extension($file) != 'php') {
+        continue;
+      }
+
+      require_once($folder .'/' .$file);
+    }
+  }
+
   static function parsers() {
     $root  = c::get('root.parsers');
 

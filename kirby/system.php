@@ -33,6 +33,7 @@ load::lib();
 load::config();
 load::parsers();
 load::plugins();
+load::helpers();
 
 // check for an exisiting content dir 
 if(!is_dir(c::get('root.content'))) die('The Kirby content directory could not be found');
