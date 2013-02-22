@@ -13,7 +13,10 @@ function url($uri=false, $lang=false) {
   // so we need to make sure that this is not a link to a real
   // file. Otherwise it will be broken by the rest of the code. 
   if($uri && is_file(c::get('root') . '/' . $uri)) {
-    return $baseUrl . '/' . $uri;          
+    $path = pathinfo($uri);
+    $ver = '.'.filemtime(c::get('root') . '/' . $uri).'.';
+    $ver_path = $path['dirname'].'/'.str_replace('.', $ver, $path['basename']);
+    return $baseUrl . '/' . $ver_path;      
   }
     
   // prepare the lang variable for later
