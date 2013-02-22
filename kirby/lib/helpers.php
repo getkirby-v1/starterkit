@@ -15,7 +15,7 @@ function url($uri=false, $lang=false) {
   if($uri && is_file(c::get('root') . '/' . $uri)) {
     $path = pathinfo($uri);
     $ver_uri = $path['dirname'].'/'.str_replace($path['extension'], filemtime(c::get('root') . '/' . $uri).'.'.$path['extension'], $path['basename']);
-    return $baseUrl . '/' . $ver_path;      
+    return $baseUrl . '/' . $ver_uri;      
   }
     
   // prepare the lang variable for later
