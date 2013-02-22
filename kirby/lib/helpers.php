@@ -14,8 +14,7 @@ function url($uri=false, $lang=false) {
   // file. Otherwise it will be broken by the rest of the code. 
   if($uri && is_file(c::get('root') . '/' . $uri)) {
     $path = pathinfo($uri);
-    $ver = '.'.filemtime(c::get('root') . '/' . $uri).'.';
-    $ver_path = $path['dirname'].'/'.str_replace('.', $ver, $path['basename']);
+    $ver_uri = $path['dirname'].'/'.str_replace($path['extension'], filemtime(c::get('root') . '/' . $uri).'.'.$path['extension'], $path['basename']);
     return $baseUrl . '/' . $ver_path;      
   }
     
