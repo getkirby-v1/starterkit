@@ -270,6 +270,35 @@ c::set('cache.ignore', array());
 /*
 
 ---------------------------------------
+Cache busting
+---------------------------------------
+
+This works in combination with filename-based cache busting
+rewrites in .htaccess which are active by default. If you
+turn this option off you may comment the following out in
+.htaccess:
+
+<IfModule mod_rewrite.c>
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)\.(\d+)\.(js|css|png|jpg|gif)$ $1.$3 [L]
+</IfModule>
+
+If you turn versioning off you should also review the cache
+times in .htaccess and lower the CSS and JS to something like
+"access plus 1 week".
+
+Turning 'versioning' on places a timestamp code into local resource
+paths ( `/css/style.css' becomes '/css/style.20110203.css') in 
+order to force refreshes in the case of far-future headers.
+
+*/
+
+c::set('versioning', true);
+
+/*
+
+---------------------------------------
 Timezone Setup 
 ---------------------------------------
 
