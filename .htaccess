@@ -58,7 +58,9 @@
 # CSS and JavaScript
   ExpiresByType application/javascript    "access plus 1 year"
   ExpiresByType text/css                  "access plus 1 year"
-  
+
+</IfModule>
+
 # ----------------------------------------------------------------------
 # Prevent mobile network providers from modifying your site
 # ----------------------------------------------------------------------
@@ -85,7 +87,6 @@
 #   developer.yahoo.com/performance/rules.html#etags
 FileETag None
 
-</IfModule>
 
 # ----------------------------------------------------------------------
 # Rewrite rules
