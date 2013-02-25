@@ -13,8 +13,8 @@ function url($uri=false, $lang=false) {
   // so we need to make sure that this is not a link to a real
   // file. Otherwise it will be broken by the rest of the code. 
   if($uri && is_file(c::get('root') . '/' . $uri)) {
-    if(c::get('versioning')) {
-      $path = pathinfo($uri);
+    $path = pathinfo($uri);
+    if(c::get('versioning') && preg_match('/js|css|png|jpg|gif/', $path['extension'])) {
       $ver_uri = $path['dirname'].'/'.str_replace($path['extension'], filemtime(c::get('root') . '/' . $uri).'.'.$path['extension'], $path['basename']);
       return $baseUrl . '/' . $ver_uri;
     }
