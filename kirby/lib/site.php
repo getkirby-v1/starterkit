@@ -200,7 +200,7 @@ class site extends obj {
             
     if(empty($cacheData)) {
       // load the main template
-      $html = tpl::load($page->template(), false, true);
+      $html = tpl::load($page->template(), array(), true);
       if($this->htmlCacheEnabled) cache::set($cacheID, (string)$html, true);
     } else {
       $html = $cacheData;
