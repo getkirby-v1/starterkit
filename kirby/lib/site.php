@@ -163,9 +163,9 @@ class site extends obj {
       $hash = $this->uri->path(2);
       
       if(!empty($hash)) {
-        $resolved = $this->pages->findByHash($hash)->first();
+        $resolved = $this->pages->findByHash($hash);
         // redirect to the original page
-        if($resolved) go(url($resolved->uri));
+        if($resolved) $resolved = go(url($resolved->first()->uri));
       }  
       
     }
