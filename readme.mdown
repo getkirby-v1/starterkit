@@ -19,7 +19,7 @@ Though Kirby's source code is available on Github: <http://github.com/bastianall
 
 Installing Kirby couldn't be simpler. Just connect to your FTP-Server and upload all files contained in the Kirby package to the document root of your server – done!
 
-Visit <http://yourdomain.com> (you should probably replace the with your url :)) and take a look at your brand new, Kirby-flavoured site.
+Visit <http://yourdomain.com> (you should probably replace that with your url :)) and take a look at your brand new, Kirby-flavoured site.
 
 
 ### Adding your license code
