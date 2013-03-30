@@ -49,6 +49,25 @@ You probably also need to adjust the RewriteBase in the .htaccess file if you wa
 If you are not allowed to have your own .htaccess file or to use mod_rewrite, go to `site/config/config.php` and search for the part where you can switch off url rewriting. 
 
 
+#### Trouble with URL Rewriting?
+
+If you're seeing 404 errors for pages other than your index page, you may need to make sure Apache is allowing mod_rewrite configuration in your `.htaccess` file.
+
+Open up your site's VirtualHost file and make sure that the `AllowOverride` directive is set to `All`, or at least that it contains `FileInfo` and  `Options` for your site's directory.
+
+**Here's an example VirtualHost:**
+
+	<VirtualHost *:80>
+		ServerName yourdomain.com
+		DocumentRoot "/path/to/your/site"
+		# ...
+		<Directory /path/to/your/site>
+			AllowOverride All
+			# ...
+		</Directory>
+	</VirtualHost>
+
+
 ## Documentation
 <http://getkirby.com/docs>
 
