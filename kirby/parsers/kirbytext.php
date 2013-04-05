@@ -67,7 +67,7 @@ class kirbytext {
   var $mdown       = true;
   var $smartypants = true;
   var $tags        = array('gist', 'twitter', 'date', 'image', 'file', 'link', 'email', 'youtube', 'vimeo');
-  var $attr        = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel', 'lang', 'target');
+  var $attr        = array('text', 'file', 'width', 'height', 'link', 'popup', 'class', 'title', 'alt', 'rel', 'lang', 'target', 'download');
 
   static function init($text=false, $mdown=true, $smartypants=true) {
     
