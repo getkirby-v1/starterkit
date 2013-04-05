@@ -27,6 +27,7 @@ class tpl {
   
   static function loadFile($file, $vars=array(), $return=false) {
     if(!file_exists($file)) return false;
+    clearstatcache();
     @extract(self::$vars);
     @extract($vars);
     content::start();

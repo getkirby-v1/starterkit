@@ -3,7 +3,7 @@
 /**
  * Kirby -- A stripped down and easy to use toolkit for PHP
  *
- * @version 0.95
+ * @version 0.96
  * @author Bastian Allgeier <bastian@getkirby.com>
  * @link http://toolkit.getkirby.com
  * @copyright Copyright 2009-2012 Bastian Allgeier
@@ -12,7 +12,7 @@
  */
 
 
-c::set('version', 0.94);
+c::set('version', 0.96);
 c::set('language', 'en');
 c::set('charset', 'utf-8');
 c::set('root', dirname(__FILE__));
@@ -403,23 +403,22 @@ class a {
     
     // natural sorting    
     if($method === 'natural') {
-
       natsort($helper);
       if($direction === SORT_DESC) $helper = array_reverse($helper);
-
-      $result = array();
-    
-      foreach($helper as $key => $val) {
-        $result[$key] = $array[$key];
-      }                
-      
-      return $result;
-  
+    } else if($direction === SORT_DESC) {
+      arsort($helper, $method);
     } else {
-      array_multisort($helper, $direction, $method, $array);
-      return $array;
+      asort($helper, $method);
     }
-  
+
+    $result = array();
+    
+    foreach($helper as $key => $val) {
+      $result[$key] = $array[$key];
+    }
+    
+    return $result;
+    
   }
 
 }
@@ -1678,9 +1677,9 @@ class dir {
    * @param   string  $dir The path for the new directory
    * @return  boolean True: the dir has been created, false: creating failed
    */
-  static function make($dir) {
+  static function make($dir, $recursive = false) {
     if(is_dir($dir)) return true;
-    if(!@mkdir($dir, 0755)) return false;
+    if(!@mkdir($dir, 0755, $recursive)) return false;
     @chmod($dir, 0755);
     return true;
   }
@@ -1928,7 +1927,11 @@ class f {
    * @return string 
    */  
   static function filename($name) {
-    return basename($name);
+    $name = basename($name);
+    $name = url::strip_query($name);
+    $name = preg_replace('!\:.*!i', '', $name);
+    $name = preg_replace('!\#.*!i', '', $name);
+    return $name;
   }
 
   /**
@@ -2747,19 +2750,14 @@ class str {
     * @return string
     */  
   static function encode($string) {
-    $decoded = utf8_decode($string);
     $encoded = '';
     $length = str::length($string);
     for($i=0; $i<$length; $i++) {
-      if($decoded[$i] === $string[$i]) {
-        $encoded .= (rand(1,2)==1) ? '&#'.ord($string[$i]).';' : '&#x'.dechex(ord($string[$i])).';';
-      } else {
-        $encoded .= (rand(1,2)==1) ? '&#'.ord($decoded[$i]).';' : '&#x'.dechex(ord($decoded[$i])).';';
-      }
+      $encoded .= (rand(1,2)==1) ? '&#' . ord($string[$i]) . ';' : '&#x' . dechex(ord($string[$i])) . ';';
     }
     return $encoded;
   }
-  
+
   /**
     * Creates an encoded email address, including proper html-tags
     *
@@ -3051,11 +3049,13 @@ class str {
     // replace all special characters
     $text = str_replace(array_keys($replace), array_values($replace), $text);
     // replace spaces with simple dashes
-    $text = preg_replace('![^a-z0-9._-]!i','-', $text);
+    $text = preg_replace('![^a-z0-9]!i','-', $text);
     // remove double dashes
     $text = preg_replace('![-]{2,}!','-', $text);
     // trim trailing and leading dashes
     $text = trim($text, '-');
+    // replace slashes with dashes
+    $text = str_replace('/', '-', $text);
 
     return $text;
 
@@ -3266,10 +3266,15 @@ class url {
     $url = str_replace('https://','',$url);
     $url = str_replace('ftp://','',$url);
     $url = str_replace('www.','',$url);
+    
     if($base) {
       $a = explode('/', $url);
       $url = a::get($a, 0);
     }
+
+    // try to remove the last / after the url
+    $url = preg_replace('!(\/)$!', '', $url);
+
     return ($chars) ? str::short($url, $chars, $rep) : $url;
   }
 

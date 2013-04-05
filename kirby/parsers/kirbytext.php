@@ -280,15 +280,17 @@ class kirbytext {
 
   function file($params) {
 
-    $url    = @$params['file'];
-    $text   = @$params['text'];
-    $class  = @$params['class'];
-    $title  = @$params['title'];
-    $target = self::target($params);
+    $url      = @$params['file'];
+    $text     = @$params['text'];
+    $class    = @$params['class'];
+    $title    = @$params['title'];
+    $download = @$params['download'];
+    $target   = self::target($params);
 
-    if(empty($text))   $text  = str_replace('_', '\_', $url); // ignore markdown italic underscores in filenames
-    if(!empty($class)) $class = ' class="' . $class . '"';
-    if(!empty($title)) $title = ' title="' . html($title) . '"';
+    if(empty($text))      $text  = str_replace('_', '\_', $url); // ignore markdown italic underscores in filenames
+    if(!empty($class))    $class = ' class="' . $class . '"';
+    if(!empty($title))    $title = ' title="' . html($title) . '"';
+    if(!empty($download)) $title = ' download="' . html($download) . '"';
 
     return '<a' . $target . $title . $class . ' href="' . $this->url($url) . '">' . html($text) . '</a>';
 
@@ -376,7 +378,7 @@ class kirbytext {
     if(empty($id)) return false;
     
     // build the embed url for the iframe    
-    $url = 'http://www.youtube.com/embed/' . $id;
+    $url = 'https://www.youtube.com/embed/' . $id;
     
     // default width and height if no custom values are set
     if(empty($params['width']))  $params['width']  = c::get('kirbytext.video.width');
@@ -402,7 +404,7 @@ class kirbytext {
     if(empty($id)) return false;    
 
     // build the embed url for the iframe    
-    $url = 'http://player.vimeo.com/video/' . $id;
+    $url = 'https://player.vimeo.com/video/' . $id;
 
     // default width and height if no custom values are set
     if(empty($params['width']))  $params['width']  = c::get('kirbytext.video.width');
