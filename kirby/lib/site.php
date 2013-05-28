@@ -448,7 +448,7 @@ class site extends obj {
     
     // http://yourdomain.com/error
     // will redirect to http://yourdomain.com/en/error
-    if($code == c::get('404')) go(url('error', c::get('lang.default')));
+    if(strpos($uri, c::get('404')) === 0) go(url(c::get('404'), c::get('lang.default')));
             
     // validate the code and switch back to the homepage if it is invalid
     if(!in_array($code, c::get('lang.available'))) go(url());
