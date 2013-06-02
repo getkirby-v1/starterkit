@@ -311,7 +311,7 @@ class site extends obj {
   
           if(file_exists($file)) {
   
-            // fetch the site info from the defaulf file. 
+            // fetch the site info from the default file. 
             $fetched = variables::fetch($file);
             $data    = $fetched['data'];
             $data['filecontent'] = $fetched['raw'];
