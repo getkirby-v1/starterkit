@@ -416,7 +416,7 @@ class page extends obj {
 
     if(str::contains($name, '-')) {
       $match = str::match($name, '!^([0-9]+[\-]+)!', 0);	
-      $uid   = str_replace($match, '', $name);
+      $uid   = substr_replace($name, '', 0, strlen($match));
       $num   = trim(rtrim($match, '-'));
     } else {
       $num   = false;
