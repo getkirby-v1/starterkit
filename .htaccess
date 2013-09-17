@@ -27,6 +27,9 @@ RewriteRule ^site/(.*) error [R=301,L]
 # block all files in the kirby folder from being accessed directly
 RewriteRule ^kirby/(.*) error [R=301,L]
 
+# leave robots.txt alone for search engines
+RewriteRule ^robots.txt robots.txt [L]
+
 # make panel links work
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
