@@ -563,7 +563,11 @@ class pages extends obj {
     return false;        
   }
 
-  function findByUID() {
+  function findByUID($uid) {
+    return $this->findBy('uid',$uid);
+  }
+
+  function findByUIDs() {
     $args = func_get_args();
     return $this->findBy('uid', $args);
   }
