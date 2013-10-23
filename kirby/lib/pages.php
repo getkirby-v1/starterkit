@@ -565,6 +565,9 @@ class pages extends obj {
 
   function findByUID() {
     $args = func_get_args();
+    if (1 === count($args)) {
+      return $this->findBy('uid', $args[0]);
+    }
     return $this->findBy('uid', $args);
   }
 
