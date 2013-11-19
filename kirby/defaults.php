@@ -19,7 +19,7 @@ c::set('root.cache',     c::get('root.site') . '/cache');
 c::set('root.parsers',   c::get('root.kirby') . '/parsers');
 
 // define the default site url
-c::set('scheme', (server::get('https')) ? 'https://' : 'http://');
+c::set('scheme', (server::get('https') && server::get('https') !== 'off') ? 'https://' : 'http://');
 c::set('url', c::get('scheme') . server::get('http_host'));
 
 // rewrite url setup
