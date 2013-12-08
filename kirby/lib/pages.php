@@ -134,18 +134,29 @@ class page extends obj {
     return ($this->prevVisible($sort, $direction)) ? true : false; 
   }
 
+  function getTemplateFile($name) {
+    return c::get('root.templates') . '/' . $name . '.php';
+  }
+
   function template() {
-
     $name = (!$this->intendedTemplate) ? c::get('tpl.default') : $this->intendedTemplate;
-    
-    // construct the template file 
-    $file = c::get('root.templates') . '/' . $name . '.php';
-    
-    // check if the template file exists and go back to the fallback    
-    if(!file_exists($file)) $name = c::get('tpl.default');
 
+    // construct the template file
+    $file = $this->getTemplateFile($name);
+
+    // check if the template file exists and go back to the specified on the contents
+    // if none, then go to fallback
+    if (!file_exists($file)) {
+      if ($this->_['template'] && file_exists($this->getTemplateFile($this->_['template']))) {
+        // if user specified a template file on the content, and this template
+        // exists, then we'll use it
+        $name = $this->_['template'];
+      } else {
+        // fallback to default, if none of the files exist
+        $name = c::get('tpl.default');
+      }
+    }
     return $name;
-        
   }
 
   function hasTemplate() {
