@@ -233,6 +233,7 @@ class files extends obj {
           $info['type'] = 'video';
           $class = 'video';
           break;
+        case 'm4a':
         case 'mp3':
           $info['type'] = 'sound';
           $class = 'file';
