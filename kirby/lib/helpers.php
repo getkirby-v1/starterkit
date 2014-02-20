@@ -12,7 +12,7 @@ function url($uri=false, $lang=false) {
   // url() can also be used to link to css, img or js files
   // so we need to make sure that this is not a link to a real
   // file. Otherwise it will be broken by the rest of the code. 
-  if($uri && is_file(c::get('root') . '/' . $uri)) {
+  if($uri && is_file(c::get('root') . '/' . preg_replace('/(\?|#).*$/is', '', $uri))) {
     return $baseUrl . '/' . $uri;          
   }
     
