@@ -390,8 +390,8 @@ class site extends obj {
         
   }
   
-  function modified() {
-    return ($this->modified) ? $this->modified : time();
+  function modified($format=false) {
+    return ($this->modified) ? ($format ? date($format, $this->modified) : $this->modified) : ($format ? date($format) : time());
   }
 
   function dataCacheID() {
