@@ -5,10 +5,7 @@ Easy to setup, easy to use, flexible as hell.
 
 <http://getkirby.com>
 
-Subscribe to the Kirby newsletter: <http://tinyletter.com/kirby>    
-or follow @getkirby on Twitter for updates: <http://twitter.com/getkirby>
-Kirby even has a Facebook page: <http://facebook.com/getkirby>
-
+Follow @getkirby on Twitter for updates: <http://twitter.com/getkirby>
 
 ## Buy
 
@@ -63,5 +60,5 @@ If you are not allowed to have your own .htaccess file or to use mod_rewrite, go
 
 ## Copyright
 
-© 2009-2012 Bastian Allgeier (OpenWe GmbH)
+© 2009-2012 Bastian Allgeier GmbH
 <http://getkirby.com>
