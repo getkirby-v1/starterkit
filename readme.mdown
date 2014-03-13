@@ -60,5 +60,5 @@ If you are not allowed to have your own .htaccess file or to use mod_rewrite, go
 
 ## Copyright
 
-© 2009-2012 Bastian Allgeier GmbH
+© 2009-2014 Bastian Allgeier GmbH
 <http://getkirby.com>
