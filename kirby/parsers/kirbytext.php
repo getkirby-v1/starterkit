@@ -283,14 +283,16 @@ class kirbytext {
     $url    = @$params['file'];
     $text   = @$params['text'];
     $class  = @$params['class'];
+    $rel    = @$params['rel'];
     $title  = @$params['title'];
     $target = self::target($params);
 
     if(empty($text))   $text  = str_replace('_', '\_', $url); // ignore markdown italic underscores in filenames
     if(!empty($class)) $class = ' class="' . $class . '"';
+    if(!empty($rel)) $rel = ' rel="' . $rel . '"';
     if(!empty($title)) $title = ' title="' . html($title) . '"';
 
-    return '<a' . $target . $title . $class . ' href="' . $this->url($url) . '">' . html($text) . '</a>';
+    return '<a' . $target . $title . $class . $rel . ' href="' . $this->url($url) . '">' . html($text) . '</a>';
 
   }
 
