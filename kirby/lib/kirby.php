@@ -805,7 +805,7 @@ class content {
     */
   static function end($return=false) {
     if($return) {
-      $content = ob_get_contents();
+      $content = trim(ob_get_contents());
       ob_end_clean();
       return $content;
     }
