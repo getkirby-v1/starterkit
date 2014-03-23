@@ -803,9 +803,12 @@ class content {
     * @param  boolean  $return Pass true to return the content instead of flushing it 
     * @return mixed
     */
-  static function end($return=false) {
+  static function end($return=false, $trim=false) {
     if($return) {
-      $content = trim(ob_get_contents());
+      $content = ob_get_contents();
+      if($trim) {
+        $content = trim($content);
+      }
       ob_end_clean();
       return $content;
     }
