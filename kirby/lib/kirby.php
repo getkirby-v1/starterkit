@@ -1695,7 +1695,7 @@ class dir {
    */
   static function read($dir, $ignore=array()) {
     if(!is_dir($dir)) return false;
-    $skip = array_merge(array('.', '..', '.DS_Store'), $ignore);
+    $skip = array_merge(array('.', '..', '.DS_Store'), (array)c::get('content.file.ignore', array()), $ignore);
     return array_diff(scandir($dir),$skip);
   }
 
