@@ -3173,7 +3173,7 @@ class str {
         $string = self::urlify($string);
         break;
       case 'filename':
-        $string = f::save_name($string);
+        $string = f::safe_name($string);
         break;
     }
 
