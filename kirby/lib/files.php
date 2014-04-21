@@ -97,6 +97,12 @@ class image extends file {
     parent::__construct($array);
     $this->thumb = $this;
     $this->title = $this->name;
+	
+	$exif = @exif_read_data($this->root);
+	if ($exif !== false) {
+		$datePieces = explode(' ', $exif['DateTimeOriginal']);
+		$this->taken = date('U', strtotime(str_replace(':', '-', $datePieces[0]) . ' ' . $datePieces[1]));
+	}
   }
 
   function width() {
