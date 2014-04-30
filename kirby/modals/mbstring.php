@@ -64,7 +64,7 @@ strong {
     If you got further questions, please contact me:<br />
     <a href="mailto:bastian@getkirby.com">bastian@getkirby.com</a>
   </dd>
-</ul>
+</dl>
 
 </body>
 
