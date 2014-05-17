@@ -547,6 +547,15 @@ class pages extends obj {
     }    
   }
 
+  function findByTemplate($template) {
+    static $result = array();
+    foreach($this->_ as $key => $page) {
+      if($page->template() == $template) $result[$page->uid] = $page;
+      if($page->hasChildren()) $page->children()->findByTemplate($template);
+    }
+    return new pages($result);
+  }
+
   function findBy($key, $value) {
     if(is_array($value)) {
       $result = array();
