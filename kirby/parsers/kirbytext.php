@@ -429,13 +429,10 @@ class kirbytext {
       'title' => 1,
     ), $settings );
 
-    $s = array();
-    foreach ( $settings as $key => $setting ) {
-      array_push( $s, $key . '=' . $setting );
-    }    
+    // add a classname to the iframe
+    if(!empty($class)) $class = ' class="' . $class . '"';
 
-    return '<div class="video-container"><iframe' . $class . ' src="' . $url . '?' . implode('&', $s ) . '" width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>';
-      
+    return '<div class="video-container"><iframe' . $class . ' src="' . $url . '?' . http_build_query( $settings ) . '" width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>';
   }
 
   static function flash($url, $w, $h) {
