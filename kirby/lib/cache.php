@@ -62,7 +62,7 @@ class cache {
     * @param  string  @file The filename for the cache file
     */  
   static function remove($file) {
-    f::remove(self::$file);
+    f::remove(self::file($file));
   }
 
   /**
