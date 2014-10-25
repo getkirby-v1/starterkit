@@ -430,8 +430,10 @@ class site extends obj {
       
       if(c::get('lang.detect')) {      
         // detect the current language
-        $detected = str::split(server::get('http_accept_language'), '-');
-        $detected = str::trim(a::first($detected));
+        $detected = str::split(server::get('http_accept_language'), ',');
+        $detected = a::first($detected);
+        $detected = str::split($detected, '-');
+        $detected = a::first($detected);
         $detected = (!in_array($detected, $available)) ? c::get('lang.default') : $detected;
 
         // set the detected code as current code          

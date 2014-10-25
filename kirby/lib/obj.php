@@ -31,7 +31,7 @@ class obj implements Iterator {
   }
   
   function __call($n, $args) {
-    return a::get($this->_, $n);
+    return a::get($this->_, strtolower($n));
   }
 
   function rewind() {
