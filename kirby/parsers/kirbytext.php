@@ -109,11 +109,7 @@ class kirbytext {
     $code  = trim($code);
 
     if(function_exists('highlight')) {
-      $result  = '<pre class="highlight ' . $first . '">';
-      $result .= '<code>';
-      $result .= highlight($code, (empty($first)) ? 'php-html' : $first);
-      $result .= '</code>';
-      $result .= '</pre>';
+      $result  = (empty($first)) ? highlight($code, 'php-html') : highlight($code, $first);
     } else {
       $result  = '<pre class="' . $first . '">';
       $result .= '<code>';
