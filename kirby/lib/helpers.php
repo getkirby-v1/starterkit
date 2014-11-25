@@ -55,7 +55,7 @@ function home() {
 
 // go to error page
 function notFound() {
-  go(url('error'));
+  go(url(c::get('404')));
 }
 
 // embed a template snippet from the snippet folder
