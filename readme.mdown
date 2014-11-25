@@ -1,4 +1,6 @@
-# Kirby
+# Kirby 1
+
+**This is the repository for Kirby 1. Please visit http://github.com/getkirby/starterkit for the latest version of Kirby 2**
 
 Kirby is a file-based CMS.   
 Easy to setup, easy to use, flexible as hell.
