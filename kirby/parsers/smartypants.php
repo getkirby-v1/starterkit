@@ -28,7 +28,7 @@ define( 'SMARTYPANTSTYPOGRAPHER_VERSION',  "1.0.1" ); # Sun 23 Jan 2013
 #  3  ->  "--" for em-dashes; "---" for en-dashes  
 #  See docs for more configuration options.
 #
-define( 'SMARTYPANTS_ATTR',    1 );
+define( 'SMARTYPANTS_ATTR', c::get('smartypants.attr', 1) );
 
 # Openning and closing smart double-quotes.
 define( 'SMARTYPANTS_SMART_DOUBLEQUOTE_OPEN',  c::get('smartypants.doublequote.open', '&#8220;') );
