@@ -2597,9 +2597,9 @@ class str {
     */  
   static function html($string, $keep_html=true) {
     if($keep_html) {
-      return stripslashes(implode('', preg_replace('/^([^<].+[^>])$/e', "htmlentities('\\1', ENT_COMPAT, 'utf-8')", preg_split('/(<.+?>)/', $string, -1, PREG_SPLIT_DELIM_CAPTURE))));
+      return stripslashes(implode('', preg_replace('/^([^<].+[^>])$/e', "str::html('\\1', false)", preg_split('/(<.+?>)/', $string, -1, PREG_SPLIT_DELIM_CAPTURE))));
     } else {
-      return htmlentities($string, ENT_COMPAT, 'utf-8');
+      return preg_replace('/(?<=&)amp;(?=#?[xX]?(?:[0-9a-fA-F]+|\w+);)/', '', htmlentities($string, ENT_COMPAT, 'utf-8'));
     }
   }
 
