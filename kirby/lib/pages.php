@@ -743,6 +743,21 @@ class pages extends obj {
     return new pages($result);    
       
   }
+  
+  function past($start = 0, $end = false){
+    if(!$end) $end = time();
+
+    foreach($this->_ as $key => $page) {
+      $page_date = strtotime($page->date('Y-m-d H:i'));
+      
+      if($start < $page_date && $page_date < $end) {
+        $pages[$key] = $page;
+      }
+    }
+    
+    return new pages($pages);
+    
+  }
             
 }
 
