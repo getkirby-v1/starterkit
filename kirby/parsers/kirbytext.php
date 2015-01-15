@@ -23,14 +23,15 @@ function youtube($url, $width=false, $height=false, $class=false) {
   ));
 }
 
-function vimeo($url, $width=false, $height=false, $class=false) {
+function vimeo($url, $width=false, $height=false, $class=false, $settings=array()) {
   $name = kirbytext::classname();
   $obj  = new $name;
   return $obj->vimeo(array(
     'vimeo'  => $url,
     'width'  => $width,
     'height' => $height,
-    'class'  => $class
+    'class'  => $class,
+    'settings' => $settings
   ));
 }
 
@@ -415,8 +416,25 @@ class kirbytext {
     // add a classname to the iframe
     if(!empty($class)) $class = ' class="' . $class . '"';
 
-    return '<div class="video-container"><iframe' . $class . ' src="' . $url . '" width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>';
-      
+    // add settings to iframe
+    $settings = @$params['settings'];
+
+    $settings = array_merge( array(
+      'autopause' => 1,
+      'autoplay' => 0,
+      'badge' => 1,
+      'byline' => 1,
+      'color' => '00adef',
+      'loop' => 0,
+      'player_id' => time(),
+      'portrait' => 1,
+      'title' => 1,
+    ), $settings );
+
+    // add a classname to the iframe
+    if(!empty($class)) $class = ' class="' . $class . '"';
+
+    return '<div class="video-container"><iframe' . $class . ' src="' . $url . '?' . http_build_query( $settings ) . '" width="' . $params['width'] . '" height="' . $params['height'] . '" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe></div>';
   }
 
   static function flash($url, $w, $h) {
