@@ -20,12 +20,12 @@ class tpl {
     return a::get(self::$vars, $key, $default);       
   }
 
-  static function load($template='default', $vars=array(), $return=false) {    
+  static function load($template='default', $vars=array(), $return=false, $trim=true) {
     $file = c::get('root.templates') . '/' . $template . '.php';
-    return self::loadFile($file, $vars, $return);
+    return self::loadFile($file, $vars, $return, $trim);
   }
   
-  static function loadFile($file, $vars=array(), $return=false) {
+  static function loadFile($file, $vars=array(), $return=false, $trim=true) {
     if(!file_exists($file)) return false;
     if(!is_array($vars)) {
       $vars = array();
@@ -35,7 +35,7 @@ class tpl {
     @extract($vars);
     content::start();
     require($file);
-    return content::end($return); 
+    return content::end($return, $trim);
   }
 
 }

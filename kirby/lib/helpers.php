@@ -59,8 +59,8 @@ function notFound() {
 }
 
 // embed a template snippet from the snippet folder
-function snippet($snippet, $data=array(), $return=false) {
-  return tpl::loadFile(c::get('root.snippets') . '/' . $snippet . '.php', $data, $return);
+function snippet($snippet, $data=array(), $return=false, $trim=true) {
+  return tpl::loadFile(c::get('root.snippets') . '/' . $snippet . '.php', $data, $return, $trim);
 }
 
 // embed a stylesheet tag
